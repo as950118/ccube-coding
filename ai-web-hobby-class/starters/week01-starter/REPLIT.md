@@ -1,34 +1,49 @@
-# Replit 템플릿 — 1주차 starter
+# Replit 템플릿 — 1주차 starter (Flask)
 
-교사용: 이 폴더를 Replit **Team Template** 으로 등록하면 학생이 Fork 만으로 바로 시작할 수 있습니다.
+**Python + Flask** 로 HTML 페이지를 보내는 첫 주입니다.  
+정적 HTML이 아니라 **서버(주방) → 화면(홀)** 구조를 체험합니다.
 
 ## 템플릿 만들기 (교사)
 
-1. [Replit](https://replit.com) 로그인 → **Create Repl**
-2. **Import from GitHub** 또는 zip 업로드로 `week01-starter` 폴더 가져오기
-3. Repl 이름 예: `ai-web-week01-이름`
-4. **Run** 클릭 → 미리보기에서 자기소개 페이지 확인
-5. (선택) Team → **Create Template** 으로 학생용 템플릿 공개
+1. [Replit](https://replit.com) → **Create Repl** → **Python**
+2. `week01-starter` 폴더 업로드 또는 Import
+3. **Run** → 미리보기에서 자기소개 페이지 확인
+4. Team → **Create Template**
 
 ## 학생 안내 (수업 첫 10분)
 
-1. 교사가 공유한 Replit 템플릿 링크 → **Fork** (또는 **Use Template**)
-2. 왼쪽 파일 목록에서 `index.html` 클릭
-3. `🟢` 주석 아래 **이름**, **소개**만 수정
-4. **Run** → 오른쪽 미리보기에서 결과 확인
+1. 템플릿 링크 → **Fork**
+2. **Run** 클릭 (중요!)
+3. `templates/index.html` → 🟢 이름·소개 수정
+4. 미리보기 새로고침
 
 ## 파일 안내
 
-| 파일 | 1주차에서 |
-|------|-----------|
-| `index.html` | ✅ 여기만 수정 |
-| `style.css` | 읽기만 (2주차부터 수정) |
-| `script.js` | 읽기만 (3주차부터 수정) |
+| 파일 | 1주차 |
+|------|-------|
+| `app.py` | 읽기만 — Flask 서버 |
+| `templates/index.html` | ✅ 🟢 수정 |
+| `static/style.css` | 읽기 (2주~) |
+| `static/script.js` | 읽기 (3주~ fetch) |
+
+## 3층 구조 (1주차 소개)
+
+```
+Run → app.py (Python) → templates/index.html (웹) → 브라우저
+                              ↓
+                        5주~ AI API (Python이 호출)
+```
 
 ## 문제 해결
 
 | 증상 | 해결 |
 |------|------|
-| 페이지가 안 보임 | Run 버튼 다시 클릭 |
-| 수정이 반영 안 됨 | 미리보기 새로고침 (↻) |
-| 망가졌을 때 | 템플릿 다시 Fork |
+| 페이지 안 보임 | **Run** 다시 클릭 |
+| index.html만 열었는데 다름 | Flask Run 으로 봐야 함 |
+| ModuleNotFoundError: flask | Replit이 requirements 설치 대기 후 Run |
+| 망가짐 | 템플릿 다시 Fork |
+
+## 참고
+
+- Flask + fetch 패턴: 저장소 `pokemon/app.py`
+- 커리큘럼: `ai-web-hobby-class/weeks/week01-html-intro.md`

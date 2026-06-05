@@ -1,11 +1,23 @@
-AI웹반 1주차 starter — 나를 소개하는 페이지
-==========================================
+AI웹반 1주차 starter — Flask + 자기소개 페이지
+================================================
 
-🟢 index.html 에서 이름(h1)과 소개(p) 2~3곳만 바꾸면 OK!
+🟢 templates/index.html 에서 이름(h1)과 소개(p) 2~3곳만 바꾸면 OK!
+   app.py 는 Run 만 — 2주차부터 Python 변수를 수정합니다.
 🟡 시간 남으면 취미 목록(ul/li) 주석을 풀고 적어보세요.
-❓ 막히면 starter 를 다시 받아도 됩니다. 과제는 선택!
+❓ 막히면 starter 를 다시 Fork. 과제는 선택!
 
-실행 방법
+실행 (Replit)
+-------------
+1. Run 버튼
+2. 오른쪽 미리보기에서 페이지 확인
+   (index.html 파일을 직접 여는 것과 다릅니다 — Flask 가 보내줍니다!)
+
+폴더 구조
 ---------
-[로컬] index.html 을 Chrome 브라우저로 열기
-[Replit] Run 버튼 → 미리보기 창에서 확인
+app.py              ← Python · Flask (1주: 읽기만)
+templates/index.html ← 🟢 HTML 수정
+static/style.css
+static/script.js    ← 3주차부터 fetch
+requirements.txt
+
+5주차부터 app.py 가 AI API 를 호출합니다.
