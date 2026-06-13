@@ -26,31 +26,32 @@
 
 ```
 week05-starter/
-├── index.html      ← 거의 건드리지 않음
-├── style.css       ← 🟢: 색·글자만
-└── script.js       ← 🟢🟡🔴: 주석으로 구역 표시
+├── app.py              ← 🟢 DEFAULT_QUESTION, 🟡 call_ai()
+├── templates/index.html
+├── static/style.css
+└── static/script.js    ← fetch /api/chat
 ```
 
-### script.js 주석 패턴
+### app.py 주석 패턴 (5주~)
 
-```javascript
-// ===== [🟢] 여기만 바꾸세요 =====
-const DEFAULT_QUESTION = "오늘 날씨 어때?";
+```python
+# ===== [🟢] 여기만 바꾸세요 =====
+DEFAULT_QUESTION = "오늘 날씨 어때?"
 
-// ===== [🟡] 아래 함수 이해하고 수정 =====
-function sendQuestion() { ... }
+# ===== [🟡] call_ai() 이해하고 수정 =====
+def call_ai(question: str) -> str: ...
 
-// ===== [🔴] 도전: 아래 추가 기능 =====
-// - Enter 키로 전송
-// - 대화 기록 배열에 저장
+# ===== [🔴] 도전 =====
+# - messages list에 대화 저장
+# - system prompt 튜터 톤
 ```
 
 ### starter 2종 (선택)
 
 | 파일 | 용도 |
 |------|------|
-| `week05-starter.zip` | 전원 — 🟢까지 거의 완성 |
-| `week05-blank.js` | 🟡🔴 — 비어 있는 함수만 (직접 작성) |
+| `week05-starter.zip` | 전원 — app.py + template 🟢까지 |
+| `week05-blank.py` | 🟡 — `call_ai()` 직접 작성 |
 
 ---
 

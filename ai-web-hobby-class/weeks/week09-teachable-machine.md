@@ -1,4 +1,4 @@
-# 9주차 — Teachable Machine: 이미지 분류
+# 9주차 — Teachable Machine: 두 번째 AI (이미지)
 
 **Phase:** 이미지 AI | **소요:** 60~90분
 
@@ -6,7 +6,19 @@
 
 ## 🟢 목표 (전원)
 
-Teachable Machine에서 만든 모델 URL을 넣으면, **이미지 1장** 업로드 시 **분류 결과**가 나온다.
+Flask 페이지 안 **이미지 AI 섹션** — TM 모델 URL → 업로드 → 분류 결과.
+
+---
+
+## 텍스트 AI vs 이미지 AI
+
+| | 5~8주 | 9~10주 |
+|--|-------|--------|
+| AI 종류 | OpenAI/Gemini | Teachable Machine |
+| 호출 위치 | **Python** (Flask) | **브라우저** (JS) |
+| 이유 | 키·prompt 보호 | TM이 브라우저용 설계 |
+
+> **둘 다 AI + 웹** — 「누가 AI를 부르나」만 다름
 
 ---
 
@@ -14,43 +26,36 @@ Teachable Machine에서 만든 모델 URL을 넣으면, **이미지 1장** 업�
 
 | 시간 | 내용 |
 |------|------|
-| 0~15분 | Teachable Machine 데모 (교사) — 2클래스 예: ✊ / ✋ |
-| 15~25분 | Week09 starter, `tmImage` 스크립트 |
+| 0~15분 | TM 데모 (교사), 2클래스 모델 |
+| 15~25분 | Week09 starter, `#image-ai` 섹션 |
 | 25~55분 | 🟢: `MODEL_URL` 붙여넣기 |
-| 55~70분 | 🟡: 클래스 이름 한글로 표시 |
+| 55~70분 | 🟡: 클래스명 한글 |
 | 70~85분 | 30초 시연 |
 | 85~90분 | 선택 과제 |
 
 ---
 
-## 사전 준비 (교사)
+## Flask 역할
 
-- [ ] Teachable Machine 공통 데모 모델 1개 (모두 같은 URL로 시작 가능)
-- [ ] 또는 수업 중 10분만 개인 모델 만들기 (시간 부족 시 교사 URL만)
-
----
-
-## starter 포함 기능
-
-- `<input type="file">` 또는 `<img id="preview">`
-- `classifyImage()` — MODEL_URL 🟢
+- `/` template에 TM `<script>` 포함
+- (선택) `@app.route("/image-lab")` 별도 페이지
 
 ---
 
 ## 🟢🟡🔴 과제
 
 ### 🟢
-1. [ ] 교사 제공 MODEL_URL 넣고 테스트
-2. [ ] 결과 글자 크기 키우기
+1. [ ] MODEL_URL 테스트
+2. [ ] 결과 CSS
 
 ### 🟡
-3. [ ] 집에서 사물 2종 찍어 **본인 모델** 만들기 (선택)
+3. [ ] 본인 TM 모델 만들기
 
 ### 🔴
-4. [ ] 확률 % 표시 (Teachable Machine API 응답 활용)
+4. [ ] 확률 % 표시
 
 ---
 
-## 다음 주 starter (Week10)
+## 다음 주 (Week10)
 
-- Week09 + 웹캠 `getUserMedia` 블록
+- 웹캠 + TM

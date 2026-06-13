@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나를 소개합니다 — AI웹반 2주차</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">Python + AI + 웹 · 2주차 · 변수 + CSS</p>
+
+            <!-- app.py 의 STUDENT_NAME → {{ name }} -->
+            <h1>{{ name }}</h1>
+
+            <!-- app.py 의 INTRO → {{ intro }} -->
+            <p class="intro">{{ intro }}</p>
+
+            <!-- app.py 의 FAVORITE → {{ favorite }} -->
+            <p class="favorite">
+                좋아하는 것: {{ favorite }}
+            </p>
+        </header>
+
+        <section class="hobbies">
+            <h2>내 취미</h2>
+            <!-- app.py 의 HOBBY → {{ hobby }} -->
+            <p class="hobby-main">가장 좋아하는 취미: <strong>{{ hobby }}</strong></p>
+
+            <!-- 1주차에서 배운 ul/li — 이번 주는 Python 에서 안 넘김 (HTML 고정) -->
+            <ul>
+                <li>축구 보기</li>
+                <li>게임</li>
+                <li>음악 듣기</li>
+            </ul>
+        </section>
+
+        <section class="flow-hint">
+            <h2>오늘의 흐름</h2>
+            <p><strong>app.py</strong> 변수 → <code>render_template</code> → <code>{{ "{{ name }}" }}</code> → 브라우저</p>
+            <p class="flow-note">Python이 <strong>데이터</strong>, HTML이 <strong>화면</strong> — 3주차부터 fetch!</p>
+        </section>
+
+        <!-- ===== [🔴] FAVORITE_FOODS list — Jinja2 for loop ===== -->
+        <!--
+        <section class="foods">
+            <h2>좋아하는 음식</h2>
+            <ul>
+                {% for food in favorite_foods %}
+                <li>{{ food }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        -->
+
+        <footer class="footer">
+            <p>🟢 목표: app.py 변수 바꾸기 → Run → 이름·소개 반영</p>
+        </footer>
+    </main>
+
+    <!-- 3주차부터 fetch 로 Python API 와 대화합니다 -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

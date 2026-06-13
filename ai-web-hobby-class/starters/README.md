@@ -1,25 +1,43 @@
-# starter 템플릿 (예정)
+# starter 템플릿 (Flask)
 
-주차별 `week{N}-starter.zip` 을 이 폴더 또는 Google Drive `AI웹반/Week{N}/` 에 배치합니다.
+주차별 `week{N}-starter/` — **Python + Flask + templates + static**
 
 ## 규칙
 
-- [01-teaching-principles.md](../01-teaching-principles.md) — 🟢🟡🔴 주석 패턴
-- [appendix/tech-stack.md](../appendix/tech-stack.md) — zip 구조
+- [appendix/architecture.md](../appendix/architecture.md)
+- [appendix/tech-stack.md](../appendix/tech-stack.md)
+- [01-teaching-principles.md](../01-teaching-principles.md)
 
-## 배포된 starter
+## 구조
 
-| 주차 | 폴더 | Replit |
-|------|------|--------|
-| 1 | [week01-starter/](week01-starter/) | `.replit` + [REPLIT.md](week01-starter/REPLIT.md) |
+```
+week{N}-starter/
+├── app.py                 ← Python · Flask · (5주~) AI
+├── requirements.txt
+├── templates/index.html
+├── static/style.css
+├── static/script.js
+└── README.txt
+```
 
-## TODO
+## 진행
 
-- [x] week01-starter
-- [ ] week02-starter
-- [ ] ...
-- [ ] week12-starter (최종 통합본)
+- [x] week01-starter — Flask + HTML 자기소개
+- [x] week02-starter — Python 변수 + Jinja2 + CSS
+- [x] week03-starter — Python 함수 + fetch API
+- [x] week04-starter — Python OX 퀴즈 + /api/check
+- [x] week05-starter — Python call_ai() + /api/chat (AI)
+- [ ] week06 ~ week12
 
-## reference (예정)
+## reference
 
-🟡🔴 완성 예시는 `reference/week{N}-complete/` 에 두기
+🟡🔴 완성 예: `reference/week{N}-complete/`
+
+## zip
+
+교사 Drive 업로드용: `week{N}-starter.zip` (폴더 압축)
+
+```bash
+cd starters && zip -r week02-starter.zip week02-starter \
+  -x "*.DS_Store" -x "*__pycache__*" -x "*.pyc"
+```

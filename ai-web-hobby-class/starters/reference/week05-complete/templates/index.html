@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 챗봇 — AI웹반 5주차 (완성)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">Python + AI + 웹 · 5주차 · AI 챗봇 ★</p>
+            <h1>{{ name }}의 AI 도우미</h1>
+            <p class="intro">질문을 내면 <strong>Python(Flask)</strong>이 <strong>AI</strong>에게 물어보고 답을 가져옵니다.</p>
+        </header>
+
+        <section class="chat">
+            <h2>🟢 AI에게 질문하기</h2>
+
+            <p class="default-hint">
+                기본 질문: <code>{{ default_question }}</code>
+            </p>
+
+            <div class="input-row">
+                <label for="question-input">내 질문</label>
+                <input type="text" id="question-input" placeholder="예: 파이썬이 뭐야?" autocomplete="off">
+            </div>
+
+            <div class="btn-row">
+                <button type="button" id="btn-default" class="btn btn-primary">기본 질문 보내기</button>
+                <button type="button" id="btn-send" class="btn btn-secondary">내 질문 보내기</button>
+            </div>
+
+            <p id="loading" class="loading hidden">생각 중… 🤔</p>
+            <div id="reply" class="reply" aria-live="polite">AI 답이 여기 나타납니다</div>
+        </section>
+
+        <footer class="footer">
+            <p>완성 예 — 로딩 표시 포함</p>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,12 +1,12 @@
-# 8주차 — 채팅 UI: 말풍선과 대화 기록
+# 8주차 — Python 대화 기록 + 채팅 UI
 
-**Phase:** AI 연결 | **소요:** 60~90분
+**Phase:** Python + AI + 웹 | **소요:** 60~90분
 
 ---
 
 ## 🟢 목표 (전원)
 
-AI 답변이 **말풍선**처럼 보이고, **질문과 답이 2줄 이상** 쌓인다.
+질문·AI 답이 **말풍선**으로 2줄 이상 쌓임. (기록은 Python list 또는 JS — starter에 선택)
 
 ---
 
@@ -14,43 +14,48 @@ AI 답변이 **말풍선**처럼 보이고, **질문과 답이 2줄 이상** 쌓
 
 | 시간 | 내용 |
 |------|------|
-| 0~10분 | Week08 starter, 카톡 UI 비교 |
-| 10~25분 | `.bubble-user`, `.bubble-ai`, `appendMessage()` |
-| 25~55분 | 🟢: 말풍선 색 바꾸기 |
-| 55~70분 | 🟡: `messages` 배열에 push |
-| 70~85분 | 30초 시연 |
-| 85~90분 | 선택 과제 |
+| 0~10min | Week08 starter |
+| 10~25min | `.bubble-user`, `.bubble-ai`, `appendMessage()` |
+| 25~55min | 🟢: 말풍선 색 |
+| 55~70min | 🟡: `/api/chat` 가 `history` 반환 (Python list) |
+| 70~85min | 30초 시연 |
+| 85~90min | 선택 과제 |
 
 ---
 
-## starter 포함 기능
+## Python + 웹 분담 (🟡)
 
-- 채팅 영역 `div#chat-log`
-- `appendMessage(text, isUser)` — 🟡에서 배열 연동
+```python
+# app.py
+messages: list[dict] = []
+
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    q = request.json["question"]
+    reply = call_ai(q)
+    messages.append({"role": "user", "text": q})
+    messages.append({"role": "ai", "text": reply})
+    return jsonify({"reply": reply, "history": messages})
+```
+
+> **텍스트 AI 파트(5~8주) 완료** — 9주부터 **이미지 AI**
 
 ---
 
 ## 🟢🟡🔴 과제
 
 ### 🟢
-1. [ ] 내 말풍선 색 · AI 말풍선 색 다르게
-2. [ ] 질문 2번 보내서 2줄 쌓이는지 확인
+1. [ ] 말풍선 색 2종
+2. [ ] 대화 2턴 테스트
 
 ### 🟡
-3. [ ] Enter 키로 전송
+3. [ ] Enter 전송
 
 ### 🔴
-4. [ ] 「대화 지우기」 버튼
+4. [ ] `/api/clear` — Python list 비우기
 
 ---
 
-## 수업·프로젝트 연결
+## 다음 주 (Week09)
 
-- **반 채팅앱 만들기 X** — 우리 사이트 안 **가짜 채팅 UI**
-- CSS로 카톡 느낌 = 🟡🔴 좋은 동기
-
----
-
-## 다음 주 starter (Week09)
-
-- Week01~08 + Teachable Machine 연동 placeholder
+- **Teachable Machine** — 브라우저 이미지 AI (같은 Flask 앱 안)

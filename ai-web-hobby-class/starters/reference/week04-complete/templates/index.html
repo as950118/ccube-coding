@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python OX 퀴즈 — 4주차 완성 예시 (교사용)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">AI + 웹 프로그래밍 취미반 · 4주차 완성 예시</p>
+            <h1>{{ name }}의 OX 퀴즈</h1>
+            <p class="intro">문제 4개 · Python 채점 · 총점 표시까지 완성했습니다.</p>
+        </header>
+
+        <section class="quiz">
+            <h2>OX 문제</h2>
+
+            {% for q in questions %}
+            <article class="question-card" data-index="{{ loop.index0 }}">
+                <p class="question-text">
+                    <span class="question-num">Q{{ loop.index }}</span>
+                    {{ q.text }}
+                </p>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-o" data-answer="O">O</button>
+                    <button type="button" class="btn btn-x" data-answer="X">X</button>
+                </div>
+                <div class="feedback" aria-live="polite"></div>
+            </article>
+            {% endfor %}
+
+            <div id="score-panel" class="score-panel hidden">
+                <p id="score-text" class="score-text"></p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>🟢🟡🔴 모두 완성한 예시입니다 (교사 시연용)</p>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

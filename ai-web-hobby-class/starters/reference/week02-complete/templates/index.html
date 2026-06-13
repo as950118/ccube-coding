@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나를 소개합니다 — 2주차 완성 예시 (교사용)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">AI + 웹 프로그래밍 취미반 · 2주차 완성 예시</p>
+
+            <h1>{{ name }}</h1>
+            <p class="intro">{{ intro }}</p>
+            <p class="favorite">좋아하는 것: {{ favorite }}</p>
+        </header>
+
+        <section class="hobbies">
+            <h2>내 취미</h2>
+            <p class="hobby-main">가장 좋아하는 취미: <strong>{{ hobby }}</strong></p>
+            <ul>
+                <li>그림 그리기</li>
+                <li>유튜브 보기</li>
+                <li>친구랑 농구하기</li>
+            </ul>
+        </section>
+
+        <section class="foods">
+            <h2>좋아하는 음식</h2>
+            <ul>
+                {% for food in favorite_foods %}
+                <li>{{ food }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <footer class="footer">
+            <p>🟢🟡🔴 모두 완성한 예시입니다 (교사 시연용)</p>
+        </footer>
+    </main>
+
+</body>
+</html>

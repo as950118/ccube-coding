@@ -2,59 +2,61 @@
 
 ## 1. 과정 소개
 
-중학교 취미반을 위한 **12주 AI + 웹 프로그래밍** 과정입니다.  
-학생들은 HTML, CSS, JavaScript 기초를 배운 뒤 AI API와 간단한 이미지 분류를 웹 페이지에 연결하여, **「나만의 AI 학습 도우미」** 웹사이트를 완성합니다.
+중학교 취미반을 위한 **12주 Python + AI + 웹 프로그래밍** 과정입니다.
+
+**Python(Flask)** 으로 서버·규칙·AI 호출을 만들고, **HTML/CSS/JavaScript** 로 화면을 꾸미며, **AI API** 와 **Teachable Machine** 으로 똑똑한 기능을 붙여 **「나만의 AI 학습 도우미」** 웹앱을 완성합니다.
+
+> 단순 「JS로 AI만 호출」이 아니라, **브라우저 ↔ Python ↔ AI** 3층 구조를 체험하는 것이 이 과정의 핵심입니다.  
+> 상세: [appendix/architecture.md](appendix/architecture.md)
 
 ---
 
 ## 2. 학습 목표
 
 ### 전체 목표
-- 웹 페이지의 기본 구조(HTML/CSS/JS)를 이해하고 직접 수정할 수 있다.
-- 버튼·입력창 등 간단한 인터랙션을 만들 수 있다.
-- AI API를 호출하여 질문하고 답을 화면에 표시할 수 있다.
-- (선택) Teachable Machine으로 만든 모델을 웹에 연결할 수 있다.
-- 완성한 웹사이트를 1분 내외로 시연·설명할 수 있다.
+- **Python:** 변수, 함수, dict/list로 간단한 규칙을 짤 수 있다.
+- **Flask:** `@app.route` 로 페이지와 JSON API를 만들 수 있다.
+- **웹:** HTML/CSS로 화면을, JavaScript `fetch`로 서버와 통신할 수 있다.
+- **AI:** Python에서 AI API를 호출하고, 결과를 웹에 표시할 수 있다.
+- **(선택)** Teachable Machine으로 이미지 분류를 같은 사이트에 붙일 수 있다.
+- 완성한 웹앱을 1~2분 내외로 시연·설명할 수 있다.
 
 ### 기대하지 않는 것 (취미반 기준)
-- Python/Flask/Django 풀스택 개발
-- 딥러닝 이론 (역전파, 손실 함수 등)
-- 복잡한 백엔드·데이터베이스
-- 실제 SMS/이메일 발송 API 연동
+- Django, DB, 로그인/회원가입
+- 딥러닝 이론·직접 모델 학습 (코드)
+- 복잡한 async·배포 인프라
 
 ---
 
-## 3. 최종 프로젝트: AI 학습 도우미
+## 3. 최종 프로젝트: AI 학습 도우미 (Flask 앱)
 
-| 기능 | 포함 주차 | 설명 |
-|------|-----------|------|
-| 자기소개·레이아웃 | 1~2 | HTML/CSS 기본 |
-| OX/계산 퀴즈 | 3~4 | JavaScript 기초 |
-| AI 챗봇 | 5~8 | API + 말풍선 UI |
-| AI 퀴즈 생성 | 6~7 | 텍스트 생성 활용 |
-| 이미지 분류 | 9~10 | Teachable Machine |
-| 통합 페이지 | 11 | 탭 또는 섹션으로 묶기 |
-| 발표 | 12 | 전시회 |
-
-**테마 변경 가능:** AI 일기 조언, 사물 구분 게임 등 — 5~10주 구조는 동일하게 유지
+| 기능 | 주차 | Python | 웹 | AI |
+|------|------|--------|-----|-----|
+| 자기소개 페이지 | 1~2 | Flask `render_template` | HTML/CSS | — |
+| 계산·OX 퀴즈 | 3~4 | 함수, dict, `/api/*` | fetch, 버튼 | — |
+| AI 챗봇 | 5~8 | `/api/chat`, prompt | 말풍선 UI | OpenAI/Gemini |
+| AI 퀴즈 생성 | 6~7 | `build_quiz_prompt()` | 표시 영역 | 텍스트 생성 |
+| 이미지 분류 | 9~10 | (정적 라우트) | 업로드·웹캠 | Teachable Machine |
+| 통합·발표 | 11~12 | `app.py` 통합 | 한 페이지 | 텍스트 + 이미지 |
 
 ---
 
 ## 4. 12주 로드맵
 
-### Phase 1 — 웹 기초 (1~4주)
-- HTML/CSS로 페이지 만들기
-- JavaScript로 버튼·입력·간단한 퀴즈
+### Phase 1 — Python + 웹 기초 (1~4주)
+- Flask로 HTML 페이지 서빙
+- Python 변수·함수 + JSON API
+- JS `fetch`로 Python과 대화
+- OX 퀴즈 (정답은 **Python**이 판정)
 
-### Phase 2 — AI 연결 (5~8주)
-- AI API로 챗봇
-- AI로 퀴즈·학습 도우미 기능
-- 채팅처럼 보이는 UI (말풍선, 대화 기록)
+### Phase 2 — Python + AI + 웹 (5~8주)
+- **Python이 AI API 호출** (키는 서버·Secrets)
+- AI 퀴즈 생성, 채팅 UI
+- 대화 기록 (Python list + 말풍선)
 
 ### Phase 3 — 이미지 AI & 마무리 (9~12주)
-- Teachable Machine + 웹캠
-- 기능 통합
-- 발표회
+- Teachable Machine (브라우저) + 같은 Flask 앱 안에 배치
+- 웹캠, 전 기능 통합, Replit 배포·발표
 
 ---
 
@@ -62,11 +64,12 @@
 
 | 구분 | 추천 | 이유 |
 |------|------|------|
-| 편집·실행 | Replit, CodePen, Glitch | 설치 없이 바로 시작 |
-| AI | OpenAI API / Google Gemini API | 챗봇·퀴즈 생성 |
-| 이미지 AI | Google Teachable Machine | 드래그앤드롭, 중학생 적합 |
-| 호스팅 | GitHub Pages, Netlify, Vercel | 무료, URL 공유 쉬움 |
-| API 키 | 선생님 발급·관리 | 학생에게 키 직접 노출 금지 |
+| **Python** | 3.11+ | Flask, AI SDK |
+| **서버** | Flask | pokemon 프로젝트와 동일 패턴 |
+| **실행** | Replit (Python Repl) | Flask + Secrets + Deploy |
+| **AI (텍스트)** | OpenAI / Gemini | Python SDK, 5~8주 |
+| **AI (이미지)** | Teachable Machine | 9~10주, 키 불필요 |
+| **API 키** | Replit Secrets | `app.py`만 접근 |
 
 자세한 내용: [appendix/tech-stack.md](appendix/tech-stack.md)
 
@@ -76,35 +79,33 @@
 
 | 시간 | 내용 |
 |------|------|
-| 0~10분 | starter 배포, 실행, 이번 주 🟢 목표 |
-| 10~25분 | 개념 설명 + 데모 |
-| 25~60분 | 🟢 전원 완료 (개별 속도) |
-| 60~75분 | 🟡 / 🔴 (선택) 또는 멘토링 |
-| 75~90분 | 30초 시연, 선택 과제 안내 |
-
-60분 수업: 시연 5분, 🟡 시간 10분 줄이기
+| 0~10분 | starter, **Run**, 브라우저↔Flask 흐름 |
+| 10~25분 | 이번 주 Python **또는** 웹 개념 + 데모 |
+| 25~60분 | 🟢 전원 완료 |
+| 60~75분 | 🟡 / 🔴 |
+| 75~90분 | 30초 시연, 선택 과제 |
 
 ---
 
-## 7. 폴더·자료 운영
+## 7. starter 운영
 
 ```
-Google Drive / AI웹반 /
-├── Week01/starter.zip
-├── Week02/starter.zip
-├── ...
-├── Week12/starter.zip
-└── FAQ.pdf
+week{N}-starter/
+├── app.py
+├── templates/index.html
+├── static/style.css, script.js
+└── requirements.txt
 ```
 
-- **매주 같은 위치**에 starter 업로드 → 링크만 메시지에 붙이기
-- 지난 주 기능이 starter에 **이미 포함** → 과제 누락 학생도 0에서 시작
+- Week N starter = 1~(N-1)주 기능 **이미 app.py·template에 포함**
+- 과제 누락 학생도 Run → 🟢부터
 
 ---
 
 ## 8. 관련 문서
 
+- 아키텍처: [appendix/architecture.md](appendix/architecture.md)
 - 차별화·과제: [01-teaching-principles.md](01-teaching-principles.md)
 - 채팅·이메일: [02-communication.md](02-communication.md)
-- 평가·발표: [03-assessment.md](03-assessment.md)
-- 주차별 상세: [weeks/](weeks/)
+- 평가: [03-assessment.md](03-assessment.md)
+- 주차별: [weeks/](weeks/)

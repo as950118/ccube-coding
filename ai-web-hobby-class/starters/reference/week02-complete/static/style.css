@@ -1,0 +1,95 @@
+/* 2주차 완성 예시 — 교사 시연용 (보라·민트 톤) */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    background: linear-gradient(160deg, #d3f9d8 0%, #e5dbff 100%);
+    color: #1a1a2e;
+    line-height: 1.6;
+}
+
+.page {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+}
+
+.header {
+    background: #7048e8;
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 1.75rem 1.5rem;
+    box-shadow: 0 8px 24px rgba(112, 72, 232, 0.25);
+}
+
+.badge {
+    display: inline-block;
+    margin: 0 0 1rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #7048e8;
+    background: #ffffff;
+    border-radius: 999px;
+}
+
+h1 {
+    margin: 0 0 0.75rem;
+    font-size: 2rem;
+    color: #ffffff;
+}
+
+.intro {
+    margin: 0 0 1rem;
+    font-size: 1.05rem;
+    opacity: 0.95;
+}
+
+.favorite {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    border-left: 4px solid #fcc419;
+}
+
+.hobbies,
+.foods {
+    margin-top: 1.25rem;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 8px 24px rgba(60, 80, 180, 0.08);
+}
+
+.hobbies h2,
+.foods h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.1rem;
+    color: #495057;
+}
+
+.hobby-main {
+    margin: 0 0 0.75rem;
+}
+
+ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+li {
+    margin-bottom: 0.35rem;
+}
+
+.footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #495057;
+}

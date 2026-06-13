@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python OX 퀴즈 — AI웹반 4주차</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">Python + AI + 웹 · 4주차 · OX 퀴즈</p>
+            <h1>{{ name }}의 OX 퀴즈</h1>
+            <p class="intro">O 또는 X 버튼을 누르면 <strong>Python</strong>이 정답을 판정합니다.<br>
+                문제 문장은 <code>app.py</code> 의 <code>QUESTIONS</code> 에서 바꿀 수 있어요!</p>
+        </header>
+
+        <section class="quiz">
+            <h2>🟢 OX 문제</h2>
+
+            {% for q in questions %}
+            <article class="question-card" data-index="{{ loop.index0 }}">
+                <p class="question-text">
+                    <span class="question-num">Q{{ loop.index }}</span>
+                    {{ q.text }}
+                </p>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-o" data-answer="O">O</button>
+                    <button type="button" class="btn btn-x" data-answer="X">X</button>
+                </div>
+                <div class="feedback" aria-live="polite"></div>
+            </article>
+            {% endfor %}
+
+            <!-- ===== [🔴] 총점 — /api/score 완성 후 주석 해제 ===== -->
+            <!--
+            <div id="score-panel" class="score-panel hidden">
+                <p id="score-text" class="score-text"></p>
+            </div>
+            -->
+        </section>
+
+        <section class="flow-hint">
+            <h2>오늘의 흐름</h2>
+            <p><strong>O/X 클릭</strong> → <code>fetch('/api/check?q=0&answer=O')</code> → <strong>Python</strong> <code>check_answer()</code> → JSON → 화면</p>
+            <p class="flow-note">3주차 계산기와 같은 fetch 패턴! 5주차 AI도 Python이 판단·호출합니다.</p>
+        </section>
+
+        <footer class="footer">
+            <p>🟢 목표: QUESTIONS[0] 문장 변경 → O/X 클릭 → 맞/틀 색 확인</p>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
