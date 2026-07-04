@@ -54,6 +54,13 @@
 
 ---
 
+## 보너스 확장
+
+- [weeks/week13-smart-home-dashboard.md](weeks/week13-smart-home-dashboard.md)  
+  Flask + SQLite + 평면도형 스마트홈 대시보드. 웹이 센서와 장치를 제어하는 느낌을 주는 보너스 프로젝트입니다.
+
+---
+
 ## 교사 체크리스트
 
 - [ ] Replit **Python** Repl (Flask) 템플릿
@@ -74,3 +81,13 @@ static/style.css
 static/script.js
 requirements.txt
 ```
+
+---
+
+## 보너스 단일 파일 예제
+
+- `starters/reference/bonus-smart-home-dashboard/index.html`  
+  HTML/CSS/JavaScript만으로 만든 가짜 IoT 스마트홈 대시보드 예제입니다. 학생들이 "웹이 장치를 제어하는 느낌"을 체험할 수 있는 독립 실행형 샘플입니다.
+
+- `starters/reference/week13-threejs-demo/index.html`  
+  Three.js 로 만든 3D 스마트홈 시연용 데모입니다. 교육용 starter 와 분리된, Flask + SQLite 기반 시각 효과 중심의 참고 예시입니다.

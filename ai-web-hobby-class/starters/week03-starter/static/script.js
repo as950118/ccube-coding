@@ -23,11 +23,11 @@ async function calculateAdd() {
 document.getElementById("btn-add").addEventListener("click", calculateAdd);
 
 // ===== [🟡] 도전: 빼기 — subtract API 완성 후 주석 해제 =====
-// async function calculateSub() {
-//     const a = document.getElementById("num-a").value;
-//     const b = document.getElementById("num-b").value;
-//     const res = await fetch(`/api/sub?a=${a}&b=${b}`);
-//     const data = await res.json();
-//     document.getElementById("result-sub").textContent = `${a} - ${b} = ${data.diff}`;
-// }
-// document.getElementById("btn-sub").addEventListener("click", calculateSub);
+async function calculateSub() {
+    const a = document.getElementById("num-a").value;
+    const b = document.getElementById("num-b").value;
+    const res = await fetch(`/api/sub?a=${a}&b=${b}`);
+    const data = await res.json();
+    document.getElementById("result-sub").textContent = `${a} - ${b} = ${data.diff}`;
+}
+document.getElementById("btn-sub").addEventListener("click", calculateSub);

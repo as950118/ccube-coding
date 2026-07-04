@@ -23,8 +23,8 @@ def add(a: int, b: int) -> int:
 
 
 # ===== [🟡] 도전: 빼기 함수 =====
-# def subtract(a: int, b: int) -> int:
-#     return a - b
+def subtract(a: int, b: int) -> int:
+    return a - b
 
 
 @app.route("/")
@@ -47,13 +47,13 @@ def api_add():
 
 
 # ===== [🟡] 도전: 빼기 API =====
-# @app.route("/api/sub")
-# def api_sub():
-#     a = int(request.args.get("a", 0))
-#     b = int(request.args.get("b", 0))
-#     return jsonify({"diff": subtract(a, b)})
+@app.route("/api/sub")
+def api_sub():
+    a = int(request.args.get("a", 0))
+    b = int(request.args.get("b", 0))
+    return jsonify({"diff": subtract(a, b)})
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5001))
     app.run(host="0.0.0.0", port=port, debug=True)

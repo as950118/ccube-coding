@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Dashboard</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg-main: #eef4ff;
+            --bg-accent: radial-gradient(circle at top left, rgba(102, 126, 234, 0.18), transparent 40%);
+            --panel: rgba(255, 255, 255, 0.88);
+            --panel-border: rgba(148, 163, 184, 0.18);
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --brand: #4f46e5;
+            --brand-soft: rgba(79, 70, 229, 0.14);
+            --good: #16a34a;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+            --button-off: #cbd5e1;
+            --button-on: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+
+        body.dark-mode {
+            color-scheme: dark;
+            --bg-main: #0f172a;
+            --bg-accent: radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 36%);
+            --panel: rgba(15, 23, 42, 0.84);
+            --panel-border: rgba(148, 163, 184, 0.2);
+            --text-main: #e2e8f0;
+            --text-sub: #94a3b8;
+            --brand: #38bdf8;
+            --brand-soft: rgba(56, 189, 248, 0.14);
+            --good: #22c55e;
+            --warn: #fbbf24;
+            --danger: #f87171;
+            --shadow: 0 24px 60px rgba(2, 6, 23, 0.4);
+            --button-off: #334155;
+            --button-on: linear-gradient(135deg, #0ea5e9, #4f46e5);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Pretendard", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+            color: var(--text-main);
+            background:
+                var(--bg-accent),
+                linear-gradient(180deg, var(--bg-main), #dbeafe 100%);
+            transition: background 0.35s ease, color 0.35s ease;
+        }
+
+        body.dark-mode {
+            background:
+                var(--bg-accent),
+                linear-gradient(180deg, var(--bg-main), #020617 100%);
+        }
+
+        .page {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 28px 0 40px;
+        }
+
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .hero-copy {
+            flex: 1 1 360px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--brand-soft);
+            color: var(--brand);
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            margin: 14px 0 8px;
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.05;
+        }
+
+        .hero-copy p {
+            margin: 0;
+            max-width: 640px;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+
+        .hero-tools {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            align-items: stretch;
+            min-width: min(100%, 310px);
+        }
+
+        .clock-card,
+        .top-controls,
+        .dashboard-card {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+        }
+
+        .clock-card {
+            padding: 18px 20px;
+            text-align: right;
+        }
+
+        .clock-label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        .clock-value {
+            margin-top: 6px;
+            font-size: clamp(1.2rem, 2.6vw, 1.7rem);
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        .top-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 14px;
+        }
+
+        .control-button,
+        .device-button,
+        .water-button {
+            border: 0;
+            border-radius: 16px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.28s ease, color 0.28s ease;
+        }
+
+        .control-button:hover,
+        .device-button:hover,
+        .water-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(79, 70, 229, 0.14);
+        }
+
+        .control-button {
+            flex: 1 1 90px;
+            padding: 12px 14px;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--panel-border);
+        }
+
+        body.dark-mode .control-button {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .dashboard-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 194px;
+            padding: 22px;
+        }
+
+        .dashboard-card::after {
+            content: "";
+            position: absolute;
+            inset: auto -24px -24px auto;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--brand-soft);
+            opacity: 0.68;
+        }
+
+        .dashboard-card.span-3 {
+            grid-column: span 3;
+        }
+
+        .dashboard-card.span-4 {
+            grid-column: span 4;
+        }
+
+        .dashboard-card.span-6 {
+            grid-column: span 6;
+        }
+
+        .dashboard-card.span-12 {
+            grid-column: 1 / -1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .card-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            font-size: 1.35rem;
+            background: var(--brand-soft);
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .card-subtitle {
+            margin: 4px 0 0;
+            color: var(--text-sub);
+            font-size: 0.88rem;
+        }
+
+        .status-pill {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            background: rgba(148, 163, 184, 0.14);
+        }
+
+        .status-pill.good {
+            color: var(--good);
+            background: rgba(34, 197, 94, 0.14);
+        }
+
+        .status-pill.warn {
+            color: var(--warn);
+            background: rgba(245, 158, 11, 0.16);
+        }
+
+        .status-pill.danger {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.14);
+        }
+
+        .status-pill.info {
+            color: var(--brand);
+            background: var(--brand-soft);
+        }
+
+        .metric-value {
+            position: relative;
+            z-index: 1;
+            margin: 10px 0 6px;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .metric-note {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            color: var(--text-sub);
+            line-height: 1.55;
+        }
+
+        .device-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .device-button {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 14px 16px;
+            color: #0f172a;
+            background: var(--button-off);
+        }
+
+        .device-button.active {
+            color: #ffffff;
+            background: var(--button-on);
+        }
+
+        .device-glow {
+            position: absolute;
+            inset: auto 18px 18px auto;
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            filter: blur(24px);
+            opacity: 0.18;
+            transform: scale(0.92);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .device-card.active .device-glow {
+            opacity: 0.42;
+            transform: scale(1);
+        }
+
+        .device-card.light .device-glow {
+            background: #fde68a;
+        }
+
+        .device-card.aircon .device-glow {
+            background: #7dd3fc;
+        }
+
+        .device-card.fan .device-glow {
+            background: #c4b5fd;
+        }
+
+        .soil-row,
+        .door-row {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .progress-bar {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 12px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.18);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #22c55e, #0ea5e9);
+            transition: width 0.35s ease, background 0.35s ease;
+        }
+
+        .water-button {
+            min-width: 110px;
+            padding: 12px 16px;
+            color: #ffffff;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+
+        .event-list {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 12px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(148, 163, 184, 0.11);
+            animation: slide-in 0.35s ease;
+        }
+
+        .event-dot {
+            flex: 0 0 10px;
+            width: 10px;
+            height: 10px;
+            margin-top: 7px;
+            border-radius: 50%;
+            background: var(--brand);
+            box-shadow: 0 0 0 7px rgba(79, 70, 229, 0.12);
+        }
+
+        .event-text {
+            flex: 1;
+        }
+
+        .event-time {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-sub);
+            font-size: 0.82rem;
+        }
+
+        .toast-stack {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 99;
+            display: grid;
+            gap: 10px;
+            width: min(360px, calc(100vw - 36px));
+        }
+
+        .toast {
+            padding: 14px 16px;
+            border-radius: 18px;
+            color: #ffffff;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(51, 65, 85, 0.92));
+            box-shadow: 0 16px 30px rgba(15, 23, 42, 0.28);
+            animation: toast-in 0.28s ease;
+        }
+
+        .danger-outline {
+            box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.18), 0 16px 30px rgba(239, 68, 68, 0.18);
+            animation: pulse-danger 1.6s infinite;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @keyframes pulse-danger {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-2px); }
+        }
+
+        @keyframes slide-in {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-card.span-3,
+            .dashboard-card.span-4,
+            .dashboard-card.span-6 {
+                grid-column: span 6;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page {
+                width: min(100% - 20px, 1180px);
+                padding-top: 18px;
+            }
+
+            .hero {
+                gap: 12px;
+                margin-bottom: 18px;
+            }
+
+            .dashboard-grid {
+                gap: 14px;
+            }
+
+            .dashboard-card,
+            .clock-card,
+            .top-controls {
+                border-radius: 20px;
+            }
+
+            .dashboard-card.span-3,
+            .dashboard-card.span-4,
+            .dashboard-card.span-6,
+            .dashboard-card.span-12 {
+                grid-column: 1 / -1;
+            }
+
+            .top-controls {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .clock-card {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <header class="hero">
+            <div class="hero-copy">
+                <span class="hero-badge">🏠 가짜 IoT 실습용 · 센서처럼 자연스럽게 움직이는 대시보드</span>
+                <h1>🏠 Smart Home Dashboard</h1>
+                <p>
+                    실제 장비는 없지만, 웹이 집 안의 기기와 센서를 읽고 제어하는 것처럼 보이도록 만든 실습 예제입니다.
+                    값은 1초마다 조금씩 변하고, 랜덤 이벤트와 상태 알림도 함께 보여줍니다.
+                </p>
+            </div>
+
+            <div class="hero-tools">
+                <section class="clock-card" aria-label="현재 시간">
+                    <span class="clock-label">현재 시간</span>
+                    <strong id="current-time" class="clock-value">--:--:--</strong>
+                </section>
+
+                <section class="top-controls" aria-label="빠른 제어">
+                    <button id="dark-mode-button" class="control-button" type="button">🌙 다크모드</button>
+                    <button id="all-on-button" class="control-button" type="button">⚡ 모든 장치 ON</button>
+                    <button id="all-off-button" class="control-button" type="button">💤 모든 장치 OFF</button>
+                </section>
+            </div>
+        </header>
+
+        <section class="dashboard-grid" aria-label="스마트홈 카드">
+            <article id="temperature-card" class="dashboard-card span-3">
+                <div class="card-header">
+                    <div class="card-title-wrap">
+                        <div id="temperature-icon" class="card-icon">🌡️</div>
+                        <div>
+                            <h2 class="card-title">온도</h2>
+                            <p class="card-subtitle">실시간 실내 온도</p>
+                        </div>
+                    </div>
+                    <span id="temperature-status" class="status-pill info">정상</span>
+                </div>
+                <p id="temperature-value" class="metric-value">24.0°C</p>
+                <p id="temperature-note" class="metric-note">쾌적한 실내 온도입니다.</p>
+            </article>
+
+            <article id="humidity-card" class="dashboard-card span-3">
+                <div class="card-header">
+                    <div class="card-title-wrap">
+                        <div id="humidity-icon" class="card-icon">💧</div>
+                        <div>
+                            <h2 class="card-title">습도</h2>
+                            <p class="card-subtitle">실시간 실내 습도</p>
+                        </div>
+                    </div>
+                    <span id="humidity-status" class="status-pill info">보통</span>
+                </div>
+                <p id="humidity-value" class="metric-value">52%</p>
+                <p id="humidity-note" class="metric-note">무난한 습도 상태를 유지 중입니다.</p>
+            </article>
+
+            <article id="light-card" class="dashboard-card span-3">
+                <div class="card-header">
+                    <div class="card-title-wrap">
+                        <div id="light-icon" class="card-icon">🌤️</div>
+                        <div>
+                            <h2 class="card-title">조도</h2>
+                            <p class="card-subtitle">밝기 센서 시뮬레이션</p>
+                        </div>
+                    </div>
+                    <span id="light-status" class="status-pill info">보통</span>
+                </div>
+                <p id="light-value" class="metric-value">보통</p>
+                <p id="light-note" class="metric-note">창가 빛이 적당하게 들어오고 있습니다.</p>
+            </article>
+
+            <article id="door-card" class="dashboard-card span-3">
+                <div class="card-header">
+                    <div class="card-title-wrap">
+                        <div id="door-icon" class="card-icon">🚪</div>
+                        <div>
+                            <h2 class="card-title">문 상태</h2>
+                            <p class="card-subtitle">현관문 센서</p>
+                        </div>
+                    </div>
+                    <span id="door-status" class="status-pill good">닫힘</span>
+                </div>
+                <p id="door-value" class="metric-value">닫힘</p>
+                <div class="door-row">
+                    <p id="door-note" class="metric-note">현재 현관문이 안전하게 닫혀 있습니다.</p>
+                </div>
+            </article>
+
+            <article id="light-device-card" class="dashboard-card span-4 device-card light">
+                <div>
+                    <div class="card-header">
+                        <div class="card-title-wrap">
+                            <div id="lamp-icon" class="card-icon">💡</div>
+                            <div>
+                                <h2 class="card-title">전등</h2>
+                                <p class="card-subtitle">거실 메인 조명</p>
+                            </div>
+                        </div>
+                        <span id="lamp-status" class="status-pill warn">OFF</span>
+                    </div>
+                    <p id="lamp-note" class="metric-note">버튼을 눌러 조명을 켜거나 끌 수 있습니다.</p>
+                </div>
+                <button id="lamp-button" class="device-button" type="button" aria-pressed="false">전등 OFF</button>
+                <div class="device-glow" aria-hidden="true"></div>
+            </article>
+
+            <article id="aircon-device-card" class="dashboard-card span-4 device-card aircon">
+                <div>
+                    <div class="card-header">
+                        <div class="card-title-wrap">
+                            <div id="aircon-icon" class="card-icon">❄️</div>
+                            <div>
+                                <h2 class="card-title">에어컨</h2>
+                                <p class="card-subtitle">거실 냉방 장치</p>
+                            </div>
+                        </div>
+                        <span id="aircon-status" class="status-pill warn">OFF</span>
+                    </div>
+                    <p id="aircon-note" class="metric-note">실내 온도가 높아지면 사용을 권장합니다.</p>
+                </div>
+                <button id="aircon-button" class="device-button" type="button" aria-pressed="false">에어컨 OFF</button>
+                <div class="device-glow" aria-hidden="true"></div>
+            </article>
+
+            <article id="fan-device-card" class="dashboard-card span-4 device-card fan">
+                <div>
+                    <div class="card-header">
+                        <div class="card-title-wrap">
+                            <div id="fan-icon" class="card-icon">🌀</div>
+                            <div>
+                                <h2 class="card-title">선풍기</h2>
+                                <p class="card-subtitle">공기 순환 장치</p>
+                            </div>
+                        </div>
+                        <span id="fan-status" class="status-pill warn">OFF</span>
+                    </div>
+                    <p id="fan-note" class="metric-note">가볍게 공기를 순환시키는 장치입니다.</p>
+                </div>
+                <button id="fan-button" class="device-button" type="button" aria-pressed="false">선풍기 OFF</button>
+                <div class="device-glow" aria-hidden="true"></div>
+            </article>
+
+            <article id="plant-card" class="dashboard-card span-6">
+                <div class="card-header">
+                    <div class="card-title-wrap">
+                        <div id="plant-icon" class="card-icon">🪴</div>
+                        <div>
+                            <h2 class="card-title">화분 상태</h2>
+                            <p class="card-subtitle">토양 습도 센서</p>
+                        </div>
+                    </div>
+                    <span id="plant-status" class="status-pill good">건강</span>
+                </div>
+                <p id="soil-value" class="metric-value">58%</p>
+                <div class="progress-bar" aria-hidden="true">
+                    <div id="soil-fill" class="progress-fill"></div>
+                </div>
+                <div class="soil-row">
+                    <p id="plant-note" class="metric-note">토양 수분이 충분해서 식물이 건강합니다.</p>
+                    <button id="water-button" class="water-button" type="button">💦 물 주기</button>
+                </div>
+            </article>
+
+            <article class="dashboard-card span-6">
+                <div class="card-header">
+                    <div class="card-title-wrap">
+                        <div class="card-icon">📣</div>
+                        <div>
+                            <h2 class="card-title">최근 이벤트</h2>
+                            <p class="card-subtitle">실시간 스마트홈 알림 기록</p>
+                        </div>
+                    </div>
+                    <span class="status-pill info">자동 생성</span>
+                </div>
+                <ul id="event-list" class="event-list" aria-live="polite"></ul>
+            </article>
+        </section>
+    </main>
+
+    <section id="toast-stack" class="toast-stack" aria-live="polite" aria-atomic="true"></section>
+    <p class="sr-only" id="screen-reader-status">대시보드가 실행 중입니다.</p>
+
+    <script>
+        // ===== DOM 요소 모음 =====
+        // 자주 사용하는 요소를 한 곳에 모아두면 아래 코드가 읽기 쉬워집니다.
+        const elements = {
+            body: document.body,
+            currentTime: document.getElementById("current-time"),
+            darkModeButton: document.getElementById("dark-mode-button"),
+            allOnButton: document.getElementById("all-on-button"),
+            allOffButton: document.getElementById("all-off-button"),
+            toastStack: document.getElementById("toast-stack"),
+            screenReaderStatus: document.getElementById("screen-reader-status"),
+
+            temperatureCard: document.getElementById("temperature-card"),
+            temperatureIcon: document.getElementById("temperature-icon"),
+            temperatureValue: document.getElementById("temperature-value"),
+            temperatureStatus: document.getElementById("temperature-status"),
+            temperatureNote: document.getElementById("temperature-note"),
+
+            humidityCard: document.getElementById("humidity-card"),
+            humidityIcon: document.getElementById("humidity-icon"),
+            humidityValue: document.getElementById("humidity-value"),
+            humidityStatus: document.getElementById("humidity-status"),
+            humidityNote: document.getElementById("humidity-note"),
+
+            lightCard: document.getElementById("light-card"),
+            lightIcon: document.getElementById("light-icon"),
+            lightValue: document.getElementById("light-value"),
+            lightStatus: document.getElementById("light-status"),
+            lightNote: document.getElementById("light-note"),
+
+            doorCard: document.getElementById("door-card"),
+            doorIcon: document.getElementById("door-icon"),
+            doorValue: document.getElementById("door-value"),
+            doorStatus: document.getElementById("door-status"),
+            doorNote: document.getElementById("door-note"),
+
+            lampCard: document.getElementById("light-device-card"),
+            lampIcon: document.getElementById("lamp-icon"),
+            lampButton: document.getElementById("lamp-button"),
+            lampStatus: document.getElementById("lamp-status"),
+            lampNote: document.getElementById("lamp-note"),
+
+            airconCard: document.getElementById("aircon-device-card"),
+            airconIcon: document.getElementById("aircon-icon"),
+            airconButton: document.getElementById("aircon-button"),
+            airconStatus: document.getElementById("aircon-status"),
+            airconNote: document.getElementById("aircon-note"),
+
+            fanCard: document.getElementById("fan-device-card"),
+            fanIcon: document.getElementById("fan-icon"),
+            fanButton: document.getElementById("fan-button"),
+            fanStatus: document.getElementById("fan-status"),
+            fanNote: document.getElementById("fan-note"),
+
+            plantCard: document.getElementById("plant-card"),
+            plantIcon: document.getElementById("plant-icon"),
+            soilValue: document.getElementById("soil-value"),
+            soilFill: document.getElementById("soil-fill"),
+            plantStatus: document.getElementById("plant-status"),
+            plantNote: document.getElementById("plant-note"),
+            waterButton: document.getElementById("water-button"),
+
+            eventList: document.getElementById("event-list")
+        };
+
+        // ===== 대시보드 상태 =====
+        // 실제 센서는 없으므로, 상태 객체를 두고 이 값을 조금씩 바꿔서 센서처럼 보이게 만듭니다.
+        const dashboardState = {
+            temperature: 24.1,
+            humidity: 52,
+            lightLevel: 62,
+            soilMoisture: 58,
+            doorOpen: false,
+            darkMode: false,
+            devices: {
+                lamp: false,
+                aircon: false,
+                fan: false
+            },
+            recentEvents: [],
+            sensorTargets: {
+                temperature: 24.5,
+                humidity: 54,
+                lightLevel: 64
+            }
+        };
+
+        // ===== 공통 유틸 함수 =====
+        function clamp(value, min, max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        function randomBetween(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function pickRandomItem(items) {
+            return items[Math.floor(Math.random() * items.length)];
+        }
+
+        function formatClock(date) {
+            return date.toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            });
+        }
+
+        function formatEventTime(date) {
+            return date.toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        // 현재 값이 목표 값 쪽으로 조금씩 움직이도록 해서 "갑자기 확 변하는" 느낌을 줄입니다.
+        function moveValueTowardTarget(currentValue, targetValue, maxStep, noiseAmount) {
+            const difference = targetValue - currentValue;
+            const limitedStep = clamp(difference, -maxStep, maxStep);
+            const noise = randomBetween(-noiseAmount, noiseAmount);
+            return currentValue + limitedStep + noise;
+        }
+
+        // ===== 센서 목표값 갱신 =====
+        // 목표를 가끔만 바꾸면 센서가 한 방향으로 조금씩 움직이는 자연스러운 흐름을 만들 수 있습니다.
+        function refreshSensorTargets() {
+            if (Math.random() < 0.25) {
+                dashboardState.sensorTargets.temperature = randomBetween(20.5, 29.2);
+            }
+
+            if (Math.random() < 0.22) {
+                dashboardState.sensorTargets.humidity = randomBetween(34, 72);
+            }
+
+            if (Math.random() < 0.28) {
+                dashboardState.sensorTargets.lightLevel = randomBetween(18, 88);
+            }
+        }
+
+        // ===== 센서 시뮬레이션 =====
+        function simulateSensorTick() {
+            refreshSensorTargets();
+
+            dashboardState.temperature = clamp(
+                moveValueTowardTarget(dashboardState.temperature, dashboardState.sensorTargets.temperature, 0.35, 0.06),
+                18,
+                30
+            );
+
+            dashboardState.humidity = clamp(
+                moveValueTowardTarget(dashboardState.humidity, dashboardState.sensorTargets.humidity, 2.4, 0.5),
+                30,
+                80
+            );
+
+            dashboardState.lightLevel = clamp(
+                moveValueTowardTarget(dashboardState.lightLevel, dashboardState.sensorTargets.lightLevel, 4.8, 1.3),
+                0,
+                100
+            );
+
+            // 화분은 시간이 지나면 조금씩 마르도록 설정합니다.
+            dashboardState.soilMoisture = clamp(
+                dashboardState.soilMoisture - randomBetween(0.2, 1.0),
+                0,
+                100
+            );
+
+            // 에어컨이 켜져 있으면 온도가 살짝 내려가도록 합니다.
+            if (dashboardState.devices.aircon) {
+                dashboardState.temperature = clamp(dashboardState.temperature - randomBetween(0.1, 0.28), 18, 30);
+            }
+
+            // 선풍기가 켜져 있으면 체감상 습도가 약간 안정되는 느낌을 줍니다.
+            if (dashboardState.devices.fan) {
+                dashboardState.humidity = clamp(dashboardState.humidity - randomBetween(-0.2, 0.6), 30, 80);
+            }
+
+            // 전등이 켜져 있으면 조도가 조금 더 밝아집니다.
+            if (dashboardState.devices.lamp) {
+                dashboardState.lightLevel = clamp(dashboardState.lightLevel + randomBetween(1.5, 3.2), 0, 100);
+            }
+        }
+
+        // ===== 상태 판정 함수 =====
+        function getTemperatureUiState() {
+            if (dashboardState.temperature >= 29) {
+                return {
+                    label: "위험",
+                    tone: "danger",
+                    note: "온도가 높습니다. 에어컨 사용을 권장합니다.",
+                    icon: "🥵"
+                };
+            }
+
+            if (dashboardState.temperature <= 20) {
+                return {
+                    label: "서늘함",
+                    tone: "warn",
+                    note: "실내가 조금 서늘합니다. 담요가 필요할 수 있어요.",
+                    icon: "🧥"
+                };
+            }
+
+            return {
+                label: "정상",
+                tone: "good",
+                note: "쾌적한 실내 온도입니다.",
+                icon: "🌡️"
+            };
+        }
+
+        function getHumidityUiState() {
+            if (dashboardState.humidity <= 35) {
+                return {
+                    label: "건조",
+                    tone: "warn",
+                    note: "습도가 낮습니다. 피부가 건조하게 느껴질 수 있어요.",
+                    icon: "🏜️"
+                };
+            }
+
+            if (dashboardState.humidity >= 70) {
+                return {
+                    label: "높음",
+                    tone: "warn",
+                    note: "습도가 조금 높습니다. 환기를 해보면 좋겠습니다.",
+                    icon: "🌫️"
+                };
+            }
+
+            return {
+                label: "보통",
+                tone: "good",
+                note: "무난한 습도 상태를 유지 중입니다.",
+                icon: "💧"
+            };
+        }
+
+        function getLightUiState() {
+            if (dashboardState.lightLevel < 34) {
+                return {
+                    label: "어두움",
+                    tone: "warn",
+                    note: "실내가 조금 어두워졌습니다. 전등을 켜면 더 밝아집니다.",
+                    icon: "🌙"
+                };
+            }
+
+            if (dashboardState.lightLevel < 68) {
+                return {
+                    label: "보통",
+                    tone: "info",
+                    note: "창가 빛이 적당하게 들어오고 있습니다.",
+                    icon: "🌤️"
+                };
+            }
+
+            return {
+                label: "밝음",
+                tone: "good",
+                note: "햇빛이 잘 들어와 밝은 상태입니다.",
+                icon: "☀️"
+            };
+        }
+
+        function getPlantUiState() {
+            if (dashboardState.soilMoisture <= 20) {
+                return {
+                    label: "물을 주세요",
+                    tone: "danger",
+                    note: "토양이 많이 말랐습니다. 물 주기 버튼을 눌러 주세요.",
+                    icon: "🥀",
+                    fill: "linear-gradient(90deg, #ef4444, #f97316)"
+                };
+            }
+
+            if (dashboardState.soilMoisture <= 50) {
+                return {
+                    label: "조금 건조",
+                    tone: "warn",
+                    note: "완전히 위험하진 않지만, 조금 더 촉촉하면 좋습니다.",
+                    icon: "🌿",
+                    fill: "linear-gradient(90deg, #f59e0b, #facc15)"
+                };
+            }
+
+            return {
+                label: "건강",
+                tone: "good",
+                note: "토양 수분이 충분해서 식물이 건강합니다.",
+                icon: "🪴",
+                fill: "linear-gradient(90deg, #22c55e, #0ea5e9)"
+            };
+        }
+
+        // ===== 공통 UI 함수 =====
+        function applyStatusPill(element, label, tone) {
+            element.textContent = label;
+            element.className = "status-pill " + tone;
+        }
+
+        function toggleDangerOutline(cardElement, shouldHighlight) {
+            cardElement.classList.toggle("danger-outline", shouldHighlight);
+        }
+
+        // ===== 화면 렌더링 =====
+        function renderClock() {
+            elements.currentTime.textContent = formatClock(new Date());
+        }
+
+        function renderTemperatureCard() {
+            const uiState = getTemperatureUiState();
+            elements.temperatureValue.textContent = dashboardState.temperature.toFixed(1) + "°C";
+            elements.temperatureIcon.textContent = uiState.icon;
+            elements.temperatureNote.textContent = uiState.note;
+            applyStatusPill(elements.temperatureStatus, uiState.label, uiState.tone);
+            toggleDangerOutline(elements.temperatureCard, uiState.tone === "danger");
+        }
+
+        function renderHumidityCard() {
+            const uiState = getHumidityUiState();
+            elements.humidityValue.textContent = Math.round(dashboardState.humidity) + "%";
+            elements.humidityIcon.textContent = uiState.icon;
+            elements.humidityNote.textContent = uiState.note;
+            applyStatusPill(elements.humidityStatus, uiState.label, uiState.tone);
+            toggleDangerOutline(elements.humidityCard, dashboardState.humidity <= 35);
+        }
+
+        function renderLightCard() {
+            const uiState = getLightUiState();
+            elements.lightValue.textContent = uiState.label;
+            elements.lightIcon.textContent = uiState.icon;
+            elements.lightNote.textContent = uiState.note;
+            applyStatusPill(elements.lightStatus, uiState.label, uiState.tone);
+        }
+
+        function renderDoorCard() {
+            const isOpen = dashboardState.doorOpen;
+            elements.doorValue.textContent = isOpen ? "열림" : "닫힘";
+            elements.doorIcon.textContent = isOpen ? "🚪" : "🔒";
+            elements.doorNote.textContent = isOpen
+                ? "현관문이 열려 있습니다. 잠깐 열렸는지 확인해 보세요."
+                : "현재 현관문이 안전하게 닫혀 있습니다.";
+            applyStatusPill(elements.doorStatus, isOpen ? "열림" : "닫힘", isOpen ? "warn" : "good");
+        }
+
+        function renderDeviceCard(deviceKey, cardElement, iconElement, buttonElement, statusElement, noteElement, labelText) {
+            const isActive = dashboardState.devices[deviceKey];
+            cardElement.classList.toggle("active", isActive);
+            buttonElement.classList.toggle("active", isActive);
+            buttonElement.setAttribute("aria-pressed", String(isActive));
+            buttonElement.textContent = labelText + " " + (isActive ? "ON" : "OFF");
+
+            iconElement.textContent = isActive
+                ? { lamp: "💡", aircon: "❄️", fan: "🌀" }[deviceKey]
+                : { lamp: "🔌", aircon: "🧊", fan: "🪭" }[deviceKey];
+
+            applyStatusPill(statusElement, isActive ? "ON" : "OFF", isActive ? "good" : "warn");
+
+            if (deviceKey === "lamp") {
+                noteElement.textContent = isActive
+                    ? "거실 조명이 켜져 있어 실내가 더 밝게 보입니다."
+                    : "버튼을 눌러 조명을 켜거나 끌 수 있습니다.";
+            }
+
+            if (deviceKey === "aircon") {
+                noteElement.textContent = isActive
+                    ? "냉방이 동작 중이라 온도가 천천히 내려가고 있습니다."
+                    : "실내 온도가 높아지면 사용을 권장합니다.";
+            }
+
+            if (deviceKey === "fan") {
+                noteElement.textContent = isActive
+                    ? "선풍기가 돌아가며 공기를 순환시키고 있습니다."
+                    : "가볍게 공기를 순환시키는 장치입니다.";
+            }
+        }
+
+        function renderPlantCard() {
+            const uiState = getPlantUiState();
+            const moistureValue = Math.round(dashboardState.soilMoisture);
+            elements.soilValue.textContent = moistureValue + "%";
+            elements.plantIcon.textContent = uiState.icon;
+            elements.plantNote.textContent = uiState.note;
+            elements.soilFill.style.width = moistureValue + "%";
+            elements.soilFill.style.background = uiState.fill;
+            applyStatusPill(elements.plantStatus, uiState.label, uiState.tone);
+            toggleDangerOutline(elements.plantCard, dashboardState.soilMoisture <= 20);
+        }
+
+        function renderEventList() {
+            elements.eventList.innerHTML = "";
+
+            dashboardState.recentEvents.forEach((eventItem) => {
+                const listItem = document.createElement("li");
+                listItem.className = "event-item";
+                listItem.innerHTML = `
+                    <span class="event-dot" aria-hidden="true"></span>
+                    <div class="event-text">
+                        <strong>${eventItem.message}</strong>
+                        <span class="event-time">${eventItem.timeText}</span>
+                    </div>
+                `;
+                elements.eventList.appendChild(listItem);
+            });
+        }
+
+        function renderDashboard() {
+            renderClock();
+            renderTemperatureCard();
+            renderHumidityCard();
+            renderLightCard();
+            renderDoorCard();
+            renderDeviceCard("lamp", elements.lampCard, elements.lampIcon, elements.lampButton, elements.lampStatus, elements.lampNote, "전등");
+            renderDeviceCard("aircon", elements.airconCard, elements.airconIcon, elements.airconButton, elements.airconStatus, elements.airconNote, "에어컨");
+            renderDeviceCard("fan", elements.fanCard, elements.fanIcon, elements.fanButton, elements.fanStatus, elements.fanNote, "선풍기");
+            renderPlantCard();
+            renderEventList();
+        }
+
+        // ===== 이벤트와 알림 =====
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = message;
+            elements.toastStack.prepend(toast);
+
+            window.setTimeout(() => {
+                toast.remove();
+            }, 3400);
+        }
+
+        function addEvent(message, showPopup = true) {
+            const now = new Date();
+            dashboardState.recentEvents.unshift({
+                message,
+                timeText: formatEventTime(now)
+            });
+
+            dashboardState.recentEvents = dashboardState.recentEvents.slice(0, 6);
+            elements.screenReaderStatus.textContent = message;
+
+            if (showPopup) {
+                showToast(message);
+            }
+        }
+
+        function triggerRandomEvent() {
+            if (Math.random() >= 0.24) {
+                return;
+            }
+
+            const eventHandlers = [
+                () => {
+                    dashboardState.doorOpen = true;
+                    addEvent("현관문이 열렸습니다.");
+                },
+                () => {
+                    dashboardState.doorOpen = false;
+                    addEvent("현관문이 닫혔습니다.");
+                },
+                () => {
+                    dashboardState.devices.lamp = false;
+                    dashboardState.devices.fan = false;
+                    addEvent("전력이 절약 모드입니다. 불필요한 장치를 잠시 쉬게 했습니다.");
+                },
+                () => {
+                    dashboardState.sensorTargets.lightLevel = randomBetween(8, 28);
+                    addEvent("비가 와서 조도가 낮아졌습니다.");
+                },
+                () => {
+                    dashboardState.sensorTargets.temperature = randomBetween(28.4, 29.8);
+                    addEvent("온도가 높아 에어컨 사용을 권장합니다.");
+                },
+                () => {
+                    dashboardState.sensorTargets.humidity = randomBetween(31, 36);
+                    addEvent("실내 공기가 건조해지고 있습니다.");
+                },
+                () => {
+                    dashboardState.sensorTargets.lightLevel = randomBetween(68, 90);
+                    addEvent("햇빛이 들어와 거실이 더 밝아졌습니다.");
+                },
+                () => {
+                    dashboardState.soilMoisture = clamp(dashboardState.soilMoisture - randomBetween(3, 7), 0, 100);
+                    addEvent("화분 흙이 빠르게 마르고 있습니다.");
+                }
+            ];
+
+            pickRandomItem(eventHandlers)();
+        }
+
+        // ===== 사용자 제어 =====
+        function setAllDevices(nextValue) {
+            dashboardState.devices.lamp = nextValue;
+            dashboardState.devices.aircon = nextValue;
+            dashboardState.devices.fan = nextValue;
+        }
+
+        function toggleDevice(deviceKey, labelText) {
+            dashboardState.devices[deviceKey] = !dashboardState.devices[deviceKey];
+            addEvent(labelText + "이(가) " + (dashboardState.devices[deviceKey] ? "켜졌습니다." : "꺼졌습니다."), false);
+            renderDashboard();
+        }
+
+        function waterPlant() {
+            dashboardState.soilMoisture = clamp(dashboardState.soilMoisture + randomBetween(14, 24), 0, 100);
+            addEvent("화분에 물을 주어 토양 습도가 올라갔습니다.");
+            renderDashboard();
+        }
+
+        function toggleDarkMode() {
+            dashboardState.darkMode = !dashboardState.darkMode;
+            elements.body.classList.toggle("dark-mode", dashboardState.darkMode);
+            elements.darkModeButton.textContent = dashboardState.darkMode ? "☀️ 라이트모드" : "🌙 다크모드";
+            addEvent(dashboardState.darkMode ? "다크모드로 전환했습니다." : "라이트모드로 전환했습니다.", false);
+            renderDashboard();
+        }
+
+        // ===== 이벤트 연결 =====
+        elements.darkModeButton.addEventListener("click", toggleDarkMode);
+
+        elements.allOnButton.addEventListener("click", () => {
+            setAllDevices(true);
+            addEvent("모든 장치를 ON 상태로 바꿨습니다.");
+            renderDashboard();
+        });
+
+        elements.allOffButton.addEventListener("click", () => {
+            setAllDevices(false);
+            addEvent("모든 장치를 OFF 상태로 바꿨습니다.");
+            renderDashboard();
+        });
+
+        elements.lampButton.addEventListener("click", () => toggleDevice("lamp", "전등"));
+        elements.airconButton.addEventListener("click", () => toggleDevice("aircon", "에어컨"));
+        elements.fanButton.addEventListener("click", () => toggleDevice("fan", "선풍기"));
+        elements.waterButton.addEventListener("click", waterPlant);
+
+        // ===== 초기 이벤트 =====
+        addEvent("스마트홈 대시보드가 시작되었습니다.", false);
+        addEvent("센서 값이 1초마다 자연스럽게 갱신됩니다.", false);
+
+        // ===== 주기적 갱신 =====
+        renderDashboard();
+
+        window.setInterval(() => {
+            simulateSensorTick();
+            triggerRandomEvent();
+            renderDashboard();
+        }, 1000);
+
+        window.setInterval(renderClock, 1000);
+    </script>
+</body>
+</html>

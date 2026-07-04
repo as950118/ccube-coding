@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week13 Three.js Smart Home Demo</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-main: #020617;
+            --bg-secondary: #0f172a;
+            --panel: rgba(15, 23, 42, 0.78);
+            --panel-border: rgba(148, 163, 184, 0.18);
+            --text-main: #e2e8f0;
+            --text-sub: #94a3b8;
+            --brand: #38bdf8;
+            --brand-soft: rgba(56, 189, 248, 0.14);
+            --good: #22c55e;
+            --warn: #fbbf24;
+            --danger: #f87171;
+            --shadow: 0 24px 60px rgba(2, 6, 23, 0.45);
+        }
+
+        body.light-mode {
+            color-scheme: light;
+            --bg-main: #eff6ff;
+            --bg-secondary: #dbeafe;
+            --panel: rgba(255, 255, 255, 0.82);
+            --panel-border: rgba(148, 163, 184, 0.24);
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --brand: #2563eb;
+            --brand-soft: rgba(37, 99, 235, 0.12);
+            --good: #16a34a;
+            --warn: #d97706;
+            --danger: #dc2626;
+            --shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: "Pretendard", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%),
+                radial-gradient(circle at top right, rgba(14, 165, 233, 0.14), transparent 24%),
+                linear-gradient(180deg, var(--bg-main), var(--bg-secondary));
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        #app {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #scene-root {
+            position: absolute;
+            inset: 0;
+        }
+
+        .hud {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: minmax(300px, 380px) minmax(260px, 320px);
+            grid-template-rows: auto 1fr;
+            gap: 18px;
+            padding: 18px;
+            pointer-events: none;
+        }
+
+        .panel {
+            pointer-events: auto;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+        }
+
+        .hero {
+            grid-column: 1 / 2;
+            grid-row: 1 / 2;
+            padding: 20px 22px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--brand-soft);
+            color: var(--brand);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+        }
+
+        h1 {
+            margin: 14px 0 10px;
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            line-height: 1.05;
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+
+        .left-stack {
+            grid-column: 1 / 2;
+            grid-row: 2 / 3;
+            display: grid;
+            align-content: start;
+            gap: 18px;
+            max-height: calc(100vh - 190px);
+            overflow: auto;
+            padding-right: 6px;
+        }
+
+        .left-stack::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .left-stack::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.24);
+        }
+
+        .right-stack {
+            grid-column: 2 / 3;
+            grid-row: 1 / 3;
+            display: grid;
+            align-content: start;
+            gap: 18px;
+        }
+
+        .control-panel,
+        .status-panel,
+        .event-panel {
+            padding: 18px;
+        }
+
+        .section-title {
+            margin: 0 0 12px;
+            font-size: 1rem;
+        }
+
+        .clock-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(148, 163, 184, 0.1);
+        }
+
+        .clock-label {
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
+
+        .clock-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 16px;
+            padding: 12px 14px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.08);
+            transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(14, 165, 233, 0.12);
+        }
+
+        button.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #0ea5e9, #4f46e5);
+        }
+
+        .primary-button {
+            color: #ffffff;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+
+        .status-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .status-card {
+            padding: 14px;
+            border-radius: 18px;
+            background: rgba(148, 163, 184, 0.11);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+        }
+
+        .status-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .status-label {
+            font-size: 0.88rem;
+            color: var(--text-sub);
+        }
+
+        .status-value {
+            display: block;
+            margin-top: 8px;
+            font-size: 1.65rem;
+            font-weight: 800;
+        }
+
+        .status-note {
+            margin-top: 6px;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            line-height: 1.45;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 10px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 800;
+        }
+
+        .pill.good {
+            color: var(--good);
+            background: rgba(34, 197, 94, 0.14);
+        }
+
+        .pill.warn {
+            color: var(--warn);
+            background: rgba(245, 158, 11, 0.16);
+        }
+
+        .pill.danger {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.14);
+        }
+
+        .pill.info {
+            color: var(--brand);
+            background: var(--brand-soft);
+        }
+
+        .device-summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .device-box {
+            padding: 12px;
+            border-radius: 18px;
+            background: rgba(148, 163, 184, 0.11);
+        }
+
+        .device-box span {
+            display: block;
+            color: var(--text-sub);
+            font-size: 0.82rem;
+        }
+
+        .device-box strong {
+            display: block;
+            margin-top: 6px;
+            font-size: 1rem;
+        }
+
+        .event-list {
+            display: grid;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .event-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 12px 14px;
+            border-radius: 18px;
+            background: rgba(148, 163, 184, 0.11);
+        }
+
+        .event-dot {
+            flex: 0 0 10px;
+            width: 10px;
+            height: 10px;
+            margin-top: 7px;
+            border-radius: 50%;
+            background: var(--brand);
+            box-shadow: 0 0 0 7px rgba(56, 189, 248, 0.12);
+        }
+
+        .event-time {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-sub);
+            font-size: 0.8rem;
+        }
+
+        .hint-panel {
+            padding: 14px 16px;
+            border-radius: 20px;
+            background: rgba(56, 189, 248, 0.08);
+            color: var(--text-sub);
+            line-height: 1.55;
+        }
+
+        .hint-panel strong {
+            color: var(--text-main);
+        }
+
+        @media (max-width: 1120px) {
+            .hud {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+
+            .hero,
+            .left-stack,
+            .right-stack {
+                grid-column: 1 / 2;
+            }
+
+            .right-stack {
+                grid-row: 3 / 4;
+            }
+        }
+
+        @media (max-width: 720px) {
+            body {
+                overflow: auto;
+            }
+
+            #app {
+                min-height: 100vh;
+            }
+
+            #scene-root {
+                position: fixed;
+                inset: 0;
+            }
+
+            .hud {
+                position: relative;
+                min-height: 100vh;
+                padding: 14px;
+            }
+
+            .button-grid,
+            .device-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="scene-root" aria-hidden="true"></div>
+
+        <div class="hud">
+            <section class="panel hero">
+                <span class="hero-badge">Three.js 시연용 참고 데모</span>
+                <h1>🏠 3D Smart Home Demo</h1>
+                <p>
+                    이 버전은 수업용 starter 와 분리된 시각 데모입니다.
+                    <strong>Three.js</strong> 로 공간과 장치를 입체적으로 보여주고,
+                    센서값과 이벤트는 <strong>Flask + SQLite API</strong> 에서 받아옵니다.
+                </p>
+            </section>
+
+            <div class="left-stack">
+                <section class="panel control-panel">
+                    <h2 class="section-title">제어 패널</h2>
+                    <div class="clock-box">
+                        <div>
+                            <div class="clock-label">현재 시간</div>
+                            <div id="clock-value" class="clock-value">--:--:--</div>
+                        </div>
+                        <div class="pill info">AUTO UPDATE</div>
+                    </div>
+
+                    <div class="button-grid">
+                        <button id="lamp-button" type="button">💡 전등 OFF</button>
+                        <button id="aircon-button" type="button">❄️ 에어컨 OFF</button>
+                        <button id="fan-button" type="button">🌀 선풍기 OFF</button>
+                        <button id="water-button" class="primary-button" type="button">💦 물 주기</button>
+                        <button id="all-on-button" type="button">⚡ 모든 장치 ON</button>
+                        <button id="all-off-button" type="button">💤 모든 장치 OFF</button>
+                        <button id="theme-button" type="button">🌙 라이트모드</button>
+                    </div>
+                </section>
+
+                <section class="panel status-panel">
+                    <h2 class="section-title">센서 상태</h2>
+
+                    <div class="status-grid">
+                        <article class="status-card">
+                            <div class="status-head">
+                                <span class="status-label">온도</span>
+                                <span id="temperature-pill" class="pill info">정상</span>
+                            </div>
+                            <strong id="temperature-value" class="status-value">24.0°C</strong>
+                            <div id="temperature-note" class="status-note">쾌적한 온도입니다.</div>
+                        </article>
+
+                        <article class="status-card">
+                            <div class="status-head">
+                                <span class="status-label">습도</span>
+                                <span id="humidity-pill" class="pill info">보통</span>
+                            </div>
+                            <strong id="humidity-value" class="status-value">52%</strong>
+                            <div id="humidity-note" class="status-note">실내 습도가 안정적입니다.</div>
+                        </article>
+
+                        <article class="status-card">
+                            <div class="status-head">
+                                <span class="status-label">조도</span>
+                                <span id="light-pill" class="pill info">보통</span>
+                            </div>
+                            <strong id="light-value" class="status-value">보통</strong>
+                            <div id="light-note" class="status-note">거실의 밝기가 적당합니다.</div>
+                        </article>
+
+                        <article class="status-card">
+                            <div class="status-head">
+                                <span class="status-label">화분 상태</span>
+                                <span id="soil-pill" class="pill good">건강</span>
+                            </div>
+                            <strong id="soil-value" class="status-value">58%</strong>
+                            <div id="soil-note" class="status-note">토양 수분이 충분합니다.</div>
+                        </article>
+                    </div>
+
+                    <div class="device-summary">
+                        <div class="device-box">
+                            <span>문 상태</span>
+                            <strong id="door-summary">닫힘</strong>
+                        </div>
+                        <div class="device-box">
+                            <span>거실 조명</span>
+                            <strong id="lamp-summary">OFF</strong>
+                        </div>
+                        <div class="device-box">
+                            <span>에어컨</span>
+                            <strong id="aircon-summary">OFF</strong>
+                        </div>
+                        <div class="device-box">
+                            <span>선풍기</span>
+                            <strong id="fan-summary">OFF</strong>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="right-stack">
+                <section class="panel event-panel">
+                    <h2 class="section-title">최근 이벤트</h2>
+                    <ul id="event-list" class="event-list"></ul>
+                </section>
+
+                <section class="panel hint-panel">
+                    <strong>참고:</strong>
+                    이 버전은 시각 참고용이지만, 단순 애니메이션 파일이 아니라
+                    <strong>backend 상태를 실제로 읽는 독립 데모 앱</strong>입니다.
+                    교육용 흐름은 `week13-starter`에서, 더 화려한 연출은 이 Three.js 버전에서 비교해 볼 수 있습니다.
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.166.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.166.1/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from "three";
+        import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+        // ===== 화면 요소 =====
+        const ui = {
+            body: document.body,
+            clockValue: document.getElementById("clock-value"),
+            lampButton: document.getElementById("lamp-button"),
+            airconButton: document.getElementById("aircon-button"),
+            fanButton: document.getElementById("fan-button"),
+            waterButton: document.getElementById("water-button"),
+            allOnButton: document.getElementById("all-on-button"),
+            allOffButton: document.getElementById("all-off-button"),
+            themeButton: document.getElementById("theme-button"),
+            temperatureValue: document.getElementById("temperature-value"),
+            temperaturePill: document.getElementById("temperature-pill"),
+            temperatureNote: document.getElementById("temperature-note"),
+            humidityValue: document.getElementById("humidity-value"),
+            humidityPill: document.getElementById("humidity-pill"),
+            humidityNote: document.getElementById("humidity-note"),
+            lightValue: document.getElementById("light-value"),
+            lightPill: document.getElementById("light-pill"),
+            lightNote: document.getElementById("light-note"),
+            soilValue: document.getElementById("soil-value"),
+            soilPill: document.getElementById("soil-pill"),
+            soilNote: document.getElementById("soil-note"),
+            doorSummary: document.getElementById("door-summary"),
+            lampSummary: document.getElementById("lamp-summary"),
+            airconSummary: document.getElementById("aircon-summary"),
+            fanSummary: document.getElementById("fan-summary"),
+            eventList: document.getElementById("event-list"),
+        };
+
+        // ===== 스마트홈 상태 =====
+        const state = {
+            temperature: 24.1,
+            humidity: 52,
+            lightLevel: 62,
+            soilMoisture: 58,
+            doorOpen: false,
+            theme: "dark",
+            devices: {
+                lamp: false,
+                aircon: false,
+                fan: false,
+            },
+            events: [],
+        };
+
+        // ===== 3D 기본 구성 =====
+        const sceneRoot = document.getElementById("scene-root");
+        const scene = new THREE.Scene();
+        scene.background = null;
+        scene.fog = new THREE.Fog(0x07111f, 16, 32);
+
+        const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(10.5, 11.2, 10.8);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        sceneRoot.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.target.set(0, 1.2, 0);
+        controls.minDistance = 9;
+        controls.maxDistance = 18;
+        controls.maxPolarAngle = Math.PI * 0.48;
+        controls.minPolarAngle = Math.PI * 0.18;
+
+        // ===== 조명 =====
+        const ambientLight = new THREE.HemisphereLight(0xbfe8ff, 0x111827, 1.1);
+        scene.add(ambientLight);
+
+        const sunLight = new THREE.DirectionalLight(0xdbeafe, 1.2);
+        sunLight.position.set(8, 11, 5);
+        sunLight.castShadow = true;
+        sunLight.shadow.mapSize.set(1024, 1024);
+        sunLight.shadow.camera.left = -10;
+        sunLight.shadow.camera.right = 10;
+        sunLight.shadow.camera.top = 10;
+        sunLight.shadow.camera.bottom = -10;
+        scene.add(sunLight);
+
+        const lampPointLight = new THREE.PointLight(0xffe58f, 0, 12, 2);
+        lampPointLight.position.set(0, 3.2, 0.3);
+        lampPointLight.castShadow = true;
+        scene.add(lampPointLight);
+
+        // ===== 재질 =====
+        const materials = {
+            baseFloor: new THREE.MeshStandardMaterial({ color: 0xcbd5e1, roughness: 0.92 }),
+            wall: new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.84 }),
+            wood: new THREE.MeshStandardMaterial({ color: 0xe2cda7, roughness: 0.92 }),
+            stone: new THREE.MeshStandardMaterial({ color: 0xcbd5e1, roughness: 0.98 }),
+            sensor: new THREE.MeshStandardMaterial({ color: 0xbfdbfe, roughness: 0.88 }),
+            plantArea: new THREE.MeshStandardMaterial({ color: 0xdcfce7, roughness: 0.9 }),
+            darkMetal: new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.32, roughness: 0.42 }),
+            whiteMetal: new THREE.MeshStandardMaterial({ color: 0xf8fafc, metalness: 0.18, roughness: 0.28 }),
+            blueGlow: new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0284c7, emissiveIntensity: 0.2 }),
+            amberGlow: new THREE.MeshStandardMaterial({ color: 0xfacc15, emissive: 0xf59e0b, emissiveIntensity: 0.4 }),
+            door: new THREE.MeshStandardMaterial({ color: 0x8b5e3c, roughness: 0.75 }),
+            leaf: new THREE.MeshStandardMaterial({ color: 0x22c55e, roughness: 0.74 }),
+            pot: new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.82 }),
+            sensorGlass: new THREE.MeshStandardMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.82, roughness: 0.08, metalness: 0.1 }),
+        };
+
+        // ===== 보조 함수 =====
+        function clamp(value, min, max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        function randomBetween(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function moveToward(current, target, maxStep, noise) {
+            const difference = target - current;
+            const limitedStep = clamp(difference, -maxStep, maxStep);
+            return current + limitedStep + randomBetween(-noise, noise);
+        }
+
+        function updateClock() {
+            ui.clockValue.textContent = new Date().toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+            });
+        }
+
+        function setPill(element, label, tone) {
+            element.textContent = label;
+            element.className = "pill " + tone;
+        }
+
+        function addEvent(message) {
+            const time = new Date().toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+            state.events.unshift({ message, time });
+            state.events = state.events.slice(0, 6);
+            renderEvents();
+        }
+
+        function renderEvents() {
+            ui.eventList.innerHTML = "";
+            state.events.forEach((eventItem) => {
+                const li = document.createElement("li");
+                li.className = "event-item";
+                li.innerHTML = `
+                    <span class="event-dot" aria-hidden="true"></span>
+                    <div>
+                        <strong>${eventItem.message}</strong>
+                        <span class="event-time">${eventItem.time}</span>
+                    </div>
+                `;
+                ui.eventList.appendChild(li);
+            });
+        }
+
+        // ===== 장면: 집 바닥과 벽 =====
+        const stage = new THREE.Group();
+        scene.add(stage);
+
+        const basePlate = new THREE.Mesh(
+            new THREE.BoxGeometry(14, 0.4, 14),
+            materials.baseFloor
+        );
+        basePlate.position.y = -0.2;
+        basePlate.receiveShadow = true;
+        stage.add(basePlate);
+
+        function createFloor(width, depth, material, x, z) {
+            const mesh = new THREE.Mesh(
+                new THREE.BoxGeometry(width, 0.12, depth),
+                material
+            );
+            mesh.position.set(x, 0.07, z);
+            mesh.receiveShadow = true;
+            stage.add(mesh);
+            return mesh;
+        }
+
+        const livingFloor = createFloor(8.3, 9.8, materials.wood, 2.1, 0);
+        const entranceFloor = createFloor(3.2, 2.7, materials.stone, -4.5, 3.5);
+        const sensorFloor = createFloor(3.2, 3.1, materials.sensor, -4.5, 0.1);
+        const plantFloor = createFloor(3.2, 3.1, materials.plantArea, -4.5, -3.6);
+
+        function createWall(width, height, depth, x, y, z, rotationY = 0) {
+            const wall = new THREE.Mesh(
+                new THREE.BoxGeometry(width, height, depth),
+                materials.wall
+            );
+            wall.position.set(x, y, z);
+            wall.rotation.y = rotationY;
+            wall.castShadow = true;
+            wall.receiveShadow = true;
+            stage.add(wall);
+            return wall;
+        }
+
+        // 바깥 벽
+        createWall(13.5, 2.2, 0.28, 0, 1.1, -6.9);
+        createWall(13.5, 2.2, 0.28, 0, 1.1, 6.9);
+        createWall(0.28, 2.2, 13.5, -6.9, 1.1, 0);
+        createWall(0.28, 2.2, 13.5, 6.9, 1.1, 0);
+
+        // 내부 벽
+        createWall(0.24, 2.1, 9.8, -2.75, 1.05, -0.05);
+        createWall(3.35, 2.1, 0.24, -4.5, 1.05, 2.0);
+        createWall(3.35, 2.1, 0.24, -4.5, 1.05, -1.55);
+
+        // ===== 거실 오브젝트 =====
+        const livingGroup = new THREE.Group();
+        stage.add(livingGroup);
+
+        // 천장등
+        const lampGroup = new THREE.Group();
+        lampGroup.position.set(0, 2.8, 0.3);
+        const lampRing = new THREE.Mesh(
+            new THREE.CylinderGeometry(1.15, 1.15, 0.18, 40),
+            materials.whiteMetal
+        );
+        lampRing.castShadow = true;
+        lampGroup.add(lampRing);
+
+        const lampBulb = new THREE.Mesh(
+            new THREE.SphereGeometry(0.55, 24, 24),
+            materials.amberGlow
+        );
+        lampBulb.position.y = -0.18;
+        lampGroup.add(lampBulb);
+
+        const lampAura = new THREE.Mesh(
+            new THREE.SphereGeometry(1.8, 24, 24),
+            new THREE.MeshBasicMaterial({ color: 0xfef08a, transparent: true, opacity: 0.12 })
+        );
+        lampAura.scale.y = 0.38;
+        lampAura.position.y = -0.15;
+        lampGroup.add(lampAura);
+        livingGroup.add(lampGroup);
+
+        // 에어컨
+        const airconGroup = new THREE.Group();
+        airconGroup.position.set(4.3, 2.4, -3.9);
+        const airconBody = new THREE.Mesh(
+            new THREE.BoxGeometry(2.1, 0.65, 0.6),
+            materials.whiteMetal
+        );
+        airconBody.castShadow = true;
+        airconGroup.add(airconBody);
+
+        const airconSlatGroup = new THREE.Group();
+        for (let index = 0; index < 3; index += 1) {
+            const slat = new THREE.Mesh(
+                new THREE.BoxGeometry(1.5, 0.04, 0.06),
+                materials.darkMetal
+            );
+            slat.position.set(0, -0.1 - index * 0.12, 0.26);
+            airconSlatGroup.add(slat);
+        }
+        airconGroup.add(airconSlatGroup);
+
+        const airflowGroup = new THREE.Group();
+        airflowGroup.position.set(0, -0.35, 0.25);
+        for (let index = 0; index < 3; index += 1) {
+            const airflow = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.06, 0.02, 1.4, 10),
+                new THREE.MeshBasicMaterial({ color: 0x7dd3fc, transparent: true, opacity: 0.42 })
+            );
+            airflow.rotation.z = Math.PI / 2;
+            airflow.position.set((index - 1) * 0.35, -0.55, 0.1);
+            airflowGroup.add(airflow);
+        }
+        airconGroup.add(airflowGroup);
+        livingGroup.add(airconGroup);
+
+        // 선풍기
+        const fanGroup = new THREE.Group();
+        fanGroup.position.set(-2.8, 1.05, 3.1);
+        const fanStand = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.08, 0.12, 1.3, 14),
+            materials.darkMetal
+        );
+        fanStand.position.y = 0.65;
+        fanGroup.add(fanStand);
+
+        const fanBase = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.65, 0.82, 0.18, 24),
+            materials.darkMetal
+        );
+        fanBase.position.y = 0.09;
+        fanGroup.add(fanBase);
+
+        const fanHead = new THREE.Group();
+        fanHead.position.set(0, 1.42, 0);
+        const fanCage = new THREE.Mesh(
+            new THREE.TorusGeometry(0.55, 0.05, 12, 40),
+            materials.whiteMetal
+        );
+        fanHead.add(fanCage);
+
+        const fanBlades = new THREE.Group();
+        for (let index = 0; index < 3; index += 1) {
+            const blade = new THREE.Mesh(
+                new THREE.BoxGeometry(0.16, 0.7, 0.05),
+                materials.blueGlow
+            );
+            blade.position.y = 0.28;
+            blade.rotation.z = index * (Math.PI * 2 / 3);
+            fanBlades.add(blade);
+        }
+        fanHead.add(fanBlades);
+
+        const fanCap = new THREE.Mesh(
+            new THREE.SphereGeometry(0.12, 16, 16),
+            materials.darkMetal
+        );
+        fanHead.add(fanCap);
+        fanGroup.add(fanHead);
+        livingGroup.add(fanGroup);
+
+        // 문
+        const doorPivot = new THREE.Group();
+        doorPivot.position.set(-6.1, 0, 4.15);
+        const door = new THREE.Mesh(
+            new THREE.BoxGeometry(0.12, 1.85, 1.25),
+            materials.door
+        );
+        door.position.set(0.62, 0.92, 0);
+        door.castShadow = true;
+        doorPivot.add(door);
+        stage.add(doorPivot);
+
+        const doorKnob = new THREE.Mesh(
+            new THREE.SphereGeometry(0.05, 12, 12),
+            materials.amberGlow
+        );
+        doorKnob.position.set(0.06, 0.12, 0.48);
+        door.add(doorKnob);
+
+        // 센서 패널
+        function createSensorPanel(x, z) {
+            const panel = new THREE.Mesh(
+                new THREE.BoxGeometry(1.1, 1.2, 0.14),
+                materials.sensorGlass
+            );
+            panel.position.set(x, 0.7, z);
+            panel.castShadow = true;
+            stage.add(panel);
+            return panel;
+        }
+
+        const tempPanel = createSensorPanel(-4.5, 0.95);
+        const humidityPanel = createSensorPanel(-4.5, 0.05);
+        const lightPanel = createSensorPanel(-4.5, -0.85);
+
+        // 화분
+        const plantGroup = new THREE.Group();
+        plantGroup.position.set(-4.5, 0.25, -3.65);
+        const pot = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.52, 0.68, 0.7, 20),
+            materials.pot
+        );
+        pot.castShadow = true;
+        pot.position.y = 0.35;
+        plantGroup.add(pot);
+
+        const soil = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.48, 0.48, 0.08, 20),
+            new THREE.MeshStandardMaterial({ color: 0x5b3a29, roughness: 1 })
+        );
+        soil.position.y = 0.68;
+        plantGroup.add(soil);
+
+        const leafGroup = new THREE.Group();
+        function createLeaf(x, y, z, rotationY, scaleY) {
+            const leaf = new THREE.Mesh(
+                new THREE.SphereGeometry(0.2, 16, 16),
+                materials.leaf
+            );
+            leaf.scale.set(0.7, scaleY, 0.35);
+            leaf.position.set(x, y, z);
+            leaf.rotation.y = rotationY;
+            leaf.rotation.z = rotationY * 0.25;
+            leafGroup.add(leaf);
+        }
+        createLeaf(0, 1.05, 0, 0, 1.8);
+        createLeaf(-0.18, 0.9, 0.08, -0.5, 1.5);
+        createLeaf(0.2, 0.88, -0.06, 0.5, 1.45);
+        createLeaf(-0.08, 0.78, -0.18, -1.1, 1.2);
+        createLeaf(0.1, 0.76, 0.18, 1.0, 1.2);
+        plantGroup.add(leafGroup);
+        stage.add(plantGroup);
+
+        // 바닥 그림자
+        const shadowPlane = new THREE.Mesh(
+            new THREE.CircleGeometry(7.2, 64),
+            new THREE.MeshBasicMaterial({ color: 0x0f172a, transparent: true, opacity: 0.12 })
+        );
+        shadowPlane.rotation.x = -Math.PI / 2;
+        shadowPlane.position.y = -0.19;
+        shadowPlane.scale.set(1.12, 0.86, 1);
+        stage.add(shadowPlane);
+
+        // ===== 상태 판정 =====
+        function getTemperatureUiState() {
+            if (state.temperature >= 29) {
+                return { label: "위험", tone: "danger", note: "온도가 높아 에어컨 사용을 권장합니다." };
+            }
+            if (state.temperature <= 20) {
+                return { label: "서늘함", tone: "warn", note: "실내가 조금 서늘합니다." };
+            }
+            return { label: "정상", tone: "good", note: "쾌적한 온도입니다." };
+        }
+
+        function getHumidityUiState() {
+            if (state.humidity <= 35) {
+                return { label: "건조", tone: "warn", note: "습도가 낮아 건조하게 느껴질 수 있습니다." };
+            }
+            if (state.humidity >= 70) {
+                return { label: "높음", tone: "warn", note: "습도가 높아 환기가 필요할 수 있습니다." };
+            }
+            return { label: "보통", tone: "good", note: "실내 습도가 안정적입니다." };
+        }
+
+        function getLightUiState() {
+            if (state.lightLevel < 34) {
+                return { label: "어두움", tone: "warn", note: "거실이 어두워졌습니다." };
+            }
+            if (state.lightLevel < 68) {
+                return { label: "보통", tone: "info", note: "거실의 밝기가 적당합니다." };
+            }
+            return { label: "밝음", tone: "good", note: "햇빛이 잘 들어오고 있습니다." };
+        }
+
+        function getSoilUiState() {
+            if (state.soilMoisture <= 20) {
+                return {
+                    label: "물을 주세요",
+                    tone: "danger",
+                    note: "토양이 많이 말랐습니다. 물 주기가 필요합니다.",
+                    leafColor: 0x86efac,
+                    aura: 0xf97316,
+                };
+            }
+            if (state.soilMoisture <= 50) {
+                return {
+                    label: "조금 건조",
+                    tone: "warn",
+                    note: "완전히 위험하진 않지만 조금 더 촉촉하면 좋습니다.",
+                    leafColor: 0x4ade80,
+                    aura: 0xfacc15,
+                };
+            }
+            return {
+                label: "건강",
+                tone: "good",
+                note: "토양 수분이 충분합니다.",
+                leafColor: 0x22c55e,
+                aura: 0x22c55e,
+            };
+        }
+
+        // ===== backend 동기화 =====
+        function syncStateFromApiResponse(data) {
+            state.temperature = data.temperature;
+            state.humidity = data.humidity;
+            state.lightLevel = data.light_level;
+            state.soilMoisture = data.soil_moisture;
+            state.doorOpen = data.door_open;
+            state.devices.lamp = data.devices.lamp;
+            state.devices.aircon = data.devices.aircon;
+            state.devices.fan = data.devices.fan;
+            state.events = data.events || [];
+        }
+
+        async function fetchJson(url, options = {}) {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error("Request failed: " + response.status);
+            }
+            return response.json();
+        }
+
+        async function fetchStatus() {
+            try {
+                const data = await fetchJson("/api/status");
+                syncStateFromApiResponse(data);
+                renderHud();
+                updateSceneState();
+            } catch (error) {
+                console.error("Failed to fetch dashboard status", error);
+            }
+        }
+
+        // ===== HUD 업데이트 =====
+        function renderHud() {
+            const temperatureUi = getTemperatureUiState();
+            const humidityUi = getHumidityUiState();
+            const lightUi = getLightUiState();
+            const soilUi = getSoilUiState();
+
+            ui.temperatureValue.textContent = state.temperature.toFixed(1) + "°C";
+            setPill(ui.temperaturePill, temperatureUi.label, temperatureUi.tone);
+            ui.temperatureNote.textContent = temperatureUi.note;
+
+            ui.humidityValue.textContent = Math.round(state.humidity) + "%";
+            setPill(ui.humidityPill, humidityUi.label, humidityUi.tone);
+            ui.humidityNote.textContent = humidityUi.note;
+
+            ui.lightValue.textContent = lightUi.label;
+            setPill(ui.lightPill, lightUi.label, lightUi.tone);
+            ui.lightNote.textContent = lightUi.note;
+
+            ui.soilValue.textContent = Math.round(state.soilMoisture) + "%";
+            setPill(ui.soilPill, soilUi.label, soilUi.tone);
+            ui.soilNote.textContent = soilUi.note;
+
+            ui.doorSummary.textContent = state.doorOpen ? "열림" : "닫힘";
+            ui.lampSummary.textContent = state.devices.lamp ? "ON" : "OFF";
+            ui.airconSummary.textContent = state.devices.aircon ? "ON" : "OFF";
+            ui.fanSummary.textContent = state.devices.fan ? "ON" : "OFF";
+
+            updateButtonState(ui.lampButton, state.devices.lamp, "💡 전등");
+            updateButtonState(ui.airconButton, state.devices.aircon, "❄️ 에어컨");
+            updateButtonState(ui.fanButton, state.devices.fan, "🌀 선풍기");
+            renderEvents();
+        }
+
+        function updateButtonState(button, isActive, label) {
+            button.classList.toggle("active", isActive);
+            button.textContent = label + " " + (isActive ? "ON" : "OFF");
+        }
+
+        // ===== 3D 장면 업데이트 =====
+        function updateSceneState() {
+            const lightUi = getLightUiState();
+            const soilUi = getSoilUiState();
+
+            lampPointLight.intensity = state.devices.lamp ? 2.2 : 0;
+            lampAura.material.opacity = state.devices.lamp ? 0.26 : 0.06;
+            lampBulb.material.emissiveIntensity = state.devices.lamp ? 1.1 : 0.18;
+
+            const ambientBase = state.theme === "dark" ? 1.1 : 1.35;
+            ambientLight.intensity = ambientBase + (state.devices.lamp ? 0.18 : 0) + state.lightLevel / 280;
+
+            const floorBrightness = THREE.MathUtils.clamp(state.lightLevel / 78, 0.45, 1.35);
+            livingFloor.material.color.setRGB(0.89 * floorBrightness, 0.8 * floorBrightness, 0.63 * floorBrightness);
+
+            airflowGroup.visible = state.devices.aircon;
+            airconBody.material.emissiveIntensity = state.devices.aircon ? 0.55 : 0.04;
+
+            fanHead.rotation.y = THREE.MathUtils.lerp(
+                fanHead.rotation.y,
+                state.devices.fan ? 0.22 : 0,
+                0.08
+            );
+
+            doorPivot.rotation.y = THREE.MathUtils.lerp(
+                doorPivot.rotation.y,
+                state.doorOpen ? -Math.PI / 2.8 : 0,
+                0.1
+            );
+
+            leafGroup.children.forEach((leaf) => {
+                leaf.material.color.setHex(soilUi.leafColor);
+            });
+            pot.material.emissive.setHex(soilUi.aura);
+            pot.material.emissiveIntensity = state.soilMoisture <= 20 ? 0.18 : 0.03;
+
+            const sensorTone = lightUi.tone === "warn" ? 0xfef08a : lightUi.tone === "good" ? 0xbbf7d0 : 0xbfdbfe;
+            tempPanel.material.color.setHex(0xe0f2fe);
+            humidityPanel.material.color.setHex(0xdcfce7);
+            lightPanel.material.color.setHex(sensorTone);
+
+            // 테마에 따라 씬 배경색/안개 색도 맞춰 줍니다.
+            if (state.theme === "dark") {
+                scene.fog.color.setHex(0x07111f);
+                sunLight.color.setHex(0xdbeafe);
+            } else {
+                scene.fog.color.setHex(0xe2e8f0);
+                sunLight.color.setHex(0xffffff);
+            }
+        }
+
+        // ===== 버튼 동작 =====
+        async function setAllDevices(value) {
+            try {
+                const data = await fetchJson("/api/device/all", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ value }),
+                });
+                syncStateFromApiResponse(data);
+                renderHud();
+                updateSceneState();
+            } catch (error) {
+                console.error("Failed to set all devices", error);
+            }
+        }
+
+        async function toggleDevice(deviceName) {
+            try {
+                const data = await fetchJson("/api/device/toggle", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ device: deviceName }),
+                });
+                syncStateFromApiResponse(data);
+                renderHud();
+                updateSceneState();
+            } catch (error) {
+                console.error("Failed to toggle device", error);
+            }
+        }
+
+        async function waterPlant() {
+            try {
+                const data = await fetchJson("/api/plant/water", {
+                    method: "POST",
+                });
+                syncStateFromApiResponse(data);
+                renderHud();
+                updateSceneState();
+            } catch (error) {
+                console.error("Failed to water plant", error);
+            }
+        }
+
+        function toggleTheme() {
+            const nextTheme = state.theme === "dark" ? "light" : "dark";
+            state.theme = nextTheme;
+            ui.body.classList.toggle("light-mode", nextTheme === "light");
+            ui.themeButton.textContent = nextTheme === "light" ? "🌙 다크모드" : "☀️ 라이트모드";
+
+            if (nextTheme === "light") {
+                materials.wall.color.setHex(0xffffff);
+                materials.baseFloor.color.setHex(0xe2e8f0);
+                materials.whiteMetal.color.setHex(0xffffff);
+                renderer.toneMappingExposure = 1.16;
+            } else {
+                materials.wall.color.setHex(0xe2e8f0);
+                materials.baseFloor.color.setHex(0xcbd5e1);
+                materials.whiteMetal.color.setHex(0xf8fafc);
+                renderer.toneMappingExposure = 1.0;
+            }
+
+            updateSceneState();
+        }
+
+        ui.lampButton.addEventListener("click", () => toggleDevice("lamp"));
+        ui.airconButton.addEventListener("click", () => toggleDevice("aircon"));
+        ui.fanButton.addEventListener("click", () => toggleDevice("fan"));
+        ui.waterButton.addEventListener("click", waterPlant);
+        ui.allOnButton.addEventListener("click", () => setAllDevices(true));
+        ui.allOffButton.addEventListener("click", () => setAllDevices(false));
+        ui.themeButton.addEventListener("click", toggleTheme);
+
+        // ===== 첫 렌더 =====
+        updateClock();
+        fetchStatus();
+
+        // ===== 애니메이션 루프 =====
+        const clock = new THREE.Clock();
+        function animate() {
+            const elapsed = clock.getElapsedTime();
+
+            if (state.devices.fan) {
+                fanBlades.rotation.z -= 0.26;
+            }
+
+            if (state.devices.aircon) {
+                airflowGroup.children.forEach((airflow, index) => {
+                    airflow.position.y = -0.55 - Math.sin(elapsed * 4 + index) * 0.05;
+                    airflow.material.opacity = 0.2 + (Math.sin(elapsed * 5 + index) + 1) * 0.18;
+                });
+            } else {
+                airflowGroup.children.forEach((airflow) => {
+                    airflow.material.opacity = 0.08;
+                });
+            }
+
+            leafGroup.rotation.y = Math.sin(elapsed * 1.3) * 0.06;
+            controls.update();
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // ===== 주기적 갱신 =====
+        window.setInterval(updateClock, 1000);
+        window.setInterval(fetchStatus, 1000);
+
+        // ===== 반응형 처리 =====
+        window.addEventListener("resize", () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ dashboard_title }} — AI웹반 13주차</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page">
+        <header class="hero">
+            <div class="hero-copy">
+                <p class="badge">보너스 주차 · Flask + SQLite + CSS 2.5D 스마트홈</p>
+                <h1>{{ name }}의 {{ dashboard_title }}</h1>
+                <p class="hero-text">
+                    이 대시보드는 <strong>Python(Flask)</strong>이 센서 값을 만들고,
+                    <strong>SQLite</strong>가 상태를 기억하고,
+                    <strong>JavaScript</strong>가 1초마다 화면을 다시 그립니다.
+                </p>
+            </div>
+
+            <div class="hero-tools">
+                <section class="clock-card">
+                    <span class="clock-label">현재 시간</span>
+                    <strong id="current-time" class="clock-value">--:--:--</strong>
+                </section>
+
+                <section class="top-controls">
+                    <button id="dark-mode-button" class="top-button" type="button">🌙 다크모드</button>
+                    <button id="all-on-button" class="top-button" type="button">⚡ 모든 장치 ON</button>
+                    <button id="all-off-button" class="top-button" type="button">💤 모든 장치 OFF</button>
+                </section>
+            </div>
+        </header>
+
+        <section class="dashboard-shell">
+            <section class="floorplan-card">
+                <div class="floorplan-head">
+                    <div>
+                        <p class="floorplan-eyebrow">TOP VIEW FLOOR PLAN</p>
+                        <h2 class="floorplan-title">스마트홈 평면도</h2>
+                    </div>
+                    <p class="floorplan-copy">
+                        거실, 현관, 센서실, 화분 구역이 하나의 집 도면 안에 배치되어 있습니다.
+                        장치가 켜지면 방 조명과 오브젝트 상태도 함께 바뀝니다.
+                    </p>
+                </div>
+
+                <div class="house-plan">
+                    <div class="plan-grid" aria-hidden="true"></div>
+                    <div class="plan-outline" aria-hidden="true"></div>
+
+                    <article class="room room-entrance" id="entrance-room">
+                        <div class="room-name">현관</div>
+                        <div class="room-floor room-floor-stone"></div>
+
+                        <div class="door-zone">
+                            <div id="door-device" class="door-device">
+                                <div class="door-frame">
+                                    <div class="door-leaf"></div>
+                                    <div class="door-knob"></div>
+                                </div>
+                                <div class="door-sensor">문 센서</div>
+                            </div>
+
+                            <div id="door-panel" class="door-pill off">닫힘</div>
+                            <p id="door-note" class="device-note">현관문이 닫혀 있습니다.</p>
+                        </div>
+                    </article>
+
+                    <article class="room room-sensor">
+                        <div class="room-name">센서실</div>
+                        <div class="room-floor room-floor-panel"></div>
+
+                        <div class="sensor-stack">
+                            <div id="temperature-card" class="mini-card">
+                                <div class="mini-label">온도</div>
+                                <strong id="temperature-value" class="mini-value">--.-°C</strong>
+                                <span id="temperature-status" class="mini-status info">정상</span>
+                            </div>
+
+                            <div id="humidity-card" class="mini-card">
+                                <div class="mini-label">습도</div>
+                                <strong id="humidity-value" class="mini-value">--%</strong>
+                                <span id="humidity-status" class="mini-status info">보통</span>
+                            </div>
+
+                            <div id="light-card" class="mini-card">
+                                <div class="mini-label">조도</div>
+                                <strong id="light-value" class="mini-value">--</strong>
+                                <span id="light-status" class="mini-status info">보통</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="room room-garden">
+                        <div class="room-name">화분 구역</div>
+                        <div class="room-floor room-floor-wood"></div>
+
+                        <div id="plant-device" class="plant-zone">
+                            <div class="plant-visual">
+                                <div class="plant-leaves" aria-hidden="true">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div id="plant-icon" class="plant-icon">🪴</div>
+                                <div class="plant-pot"></div>
+                            </div>
+
+                            <div class="plant-info">
+                                <div class="mini-label">토양 습도</div>
+                                <strong id="soil-value" class="plant-value">--%</strong>
+                                <span id="plant-status" class="mini-status good">건강</span>
+                                <div class="soil-bar">
+                                    <div id="soil-fill" class="soil-fill"></div>
+                                </div>
+                                <p id="plant-note" class="device-note">화분 상태를 불러오는 중입니다.</p>
+                                <button id="water-button" class="water-button" type="button">💦 물 주기</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="room room-living" id="living-room">
+                        <div class="room-name">거실</div>
+                        <div class="room-floor room-floor-living"></div>
+                        <div class="living-glow" aria-hidden="true"></div>
+
+                        <div id="lamp-device" class="device lamp-device">
+                            <div class="device-name">전등</div>
+                            <div class="lamp-3d">
+                                <div class="lamp-ring"></div>
+                                <div class="lamp-bulb"></div>
+                                <div class="lamp-aura"></div>
+                            </div>
+                            <button id="lamp-button" class="device-panel off" type="button">OFF</button>
+                        </div>
+
+                        <div id="aircon-device" class="device aircon-device">
+                            <div class="device-name">에어컨</div>
+                            <div class="aircon-3d">
+                                <div class="aircon-body">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="air-flow">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                            <button id="aircon-button" class="device-panel off" type="button">OFF</button>
+                        </div>
+
+                        <div id="fan-device" class="device fan-device">
+                            <div class="device-name">선풍기</div>
+                            <div class="fan-3d">
+                                <div class="fan-head">
+                                    <div class="fan-cage">
+                                        <div class="fan-blades">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fan-neck"></div>
+                                <div class="fan-base"></div>
+                            </div>
+                            <button id="fan-button" class="device-panel off" type="button">OFF</button>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <aside class="side-panel">
+                <section class="panel-card">
+                    <div class="panel-head">
+                        <h2>실시간 상태</h2>
+                        <span class="panel-badge">DB 저장</span>
+                    </div>
+                    <p class="panel-text">
+                        상태는 Flask 서버가 계산하고, SQLite가 저장합니다.
+                        새로고침해도 장치 상태가 유지됩니다.
+                    </p>
+                    <div class="summary-grid">
+                        <div class="summary-box">
+                            <span>전등</span>
+                            <strong id="lamp-summary">OFF</strong>
+                        </div>
+                        <div class="summary-box">
+                            <span>에어컨</span>
+                            <strong id="aircon-summary">OFF</strong>
+                        </div>
+                        <div class="summary-box">
+                            <span>선풍기</span>
+                            <strong id="fan-summary">OFF</strong>
+                        </div>
+                        <div class="summary-box">
+                            <span>문 상태</span>
+                            <strong id="door-summary">닫힘</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel-card">
+                    <div class="panel-head">
+                        <h2>최근 이벤트</h2>
+                        <span class="panel-badge">자동 생성</span>
+                    </div>
+                    <ul id="event-list" class="event-list" aria-live="polite"></ul>
+                </section>
+            </aside>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

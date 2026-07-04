@@ -27,11 +27,15 @@ week{N}-starter/
 - [x] week03-starter — Python 함수 + fetch API
 - [x] week04-starter — Python OX 퀴즈 + /api/check
 - [x] week05-starter — Python call_ai() + /api/chat (AI)
+- [x] week13-starter — Flask + SQLite + IoT 스마트홈 대시보드 (보너스)
 - [ ] week06 ~ week12
 
 ## reference
 
 🟡🔴 완성 예: `reference/week{N}-complete/`
+
+추가 참고:
+- `reference/week13-threejs-demo/` — Three.js + Flask + SQLite 기반 3D 스마트홈 시연용 예시
 
 ## zip
 

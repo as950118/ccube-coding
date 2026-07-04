@@ -14,5 +14,6 @@
 | 10 | [week10-webcam.md](week10-webcam.md) | 이미지AI | 웹캠 |
 | 11 | [week11-integration.md](week11-integration.md) | 통합 | 전 기능 |
 | 12 | [week12-presentation.md](week12-presentation.md) | 발표 | 시연 |
+| 13 | [week13-smart-home-dashboard.md](week13-smart-home-dashboard.md) | 보너스 | Flask + SQLite 스마트홈 |
 
 아키텍처: [../appendix/architecture.md](../appendix/architecture.md)
