@@ -18,25 +18,25 @@ async function handleAnswer(card, answer) {
     userAnswers[qIndex] = answer;
 
     // ===== [🔴] 도전: 모든 문제 답하면 /api/score 호출 =====
-    // const totalQuestions = document.querySelectorAll(".question-card").length;
-    // if (Object.keys(userAnswers).length === totalQuestions) {
-    //     await showScore(totalQuestions);
-    // }
+    const totalQuestions = document.querySelectorAll(".question-card").length;
+    if (Object.keys(userAnswers).length === totalQuestions) {
+        await showScore(totalQuestions);
+    }
 }
 
 // ===== [🔴] 도전: Python /api/score 로 총점 표시 =====
-// async function showScore(totalQuestions) {
-//     const answers = [];
-//     for (let i = 0; i < totalQuestions; i++) {
-//         answers.push(userAnswers[i] || "");
-//     }
-//     const res = await fetch(`/api/score?answers=${answers.join(",")}`);
-//     const data = await res.json();
-//     const panel = document.getElementById("score-panel");
-//     const text = document.getElementById("score-text");
-//     text.textContent = `총점: ${data.score} / ${data.total}`;
-//     panel.classList.remove("hidden");
-// }
+async function showScore(totalQuestions) {
+    const answers = [];
+    for (let i = 0; i < totalQuestions; i++) {
+        answers.push(userAnswers[i] || "");
+    }
+    const res = await fetch(`/api/score?answers=${answers.join(",")}`);
+    const data = await res.json();
+    const panel = document.getElementById("score-panel");
+    const text = document.getElementById("score-text");
+    text.textContent = `총점: ${data.score} / ${data.total}`;
+    panel.classList.remove("hidden");
+}
 
 document.querySelectorAll(".question-card").forEach((card) => {
     card.querySelectorAll(".btn-o, .btn-x").forEach((btn) => {

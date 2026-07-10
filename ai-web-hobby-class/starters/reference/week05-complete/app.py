@@ -13,6 +13,7 @@ DEFAULT_QUESTION = "중학생에게 공부 팁 한 가지만 알려줘"
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 AI_MODEL = "google/gemma-4-31b-it:free"
+AI_MODEL = "openrouter/free"
 
 
 def call_ai(question: str) -> str:
@@ -49,5 +50,5 @@ def api_chat():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5001))
     app.run(host="0.0.0.0", port=port, debug=True)

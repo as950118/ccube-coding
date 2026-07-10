@@ -50,16 +50,19 @@ def api_check():
 
 
 # ===== [🔴] 도전: 모든 문제 답 제출 후 총점 =====
-# @app.route("/api/score")
-# def api_score():
-#     """answers=O,X,O 형식으로 받아 Python이 맞은 개수를 셉니다."""
-#     raw = request.args.get("answers", "")
-#     answers = [a.strip().upper() for a in raw.split(",") if a.strip()]
-#     score = sum(
-#         1 for i, ans in enumerate(answers)
-#         if i < len(QUESTIONS) and ans == QUESTIONS[i]["answer"]
-#     )
-#     return jsonify({"score": score, "total": len(QUESTIONS)})
+@app.route("/api/score")
+def api_score():
+    """answers=O,X,O 형식으로 받아 Python이 맞은 개수를 셉니다."""
+    raw = request.args.get("answers", "")
+    answers = []
+    for a in raw.split(","):
+        if a.strip():
+            answers.append(a.strip().upper())
+    score = sum(
+        1 for i, ans in enumerate(answers)
+        if i < len(QUESTIONS) and ans == QUESTIONS[i]["answer"]
+    )
+    return jsonify({"score": score, "total": len(QUESTIONS)})
 
 
 if __name__ == "__main__":
