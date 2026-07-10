@@ -1,5 +1,6 @@
 """
 AI웹반 5주차 — 완성 예시 (교사 시연용)
+https://app.notion.com/p/api-key-399b05b3ee658079a0edd3dd50cab208
 """
 import os
 
