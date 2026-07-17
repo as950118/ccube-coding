@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_title }} — AI웹반 7주차</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">Python + AI + 웹 · 7주차 · 학습 도우미 통합</p>
+            <!-- ===== [🟢] APP_TITLE — app.py 에서 바꿉니다 ===== -->
+            <h1>{{ app_title }}</h1>
+            <p class="intro">{{ name }}의 한 앱에 <strong>챗봇</strong>과 <strong>퀴즈</strong>가 함께 있어요.<br>
+                아래 탭을 눌러 기능을 바꿔 보세요!</p>
+        </header>
+
+        <!-- ===== [🟢] 탭 이름 — 바꿔보세요 ===== -->
+        <nav class="tabs" role="tablist">
+            <button type="button" class="tab active" data-tab="chat" role="tab" aria-selected="true">💬 AI 챗봇</button>
+            <button type="button" class="tab" data-tab="quiz" role="tab" aria-selected="false">📝 AI 퀴즈</button>
+            <!-- ===== [🔴] 도전: 아래 주석을 해제하고 OX 탭을 켜세요 ===== -->
+            <!-- <button type="button" class="tab" data-tab="ox" role="tab" aria-selected="false">⭕ OX 퀴즈</button> -->
+        </nav>
+
+        <!-- ===== 탭 1: AI 챗봇 (5주차) ===== -->
+        <section id="panel-chat" class="panel active" role="tabpanel">
+            <h2>AI에게 질문하기</h2>
+            <p class="default-hint">
+                기본 질문: <code>{{ default_question }}</code>
+            </p>
+            <div class="input-row">
+                <label for="question-input">내 질문</label>
+                <input type="text" id="question-input" placeholder="예: 파이썬이 뭐야?" autocomplete="off">
+            </div>
+            <div class="btn-row">
+                <button type="button" id="btn-default" class="btn btn-primary">기본 질문 보내기</button>
+                <button type="button" id="btn-send" class="btn btn-secondary">내 질문 보내기</button>
+            </div>
+            <div id="reply" class="reply" aria-live="polite">AI 답이 여기 나타납니다</div>
+        </section>
+
+        <!-- ===== 탭 2: AI 퀴즈 (6주차) ===== -->
+        <section id="panel-quiz" class="panel" role="tabpanel" hidden>
+            <h2>AI에게 퀴즈 만들어 달라고 하기</h2>
+            <p class="default-hint">
+                기본 과목: <code>{{ default_subject }}</code>
+            </p>
+            <div class="input-row">
+                <label for="subject-input">과목 / 주제</label>
+                <input type="text" id="subject-input" value="{{ default_subject }}" autocomplete="off">
+            </div>
+            <div class="btn-row">
+                <button type="button" id="btn-generate" class="btn btn-primary">퀴즈 생성하기</button>
+            </div>
+            <div id="quiz-result" class="quiz-result" aria-live="polite">AI 퀴즈가 여기 나타납니다</div>
+        </section>
+
+        <!-- ===== [🔴] 탭 3: OX 퀴즈 (4주차) — 탭 버튼 주석 해제 후 사용 ===== -->
+        <section id="panel-ox" class="panel" role="tabpanel" hidden>
+            <h2>OX 퀴즈 (4주차)</h2>
+            {% for q in questions %}
+            <article class="question-card" data-index="{{ loop.index0 }}">
+                <p class="question-text">
+                    <span class="question-num">Q{{ loop.index }}</span>
+                    {{ q.text }}
+                </p>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-o" data-answer="O">O</button>
+                    <button type="button" class="btn btn-x" data-answer="X">X</button>
+                </div>
+                <div class="feedback" aria-live="polite"></div>
+            </article>
+            {% endfor %}
+        </section>
+
+        <section class="flow-hint">
+            <h2>오늘의 흐름</h2>
+            <p>한 <code>app.py</code>에 라우트가 여러 개!
+                <code>/api/chat</code> · <code>/api/generate-quiz</code> · (🔴) <code>/api/check</code></p>
+            <p class="flow-note">탭만 바꿔도 같은 사이트 안에서 기능이 바뀝니다.</p>
+        </section>
+
+        <footer class="footer">
+            <p>🟢 목표: <code>APP_TITLE</code> 변경 → 탭 2개 클릭 확인</p>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

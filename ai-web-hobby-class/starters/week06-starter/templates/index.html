@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 퀴즈 생성 — AI웹반 6주차</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">Python + AI + 웹 · 6주차 · AI 퀴즈 생성</p>
+            <h1>{{ name }}의 AI 퀴즈 메이커</h1>
+            <p class="intro"><strong>Python</strong>이 prompt를 만들고, <strong>AI</strong>가 퀴즈를 생성합니다.<br>
+                과목만 바꾸면 다른 퀴즈가 나와요!</p>
+        </header>
+
+        <section class="quiz-gen">
+            <h2>🟢 AI에게 퀴즈 만들어 달라고 하기</h2>
+
+            <p class="default-hint">
+                기본 과목: <code>{{ default_subject }}</code>
+                <span class="hint-note">← <code>app.py</code> 의 <code>DEFAULT_SUBJECT</code></span>
+            </p>
+
+            <div class="input-row">
+                <label for="subject-input">과목 / 주제 (🟢)</label>
+                <input
+                    type="text"
+                    id="subject-input"
+                    placeholder="예: 과학, 한국사, 수학"
+                    autocomplete="off"
+                    value="{{ default_subject }}"
+                >
+            </div>
+
+            <div class="btn-row">
+                <button type="button" id="btn-generate" class="btn btn-primary">퀴즈 생성하기</button>
+            </div>
+
+            <!-- fetch 결과가 여기 표시됩니다 — [🟢] CSS로 꾸며보세요 -->
+            <div id="quiz-result" class="quiz-result" aria-live="polite">AI 퀴즈가 여기 나타납니다</div>
+
+            <!-- ===== [🔴] 로딩 — script.js 주석 해제 후 표시 ===== -->
+            <!-- <p id="loading" class="loading hidden">퀴즈 만드는 중… 📝</p> -->
+        </section>
+
+        <section class="flow-hint">
+            <h2>오늘의 흐름</h2>
+            <p><strong>버튼 클릭</strong> → <code>fetch('/api/generate-quiz?subject=...')</code>
+                → <strong>Python</strong> <code>build_quiz_prompt()</code>
+                → <code>call_ai()</code> → JSON → 화면</p>
+            <p class="flow-note">5주차는 질문 그대로 → 이번 주는 <strong>Python이 prompt를 설계</strong>!</p>
+        </section>
+
+        <footer class="footer">
+            <p>🟢 목표: <code>DEFAULT_SUBJECT</code> 변경 → 퀴즈 생성 → AI 퀴즈 확인</p>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

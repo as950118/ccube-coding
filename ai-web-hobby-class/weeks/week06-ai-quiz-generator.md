@@ -56,6 +56,20 @@ def api_quiz():
 
 ---
 
+## starter 포함
+
+```
+app.py                 → [🟢] DEFAULT_SUBJECT · build_quiz_prompt() · /api/generate-quiz
+templates/index.html   → 과목 입력·퀴즈 결과 영역
+static/script.js       → [🟢] fetch /api/generate-quiz
+static/style.css       → [🟢] .quiz-result 색·배경
+requirements.txt       → flask + openai
+```
+
+완성 예: `starters/reference/week06-complete/`
+
+---
+
 ## 다음 주 (Week07)
 
 - `/api/chat` + `/api/generate-quiz` 한 `index.html` 탭

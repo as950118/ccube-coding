@@ -27,8 +27,10 @@ week{N}-starter/
 - [x] week03-starter — Python 함수 + fetch API
 - [x] week04-starter — Python OX 퀴즈 + /api/check
 - [x] week05-starter — Python call_ai() + /api/chat (AI)
+- [x] week06-starter — Python build_quiz_prompt() + /api/generate-quiz
+- [x] week07-starter — 라우트 통합 (챗봇·퀴즈 탭, 🔴 OX)
 - [x] week13-starter — Flask + SQLite + IoT 스마트홈 대시보드 (보너스)
-- [ ] week06 ~ week12
+- [ ] week08 ~ week12
 
 ## reference
 

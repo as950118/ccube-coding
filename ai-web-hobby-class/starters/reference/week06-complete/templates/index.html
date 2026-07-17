@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 퀴즈 생성 — AI웹반 6주차 (완성)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">Python + AI + 웹 · 6주차 · AI 퀴즈 생성</p>
+            <h1>{{ name }}의 AI 퀴즈 메이커</h1>
+            <p class="intro"><strong>Python</strong>이 prompt를 만들고, <strong>AI</strong>가 퀴즈를 생성합니다.</p>
+        </header>
+
+        <section class="quiz-gen">
+            <h2>🟢 AI에게 퀴즈 만들어 달라고 하기</h2>
+
+            <p class="default-hint">
+                기본 과목: <code>{{ default_subject }}</code>
+            </p>
+
+            <div class="input-row">
+                <label for="subject-input">과목 / 주제</label>
+                <input type="text" id="subject-input" value="{{ default_subject }}" autocomplete="off">
+            </div>
+
+            <div class="btn-row">
+                <button type="button" id="btn-generate" class="btn btn-primary">퀴즈 생성하기</button>
+            </div>
+
+            <p id="loading" class="loading hidden">퀴즈 만드는 중… 📝</p>
+            <div id="quiz-result" class="quiz-result" aria-live="polite">AI 퀴즈가 여기 나타납니다</div>
+        </section>
+
+        <footer class="footer">
+            <p>완성 예 — 쉬운 난이도 prompt + 로딩 표시</p>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
