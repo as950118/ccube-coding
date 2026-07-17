@@ -48,6 +48,20 @@
 
 ---
 
+## starter 포함
+
+```
+app.py                 → [🟢] APP_TITLE · [🟡] TUTOR_PROMPT · /api/chat · /api/generate-quiz · /api/check
+templates/index.html   → 탭 UI (챗봇·퀴즈 · 🔴 OX 주석)
+static/script.js       → 탭 전환 + fetch
+static/style.css       → 탭·패널 스타일
+requirements.txt       → flask + openai
+```
+
+완성 예: `starters/reference/week07-complete/` (OX 3탭 포함)
+
+---
+
 ## 다음 주 (Week08)
 
 - Python `messages: list[dict]` + 말풍선 UI
