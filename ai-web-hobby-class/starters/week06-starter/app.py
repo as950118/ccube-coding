@@ -1,5 +1,6 @@
 """
 AI웹반 6주차 — Python prompt + AI 퀴즈 생성
+https://app.notion.com/p/api-key-399b05b3ee658079a0edd3dd50cab208
 
 [🟢] 이번 주: DEFAULT_SUBJECT 바꾸기 → 퀴즈 생성 버튼 → AI 퀴즈 확인!
 [🟡] build_quiz_prompt() 에 「쉬운 난이도」 추가
@@ -17,7 +18,7 @@ STUDENT_NAME = "홍길동"
 
 # OpenRouter — OpenAI SDK 호환 API (https://openrouter.ai)
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-AI_MODEL = "google/gemma-4-31b-it:free"  # 무료 모델 — openrouter.ai/collections/free-models
+AI_MODEL = "openrouter/free"  # 무료 모델 — openrouter.ai/collections/free-models
 
 
 # ===== [🟢] 기본 과목 — 바꿔보세요 =====

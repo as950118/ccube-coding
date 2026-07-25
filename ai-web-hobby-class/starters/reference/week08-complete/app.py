@@ -1,5 +1,6 @@
 """
 AI웹반 8주차 — 완성 예시 (교사 시연용)
+https://app.notion.com/p/api-key-399b05b3ee658079a0edd3dd50cab208
 말풍선 UI + history + /api/clear
 """
 import os
@@ -13,7 +14,7 @@ STUDENT_NAME = "김서연"
 APP_TITLE = "서연의 말풍선 채팅"
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-AI_MODEL = "google/gemma-4-31b-it:free"
+AI_MODEL = "openrouter/free"
 TUTOR_PROMPT = "너는 중학생을 도와주는 친절한 튜터야. 쉽고 짧게, 응원하며 설명해 줘."
 
 messages: list[dict] = []

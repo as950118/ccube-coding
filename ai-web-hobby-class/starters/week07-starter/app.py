@@ -1,5 +1,6 @@
 """
 AI웹반 7주차 — Flask 라우트 통합: AI 학습 도우미 한 앱
+https://app.notion.com/p/api-key-399b05b3ee658079a0edd3dd50cab208
 
 [🟢] 이번 주: APP_TITLE · 탭 이름 바꾸기 → 챗봇/퀴즈 탭 클릭!
 [🟡] TUTOR_PROMPT — 친절한 튜터 system prompt
@@ -19,7 +20,7 @@ STUDENT_NAME = "홍길동"
 
 # OpenRouter — OpenAI SDK 호환 API (https://openrouter.ai)
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-AI_MODEL = "google/gemma-4-31b-it:free"
+AI_MODEL = "openrouter/free"
 
 DEFAULT_QUESTION = "중학생에게 공부 팁 한 가지만 알려줘"
 DEFAULT_SUBJECT = "영어 단어"

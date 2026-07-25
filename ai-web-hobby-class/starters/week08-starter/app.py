@@ -1,5 +1,6 @@
 """
 AI웹반 8주차 — Python 대화 기록 + 채팅 UI (말풍선)
+https://app.notion.com/p/api-key-399b05b3ee658079a0edd3dd50cab208
 
 [🟢] 이번 주: 말풍선 색 바꾸기 → 질문·답 2턴 이상 쌓이기!
 [🟡] /api/chat 가 history(Python list) 반환
@@ -17,7 +18,7 @@ STUDENT_NAME = "홍길동"
 APP_TITLE = "말풍선 AI 채팅"
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-AI_MODEL = "google/gemma-4-31b-it:free"
+AI_MODEL = "openrouter/free"
 
 TUTOR_PROMPT = "너는 중학생을 도와주는 친절한 튜터야. 쉽고 짧게 설명해 줘."
 
