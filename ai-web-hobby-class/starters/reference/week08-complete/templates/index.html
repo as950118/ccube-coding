@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_title }} — AI웹반 8주차 (완성)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">Python + AI + 웹 · 8주차 · 채팅 UI</p>
+            <h1>{{ app_title }}</h1>
+            <p class="intro">{{ name }}의 질문과 AI 답이 말풍선으로 쌓입니다.</p>
+        </header>
+
+        <section class="chat-room">
+            <h2>대화창</h2>
+            <div id="chat-log" class="chat-log" aria-live="polite">
+                <p class="chat-empty">아직 대화가 없어요. 아래 질문을 보내 보세요!</p>
+            </div>
+            <div class="composer">
+                <label for="question-input" class="sr-only">질문</label>
+                <input type="text" id="question-input" placeholder="예: 파이썬이 뭐야?" autocomplete="off">
+                <button type="button" id="btn-send" class="btn btn-primary">보내기</button>
+                <button type="button" id="btn-clear" class="btn btn-ghost">지우기</button>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>완성 예 — history + clear</p>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

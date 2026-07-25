@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_title }} — AI웹반 9주차</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Teachable Machine + TensorFlow.js (브라우저 이미지 AI) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">이미지 AI · 9주차 · Teachable Machine</p>
+            <h1>{{ app_title }}</h1>
+            <p class="intro">{{ name }}의 <strong>두 번째 AI</strong> — 이번엔 브라우저가 이미지를 분류합니다.<br>
+                API 키 없이, <code>MODEL_URL</code> 만 있으면 돼요!</p>
+        </header>
+
+        <section class="compare">
+            <h2>텍스트 AI vs 이미지 AI</h2>
+            <div class="compare-grid">
+                <div class="compare-card">
+                    <strong>5~8주 텍스트</strong>
+                    <p>Python(Flask)이 AI 호출<br>키는 Secrets</p>
+                </div>
+                <div class="compare-card highlight">
+                    <strong>9~10주 이미지</strong>
+                    <p>브라우저(JS)가 TM 호출<br>키 불필요</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== #image-ai — 이미지 AI 섹션 ===== -->
+        <section id="image-ai" class="image-ai">
+            <h2>🟢 이미지 올려서 분류하기</h2>
+
+            <p class="default-hint">
+                모델 URL: <code id="model-url-display">{{ model_url }}</code>
+                <span class="hint-note">← <code>app.py</code> 의 <code>MODEL_URL</code> (끝에 / 필수)</span>
+            </p>
+
+            <div class="upload-row">
+                <label for="image-input" class="btn btn-primary">사진 선택</label>
+                <input type="file" id="image-input" accept="image/*" hidden>
+                <button type="button" id="btn-predict" class="btn btn-secondary" disabled>분류하기</button>
+            </div>
+
+            <div class="preview-wrap">
+                <img id="preview" class="preview hidden" alt="선택한 이미지 미리보기">
+                <p id="status" class="status">모델을 불러오는 중…</p>
+            </div>
+
+            <!-- [🟢] 결과 영역 — CSS로 꾸며보세요 -->
+            <div id="result" class="result" aria-live="polite">분류 결과가 여기 나타납니다</div>
+        </section>
+
+        <section class="flow-hint">
+            <h2>오늘의 흐름</h2>
+            <p><strong>Flask</strong> 가 페이지 + <code>MODEL_URL</code> 전달
+                → <strong>JS</strong> <code>tmImage.load()</code>
+                → 업로드 → <code>model.predict()</code> → 화면</p>
+            <p class="flow-note">Python은 AI를 안 부릅니다 — 브라우저가 이미지 AI!</p>
+        </section>
+
+        <footer class="footer">
+            <p>🟢 목표: MODEL_URL 붙여넣기 → 업로드 → 분류 확인</p>
+        </footer>
+    </main>
+
+    <script>
+        // Jinja → JS 로 모델 URL 전달
+        window.TM_MODEL_URL = {{ model_url | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

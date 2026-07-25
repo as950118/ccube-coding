@@ -56,6 +56,20 @@ Flask 페이지 안 **이미지 AI 섹션** — TM 모델 URL → 업로드 → 
 
 ---
 
+## starter 포함
+
+```
+app.py                 → [🟢] MODEL_URL (Flask는 페이지·URL만)
+templates/index.html   → #image-ai + TM CDN 스크립트
+static/script.js       → tmImage.load / predict (🟡한글 · 🔴%)
+static/style.css       → [🟢] .result
+requirements.txt       → flask (openai 불필요)
+```
+
+완성 예: `starters/reference/week09-complete/`
+
+---
+
 ## 다음 주 (Week10)
 
 - 웹캠 + TM
