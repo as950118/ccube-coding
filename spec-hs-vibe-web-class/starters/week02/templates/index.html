@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>2026 진학반 오픈 채팅방</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+
+            background-color: #edf1f7;
+            color: #1f2937;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+
+            width: min(850px, 100%);
+            height: min(900px, calc(100vh - 40px));
+
+            overflow: hidden;
+
+            background-color: white;
+            border: 1px solid #dbe2ea;
+            border-radius: 20px;
+
+            box-shadow:
+                0 18px 45px rgba(15, 23, 42, 0.13);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 23px 26px;
+
+            background-color: #172554;
+            color: white;
+        }
+
+        .title-area h1 {
+            margin: 0 0 7px;
+            font-size: 23px;
+        }
+
+        .title-area p {
+            margin: 0;
+            color: #bfdbfe;
+            font-size: 14px;
+        }
+
+        .server-state {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 12px;
+
+            background-color: rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+
+            font-size: 13px;
+        }
+
+        .state-dot {
+            width: 9px;
+            height: 9px;
+
+            background-color: #4ade80;
+            border-radius: 50%;
+        }
+
+        .state-dot.error-state {
+            background-color: #f87171;
+        }
+
+        .notice {
+            padding: 17px 24px;
+
+            background-color: #eff6ff;
+            border-bottom: 1px solid #bfdbfe;
+        }
+
+        .notice-title {
+            display: block;
+            margin-bottom: 7px;
+
+            color: #1d4ed8;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .notice-content {
+            margin: 0;
+
+            color: #334155;
+            font-size: 14px;
+            line-height: 1.6;
+
+            white-space: pre-wrap;
+        }
+
+        .chat-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 13px 26px;
+
+            background-color: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .chat-summary strong {
+            color: #2563eb;
+        }
+
+        .refresh-time {
+            color: #94a3b8;
+        }
+
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+
+            padding: 25px;
+
+            background-color: #f8fafc;
+
+            scroll-behavior: smooth;
+        }
+
+        .message-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            width: 42px;
+            height: 42px;
+
+            background-color: #dbeafe;
+            border-radius: 13px;
+
+            color: #1d4ed8;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .message-content {
+            max-width: calc(100% - 55px);
+        }
+
+        .message-information {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            margin-bottom: 6px;
+        }
+
+        .student-id {
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .message-time {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .message-bubble {
+            display: inline-block;
+
+            padding: 12px 15px;
+
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px 15px 15px 15px;
+
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+
+            box-shadow:
+                0 2px 5px rgba(15, 23, 42, 0.04);
+        }
+
+        .empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            height: 100%;
+
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .empty strong {
+            margin-bottom: 8px;
+            color: #64748b;
+        }
+
+        .error-message {
+            padding: 18px;
+
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+
+            color: #b91c1c;
+            text-align: center;
+        }
+
+        .chat-footer {
+            padding: 15px 25px;
+
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+
+            color: #64748b;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+            }
+
+            .chat-container {
+                height: 100vh;
+                border: 0;
+                border-radius: 0;
+            }
+
+            .chat-header {
+                padding: 18px;
+            }
+
+            .title-area h1 {
+                font-size: 19px;
+            }
+
+            .title-area p {
+                display: none;
+            }
+
+            .server-state {
+                padding: 7px 10px;
+            }
+
+            .notice {
+                padding: 14px 18px;
+            }
+
+            .chat-list {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="chat-container">
+
+        <header class="chat-header">
+            <div class="title-area">
+                <h1>2026 진학반 오픈 채팅방</h1>
+
+                <p>
+                    파이썬으로 서버와 통신하는 실습입니다.
+                </p>
+            </div>
+
+            <div class="server-state">
+                <span
+                    class="state-dot"
+                    id="stateDot"
+                ></span>
+
+                <span id="serverState">연결 중</span>
+            </div>
+        </header>
+
+        <section class="notice">
+            <span class="notice-title">
+                선생님 공지
+            </span>
+
+            <p class="notice-content">{{ notice }}</p>
+        </section>
+
+        <section class="chat-summary">
+            <span>
+                최근 메시지
+                <strong id="messageCount">0</strong>개
+            </span>
+
+            <span
+                class="refresh-time"
+                id="refreshTime"
+            >
+                불러오는 중
+            </span>
+        </section>
+
+        <section
+            class="chat-list"
+            id="chatList"
+        >
+            <div class="empty">
+                <strong>
+                    채팅 내용을 불러오고 있습니다.
+                </strong>
+
+                <span>
+                    잠시만 기다려 주세요.
+                </span>
+            </div>
+        </section>
+
+        <footer class="chat-footer">
+            학생 프로그램에서 메시지를 전송하면 자동으로 표시됩니다.
+        </footer>
+
+    </main>
+
+    <script>
+        const chatList =
+            document.querySelector("#chatList");
+
+        const messageCount =
+            document.querySelector("#messageCount");
+
+        const refreshTime =
+            document.querySelector("#refreshTime");
+
+        const serverState =
+            document.querySelector("#serverState");
+
+        const stateDot =
+            document.querySelector("#stateDot");
+
+        let lastMessageId = null;
+
+
+        // HTML 특수문자 안전 처리
+        function escapeHtml(text) {
+            const element =
+                document.createElement("div");
+
+            element.textContent = text;
+
+            return element.innerHTML;
+        }
+
+
+        // ID 앞 두 글자
+        function getInitial(studentId) {
+            if (!studentId) {
+                return "?";
+            }
+
+            return studentId
+                .slice(0, 2)
+                .toUpperCase();
+        }
+
+
+        // 날짜에서 시간 부분 가져오기
+        function formatTime(createdAt) {
+            if (!createdAt) {
+                return "";
+            }
+
+            const parts = createdAt.split(" ");
+
+            if (parts.length < 2) {
+                return createdAt;
+            }
+
+            return parts[1].slice(0, 5);
+        }
+
+
+        // 채팅 목록 출력
+        function renderMessages(messages) {
+            messageCount.textContent =
+                messages.length;
+
+            if (messages.length === 0) {
+                chatList.innerHTML = `
+                    <div class="empty">
+                        <strong>
+                            아직 전송된 메시지가 없습니다.
+                        </strong>
+
+                        <span>
+                            학생 프로그램에서 첫 메시지를 보내 주세요.
+                        </span>
+                    </div>
+                `;
+
+                lastMessageId = null;
+                return;
+            }
+
+            const newestMessage =
+                messages[messages.length - 1];
+
+            const hasNewMessage =
+                lastMessageId !== newestMessage.id;
+
+            let html = "";
+
+            for (const chat of messages) {
+                const studentId =
+                    escapeHtml(chat.student_id);
+
+                const message =
+                    escapeHtml(chat.message);
+
+                const time =
+                    formatTime(chat.created_at);
+
+                const initial =
+                    escapeHtml(
+                        getInitial(chat.student_id)
+                    );
+
+                html += `
+                    <article class="message-row">
+
+                        <div class="avatar">
+                            ${initial}
+                        </div>
+
+                        <div class="message-content">
+
+                            <div class="message-information">
+                                <span class="student-id">
+                                    ${studentId}
+                                </span>
+
+                                <span class="message-time">
+                                    ${time}
+                                </span>
+                            </div>
+
+                            <div class="message-bubble">${message}</div>
+
+                        </div>
+                    </article>
+                `;
+            }
+
+            chatList.innerHTML = html;
+
+            if (hasNewMessage) {
+                chatList.scrollTop =
+                    chatList.scrollHeight;
+            }
+
+            lastMessageId =
+                newestMessage.id;
+        }
+
+
+        // 서버에서 최신 채팅 불러오기
+        async function loadMessages() {
+            try {
+                const response =
+                    await fetch("/api/messages");
+
+                if (!response.ok) {
+                    throw new Error(
+                        "서버 응답 오류"
+                    );
+                }
+
+                const result =
+                    await response.json();
+
+                renderMessages(
+                    result.messages
+                );
+
+                serverState.textContent =
+                    "연결됨";
+
+                stateDot.classList.remove(
+                    "error-state"
+                );
+
+                const now = new Date();
+
+                refreshTime.textContent =
+                    now.toLocaleTimeString(
+                        "ko-KR"
+                    ) + " 업데이트";
+
+            } catch (error) {
+                serverState.textContent =
+                    "연결 오류";
+
+                stateDot.classList.add(
+                    "error-state"
+                );
+
+                chatList.innerHTML = `
+                    <div class="error-message">
+                        서버에서 채팅 내용을 불러오지 못했습니다.
+                    </div>
+                `;
+            }
+        }
+
+
+        // 페이지 실행 즉시 채팅 조회
+        loadMessages();
+
+        // 2초마다 최신 채팅 조회
+        setInterval(
+            loadMessages,
+            2000
+        );
+    </script>
+</body>
+</html>

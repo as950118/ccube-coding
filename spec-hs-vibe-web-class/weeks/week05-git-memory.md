@@ -1,4 +1,4 @@
-# 3주차 — Git · GitHub · 프로젝트 기억(CLAUDE.md)
+# 5주차 — Git · GitHub · 프로젝트 기억(CLAUDE.md)
 
 **Phase:** 입문 | **소요:** 4시간  
 **원본 대응:** S7 일부, S8, S9 · M6~M7, M9

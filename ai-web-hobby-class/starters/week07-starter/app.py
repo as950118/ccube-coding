@@ -15,8 +15,8 @@ from openai import OpenAI
 app = Flask(__name__)
 
 # ===== [🟢] 사이트 제목 — 바꿔보세요 =====
-APP_TITLE = "나의 AI 학습 도우미"
-STUDENT_NAME = "홍길동"
+APP_TITLE = "SPA AI 웹사이트"
+STUDENT_NAME = "정헌진"
 
 # OpenRouter — OpenAI SDK 호환 API (https://openrouter.ai)
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
@@ -79,22 +79,30 @@ def home():
         questions=QUESTIONS,
     )
 
-
+cache = {}
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
     """5주차 — AI 챗."""
     data = request.get_json(silent=True) or {}
     question = (data.get("question") or "").strip() or DEFAULT_QUESTION
-    reply = call_ai(question)
+    if question in cache:
+        reply = cache[question]
+    else:
+        reply = call_ai(question)
+        cache[question] = reply
     return jsonify({"reply": reply, "question": question})
 
-
+cache_quiz = {}
 @app.route("/api/generate-quiz")
 def api_generate_quiz():
     """6주차 — AI 퀴즈 생성."""
     subject = (request.args.get("subject") or "").strip() or DEFAULT_SUBJECT
     prompt = build_quiz_prompt(subject)
-    quiz = call_ai(prompt)
+    if subject in cache_quiz:
+        quiz = cache_quiz[subject]
+    else:
+        quiz = call_ai(prompt)
+        cache_quiz[subject] = quiz
     return jsonify({"quiz": quiz, "subject": subject})
 
 
