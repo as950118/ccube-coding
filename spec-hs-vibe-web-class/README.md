@@ -33,7 +33,8 @@
 | [appendix/](appendix/) | 아키텍처 · 원본 커리큘럼 매핑 |
 | [weeks/](weeks/) | 주차별 수업 계획 (14주) |
 | [messages/](messages/) | 카톡·이메일 템플릿 |
-| [starters/](starters/) | 주차별 starter (추후) |
+| [starters/](starters/) | 주차별 starter · 완성 예시 |
+| [docs/](docs/) | 학생용 수업 자료 (docx) |
 
 ---
 

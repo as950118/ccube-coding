@@ -1,0 +1,251 @@
+:root {
+  --ink: #15202b;
+  --muted: #4a5a6a;
+  --paper: #f3f6f4;
+  --panel: #ffffff;
+  --line: #c9d4cc;
+  --accent: #1f6f5b;
+  --accent-soft: #d8efe6;
+  --hero-a: #dfece6;
+  --hero-b: #c5d9e8;
+  --max: 42rem;
+  --font-display: "Outfit", "Noto Sans KR", sans-serif;
+  --font-body: "Noto Sans KR", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, var(--hero-b), transparent 55%),
+    radial-gradient(900px 420px at 100% 0%, var(--hero-a), transparent 50%),
+    linear-gradient(180deg, #eef3f0 0%, var(--paper) 28%, var(--paper) 100%);
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  backdrop-filter: blur(10px);
+  background: rgba(243, 246, 244, 0.88);
+  border-bottom: 1px solid rgba(201, 212, 204, 0.8);
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.nav a:hover {
+  color: var(--accent);
+}
+
+main {
+  max-width: calc(var(--max) + 4rem);
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+.section {
+  padding: 3.5rem 0 2.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.section:last-of-type {
+  border-bottom: 0;
+}
+
+.hero {
+  padding-top: 4.5rem;
+  padding-bottom: 4rem;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.tagline {
+  margin: 1rem 0 0;
+  max-width: 22rem;
+  font-size: 1.2rem;
+  color: var(--muted);
+}
+
+h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+}
+
+.section-lead {
+  margin: -0.25rem 0 1.25rem;
+  color: var(--muted);
+}
+
+.interest-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.interest-list li {
+  display: grid;
+  gap: 0.2rem;
+  padding: 1rem 1.1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+}
+
+.interest-list strong {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+
+.interest-list span {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.project-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .project-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.project-card {
+  margin: 0;
+  padding: 1.2rem 1.2rem 1.35rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.badge {
+  display: inline-block;
+  margin: 0 0 0.6rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.project-card h3 {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.project-card p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.contact-list {
+  margin: 1rem 0;
+  padding-left: 1.2rem;
+}
+
+.placeholder {
+  color: var(--muted);
+}
+
+.note {
+  margin: 1.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.site-footer {
+  max-width: calc(var(--max) + 4rem);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 480px) {
+  .nav a:nth-child(n + 4) {
+    display: none;
+  }
+
+  .hero h1 {
+    word-break: keep-all;
+  }
+
+  .section {
+    padding: 2.75rem 0 2rem;
+  }
+}
