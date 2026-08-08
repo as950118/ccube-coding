@@ -13,7 +13,6 @@ STUDENT_NAME = "김서연"
 DEFAULT_QUESTION = "중학생에게 공부 팁 한 가지만 알려줘"
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-AI_MODEL = "google/gemma-4-31b-it:free"
 AI_MODEL = "openrouter/free"
 
 

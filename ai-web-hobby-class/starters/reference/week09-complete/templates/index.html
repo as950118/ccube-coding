@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_title }} — AI웹반 9주차 (완성)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">이미지 AI · 9주차 · Teachable Machine</p>
+            <h1>{{ app_title }}</h1>
+            <p class="intro">브라우저가 이미지를 분류합니다. 확률 %까지 표시!</p>
+        </header>
+
+        <section id="image-ai" class="image-ai">
+            <h2>이미지 올려서 분류하기</h2>
+            <p class="default-hint">
+                모델 URL: <code>{{ model_url }}</code>
+            </p>
+            <div class="upload-row">
+                <label for="image-input" class="btn btn-primary">사진 선택</label>
+                <input type="file" id="image-input" accept="image/*" hidden>
+                <button type="button" id="btn-predict" class="btn btn-secondary" disabled>분류하기</button>
+            </div>
+            <div class="preview-wrap">
+                <img id="preview" class="preview hidden" alt="선택한 이미지 미리보기">
+                <p id="status" class="status">모델을 불러오는 중…</p>
+            </div>
+            <div id="result" class="result" aria-live="polite">분류 결과가 여기 나타납니다</div>
+        </section>
+
+        <footer class="footer">
+            <p>완성 예 — 한글 라벨 + 확률 %</p>
+        </footer>
+    </main>
+
+    <script>
+        window.TM_MODEL_URL = {{ model_url | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 """
 AI웹반 7주차 — 완성 예시 (교사 시연용)
+https://app.notion.com/p/api-key-399b05b3ee658079a0edd3dd50cab208
 챗봇·퀴즈·OX 3탭 + TUTOR_PROMPT
 """
 import os
@@ -13,7 +14,7 @@ APP_TITLE = "서연의 AI 학습 도우미"
 STUDENT_NAME = "김서연"
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-AI_MODEL = "google/gemma-4-31b-it:free"
+AI_MODEL = "openrouter/free"
 
 DEFAULT_QUESTION = "오늘 공부 계획을 세워줘"
 DEFAULT_SUBJECT = "과학"

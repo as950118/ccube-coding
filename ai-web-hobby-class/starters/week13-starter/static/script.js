@@ -203,6 +203,21 @@ function renderDashboard(data) {
     renderEvents(data.events || []);
 }
 
+// ===== 요청이 끝날 때까지(성공/실패 모두) 버튼을 잠가 중복 클릭 방지 =====
+function withButtonLock(buttonElement, handler) {
+    return async (...args) => {
+        if (buttonElement.disabled) return;
+        buttonElement.disabled = true;
+        try {
+            await handler(...args);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            buttonElement.disabled = false;
+        }
+    };
+}
+
 async function fetchJson(url, options = {}) {
     const response = await fetch(url, options);
     if (!response.ok) {
@@ -248,12 +263,12 @@ function toggleDarkMode() {
 }
 
 elements.darkModeButton.addEventListener("click", toggleDarkMode);
-elements.allOnButton.addEventListener("click", () => setAllDevices(true));
-elements.allOffButton.addEventListener("click", () => setAllDevices(false));
-elements.lampButton.addEventListener("click", () => toggleDevice("lamp"));
-elements.airconButton.addEventListener("click", () => toggleDevice("aircon"));
-elements.fanButton.addEventListener("click", () => toggleDevice("fan"));
-elements.waterButton.addEventListener("click", waterPlant);
+elements.allOnButton.addEventListener("click", withButtonLock(elements.allOnButton, () => setAllDevices(true)));
+elements.allOffButton.addEventListener("click", withButtonLock(elements.allOffButton, () => setAllDevices(false)));
+elements.lampButton.addEventListener("click", withButtonLock(elements.lampButton, () => toggleDevice("lamp")));
+elements.airconButton.addEventListener("click", withButtonLock(elements.airconButton, () => toggleDevice("aircon")));
+elements.fanButton.addEventListener("click", withButtonLock(elements.fanButton, () => toggleDevice("fan")));
+elements.waterButton.addEventListener("click", withButtonLock(elements.waterButton, waterPlant));
 
 updateClock();
 fetchStatus();

@@ -56,6 +56,20 @@ def api_chat():
 
 ---
 
+## starter 포함
+
+```
+app.py                 → messages list · /api/chat(history) · /api/clear
+templates/index.html   → 채팅창 · 말풍선 영역
+static/script.js       → appendMessage() · Enter 전송
+static/style.css       → [🟢] .bubble-user / .bubble-ai
+requirements.txt       → flask + openai
+```
+
+완성 예: `starters/reference/week08-complete/`
+
+---
+
 ## 다음 주 (Week09)
 
 - **Teachable Machine** — 브라우저 이미지 AI (같은 Flask 앱 안)

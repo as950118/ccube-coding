@@ -1,5 +1,6 @@
 """
 AI웹반 6주차 — 완성 예시 (교사 시연용)
+https://app.notion.com/p/api-key-399b05b3ee658079a0edd3dd50cab208
 쉬운 난이도 prompt + 로딩 표시 포함
 """
 import os
@@ -13,7 +14,7 @@ STUDENT_NAME = "김서연"
 DEFAULT_SUBJECT = "과학"
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-AI_MODEL = "google/gemma-4-31b-it:free"
+AI_MODEL = "openrouter/free"
 
 
 def call_ai(prompt: str) -> str:

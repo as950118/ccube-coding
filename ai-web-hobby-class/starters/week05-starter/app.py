@@ -1,5 +1,6 @@
 """
 AI웹반 5주차 — Python + AI: Flask가 AI에게 질문하기 ★
+https://app.notion.com/p/api-key-399b05b3ee658079a0edd3dd50cab208
 
 [🟢] 이번 주: DEFAULT_QUESTION 바꾸기 → AI 답 확인!
 [🟡] 입력창에서 질문 보내기 (POST JSON)
@@ -17,7 +18,7 @@ STUDENT_NAME = "홍길동"
 
 # OpenRouter — OpenAI SDK 호환 API (https://openrouter.ai)
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-AI_MODEL = "google/gemma-4-31b-it:free"  # 무료 모델 — openrouter.ai/collections/free-models
+AI_MODEL = "openrouter/free"  # 무료 모델 — openrouter.ai/collections/free-models
 
 
 # ===== [🟢] 기본 질문 — 바꿔보세요 =====
