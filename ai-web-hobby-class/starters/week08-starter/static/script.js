@@ -25,9 +25,16 @@ function renderHistory(history) {
     history.forEach((msg) => appendMessage(msg.role, msg.text));
 }
 
+const sendBtn = document.getElementById("btn-send");
+
 async function sendQuestion() {
+    if (sendBtn.disabled) return; // 이미 요청이 진행 중이면 무시
+
     const question = questionInput.value.trim();
     if (!question) return;
+
+    // ===== [🟢] 요청 처리 중에는 버튼을 잠가서 중복 클릭 방지 =====
+    sendBtn.disabled = true;
 
     questionInput.value = "";
     appendMessage("user", question);
@@ -58,10 +65,13 @@ async function sendQuestion() {
     } catch (err) {
         thinking.remove();
         appendMessage("ai", "오류가 났어요. Run 중인지 확인해 주세요.");
+    } finally {
+        // 성공/실패 상관없이 완료되면 다시 클릭 가능하게
+        sendBtn.disabled = false;
     }
 }
 
-document.getElementById("btn-send").addEventListener("click", sendQuestion);
+sendBtn.addEventListener("click", sendQuestion);
 
 // ===== [🟡] Enter 로 전송 =====
 questionInput.addEventListener("keydown", (event) => {
@@ -74,8 +84,16 @@ questionInput.addEventListener("keydown", (event) => {
 const clearBtn = document.getElementById("btn-clear");
 if (clearBtn) {
     clearBtn.addEventListener("click", async () => {
-        const res = await fetch("/api/clear", { method: "POST" });
-        const data = await res.json();
-        renderHistory(data.history);
+        if (clearBtn.disabled) return;
+        clearBtn.disabled = true;
+        try {
+            const res = await fetch("/api/clear", { method: "POST" });
+            const data = await res.json();
+            renderHistory(data.history);
+        } catch (err) {
+            appendMessage("ai", "기록을 지우지 못했어요. Run 중인지 확인해 주세요.");
+        } finally {
+            clearBtn.disabled = false;
+        }
     });
 }

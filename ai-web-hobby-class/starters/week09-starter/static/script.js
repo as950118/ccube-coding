@@ -56,27 +56,39 @@ imageInput.addEventListener("change", () => {
 
 // ===== [🟢] 분류하기 =====
 btnPredict.addEventListener("click", async () => {
-    if (!model) {
+    if (!model || btnPredict.disabled) {
         resultEl.textContent = "모델이 아직 없어요. MODEL_URL 을 확인하세요.";
         return;
     }
 
+    // ===== [🟢] 분류 중에는 버튼을 잠가서 중복 클릭 방지 =====
+    btnPredict.disabled = true;
     statusEl.textContent = "분류 중…";
-    const prediction = await model.predict(previewEl);
 
-    // 확률이 높은 순
-    prediction.sort((a, b) => b.probability - a.probability);
-    const top = prediction[0];
+    try {
+        const prediction = await model.predict(previewEl);
 
-    // [🔴] 도전: 아래 주석을 해제하면 모든 클래스 확률 % 표시
-    // const lines = prediction.map(
-    //     (p) => `${labelText(p.className)}: ${(p.probability * 100).toFixed(1)}%`
-    // );
-    // resultEl.textContent = lines.join("\n");
+        // 확률이 높은 순
+        prediction.sort((a, b) => b.probability - a.probability);
+        const top = prediction[0];
 
-    // [🟢] 기본: 1등만 표시
-    resultEl.textContent = `결과: ${labelText(top.className)}`;
-    statusEl.textContent = "분류 완료!";
+        // [🔴] 도전: 아래 주석을 해제하면 모든 클래스 확률 % 표시
+        // const lines = prediction.map(
+        //     (p) => `${labelText(p.className)}: ${(p.probability * 100).toFixed(1)}%`
+        // );
+        // resultEl.textContent = lines.join("\n");
+
+        // [🟢] 기본: 1등만 표시
+        resultEl.textContent = `결과: ${labelText(top.className)}`;
+        statusEl.textContent = "분류 완료!";
+    } catch (err) {
+        console.error(err);
+        statusEl.textContent = "분류 실패";
+        resultEl.textContent = "오류가 났어요. 다시 시도해 주세요.";
+    } finally {
+        // 성공/실패 상관없이 완료되면 다시 클릭 가능하게
+        btnPredict.disabled = false;
+    }
 });
 
 loadModel().then(() => {
