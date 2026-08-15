@@ -37,6 +37,14 @@ async function loadModel() {
         model = await tmImage.load(modelURL, metadataURL);
         maxPredictions = model.getTotalClasses();
         statusEl.textContent = `모델 준비 완료! (클래스 ${maxPredictions}개)`;
+
+        // ===== [🟡] 라벨명 자동 확인 — 주석 해제하면 콘솔(F12)에
+        // 본인 모델의 실제 클래스명이 LABEL_KO 틀 형태로 출력됨.
+        // metadata.json 직접 열어볼 필요 없이 그대로 복사해서 위 LABEL_KO 에 붙여넣고 값만 한글로 바꾸면 끝!
+        // console.log("나의 LABEL_KO:\n" + JSON.stringify(
+        //     Object.fromEntries(model.getClassLabels().map((name) => [name, name])),
+        //     null, 4
+        // ));
     } catch (err) {
         console.error(err);
         statusEl.textContent = "모델 로드 실패 — URL 끝의 / 와 공개 설정 확인";

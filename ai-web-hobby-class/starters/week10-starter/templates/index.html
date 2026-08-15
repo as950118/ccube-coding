@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_title }} — AI웹반 10주차</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Teachable Machine + TensorFlow.js (브라우저 이미지 AI) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js"></script>
+</head>
+<body>
+
+    <main class="page">
+        <header class="header">
+            <p class="badge">이미지 AI · 10주차 · 웹캠 + Teachable Machine</p>
+            <h1>{{ app_title }}</h1>
+            <p class="intro">{{ name }}의 AI — 이번엔 <strong>웹캠</strong>으로 실시간 분류!<br>
+                지난 주와 마찬가지로 API 키 없이, <code>MODEL_URL</code> 만 있으면 돼요.</p>
+        </header>
+
+        <!-- ===== #image-ai — 웹캠 이미지 AI 섹션 ===== -->
+        <section id="image-ai" class="image-ai">
+            <h2>🟢 웹캠으로 분류하기</h2>
+
+            <p class="default-hint">
+                모델 URL: <code id="model-url-display">{{ model_url }}</code>
+                <span class="hint-note">← <code>app.py</code> 의 <code>MODEL_URL</code> (끝에 / 필수)</span>
+            </p>
+
+            <!-- 웹캠 모드 -->
+            <div id="webcam-mode">
+                <div id="webcam-container" class="webcam-container"></div>
+
+                <div class="btn-row">
+                    <button type="button" id="btn-predict" class="btn btn-primary" disabled>분류하기</button>
+                    <!-- [🟡] 「지금 뭐야?」 — 누르는 동안 계속 분류 -->
+                    <button type="button" id="btn-live" class="btn btn-secondary" disabled>지금 뭐야?</button>
+                </div>
+
+                <p id="status" class="status">모델을 불러오는 중…</p>
+            </div>
+
+            <!-- 카메라 거부/미지원 시 대체 — 9주차 파일 업로드 -->
+            <div id="upload-mode" class="hidden">
+                <p class="status">📷 카메라를 사용할 수 없어요 — 대신 사진을 업로드해서 분류해 보세요.</p>
+                <div class="btn-row">
+                    <label for="image-input" class="btn btn-primary">사진 선택</label>
+                    <input type="file" id="image-input" accept="image/*" hidden>
+                    <button type="button" id="btn-predict-upload" class="btn btn-secondary" disabled>분류하기</button>
+                </div>
+                <img id="preview" class="preview hidden" alt="선택한 이미지 미리보기">
+            </div>
+
+            <!-- [🟢] 결과 영역 — CSS로 꾸며보세요 / [🔴] 80% 이상이면 강조 -->
+            <div id="result" class="result" aria-live="polite">분류 결과가 여기 나타납니다</div>
+        </section>
+
+        <section class="flow-hint">
+            <h2>오늘의 흐름</h2>
+            <p><strong>Flask</strong> 가 페이지 + <code>MODEL_URL</code> 전달
+                → <strong>JS</strong> <code>tmImage.Webcam</code> 으로 카메라 켜기
+                → <code>model.predict()</code> → 화면</p>
+            <p class="flow-note">Python은 여전히 AI를 안 부릅니다 — 브라우저가 이미지 AI!</p>
+        </section>
+
+        <footer class="footer">
+            <p>🟢 목표: 웹캠 켜기 → 「분류하기」로 결과 확인</p>
+        </footer>
+    </main>
+
+    <script>
+        // Jinja → JS 로 모델 URL 전달
+        window.TM_MODEL_URL = {{ model_url | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
