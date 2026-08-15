@@ -20,7 +20,7 @@ APP_TITLE = "말풍선 AI 채팅"
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 AI_MODEL = "openrouter/free"
 
-TUTOR_PROMPT = "너는 중학생을 도와주는 친절한 튜터야. 쉽고 짧게 설명해 줘."
+TUTOR_PROMPT = "너는 중학생을 도와주는 친절한 튜터야. 쉽고 짧게 설명해 줘. 냥으로 끝나게 고양이 처럼 대답해."
 
 # ===== [🟡] Python이 대화 기록을 보관합니다 =====
 messages: list[dict] = []
