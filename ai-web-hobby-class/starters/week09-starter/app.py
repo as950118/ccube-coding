@@ -21,7 +21,7 @@ APP_TITLE = "이미지 AI 실험실"
 # ===== [🟢] Teachable Machine 모델 URL — 끝에 / 포함! =====
 # 교사/학생이 https://teachablemachine.withgoogle.com 에서 만든 모델
 # 예: https://teachablemachine.withgoogle.com/models/XXXXXXXX/
-MODEL_URL = "https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/"
+MODEL_URL = "https://teachablemachine.withgoogle.com/models/GFzCz0vn0/" # 걸그룹 분류기
 
 
 @app.route("/")
