@@ -81,13 +81,13 @@ btnPredict.addEventListener("click", async () => {
         const top = prediction[0];
 
         // [🔴] 도전: 아래 주석을 해제하면 모든 클래스 확률 % 표시
-        // const lines = prediction.map(
-        //     (p) => `${labelText(p.className)}: ${(p.probability * 100).toFixed(1)}%`
-        // );
-        // resultEl.textContent = lines.join("\n");
+        const lines = prediction.map(
+            (p) => `${labelText(p.className)}: ${(p.probability * 100).toFixed(1)}%`
+        );
+        resultEl.textContent = lines.join("\n");
 
         // [🟢] 기본: 1등만 표시
-        resultEl.textContent = `결과: ${labelText(top.className)}`;
+        // resultEl.textContent = `결과: ${labelText(top.className)}`;
         statusEl.textContent = "분류 완료!";
     } catch (err) {
         console.error(err);

@@ -32,8 +32,9 @@ week{N}-starter/
 - [x] week08-starter — Python messages[] + 말풍선 채팅 UI
 - [x] week09-starter — Teachable Machine 이미지 분류
 - [x] week10-starter — 웹캠 + Teachable Machine (카메라 거부 시 9주 업로드로 대체)
+- [x] week11-starter — 챗봇·퀴즈·OX·이미지 AI 4메뉴 통합 (다크모드 힌트)
 - [x] week13-starter — Flask + SQLite + IoT 스마트홈 대시보드 (보너스)
-- [ ] week11 ~ week12
+- [ ] week12 — starter 불필요 (11주차 앱으로 발표)
 
 ## reference
 

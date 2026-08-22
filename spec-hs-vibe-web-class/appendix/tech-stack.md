@@ -20,6 +20,14 @@
 | Playwright MCP | UI 테스트 맛보기 |
 | Context7 MCP | 공식문서 조회 |
 | 커스텀 슬래시 커맨드 | Week8 |
+| React / Next.js 등 모던 프레임워크 | 관심 학생만 · [modern-frameworks-guide.md](modern-frameworks-guide.md) 참고 |
+
+## 참고 자료
+
+| 문서 | 언제 쓰나 |
+|------|-----------|
+| [modern-frameworks-guide.md](modern-frameworks-guide.md) | 학생이 React/Next.js 등 프레임워크를 물어볼 때 |
+| [web-concepts-guide.md](web-concepts-guide.md) | 학생이 서버·클라이언트·API·DB·도메인·IP 등 웹의 기본 원리를 물어볼 때 |
 
 ## 의도적으로 빼거나 축소한 것 (성인 인강 대비)
 

@@ -21,7 +21,7 @@ APP_TITLE = "이미지 AI 실험실 — 웹캠"
 # ===== [🟢] Teachable Machine 모델 URL — 끝에 / 포함! =====
 # 9주차와 같은 모델을 써도 되고, 새로 만들어도 됩니다.
 # 예: https://teachablemachine.withgoogle.com/models/XXXXXXXX/
-MODEL_URL = "https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/"
+MODEL_URL = "https://teachablemachine.withgoogle.com/models/GFzCz0vn0/"
 
 
 @app.route("/")
