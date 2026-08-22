@@ -10,8 +10,8 @@
 | 3 | [week03-orientation-setup.md](week03-orientation-setup.md) | 입문 | 환경 세팅 + 첫 웹 맛보기 |
 | 4 | [week04-vibe-basics-profile.md](week04-vibe-basics-profile.md) | 입문 | Plan·권한 + 프로필 초안 |
 | 5 | [week05-git-memory.md](week05-git-memory.md) | 입문 | GitHub + CLAUDE.md |
-| 6 | [week06-profile-deploy.md](week06-profile-deploy.md) | 입문 | **포트폴리오 #1** 배포 |
-| 7 | [week07-starter-kit.md](week07-starter-kit.md) | 워크플로 | Starter Kit · 프롬프트 |
+| 6 | [week06-bbs-basics.md](week06-bbs-basics.md) | 입문(재설계) | 클라이언트·서버·DB + BBS(Flask/SQLite) |
+| 7 | [week07-starter-kit.md](week07-starter-kit.md) | 워크플로 | ⚠️ 재설계 예정 — class·interface·디자인 패턴(MVC/DI/IoC/POJO/헥사고날) + React |
 | 8 | [week08-automation-mcp.md](week08-automation-mcp.md) | 워크플로 | 커맨드·에이전트·MCP 입문 |
 | 9 | [week09-prd-roadmap.md](week09-prd-roadmap.md) | 워크플로 | 미니앱 PRD + ROADMAP |
 | 10 | [week10-miniapp-mvp.md](week10-miniapp-mvp.md) | 워크플로 | **포트폴리오 #2** MVP 배포 |
@@ -21,3 +21,5 @@
 | 14 | [week14-portfolio-presentation.md](week14-portfolio-presentation.md) | 발표 | 면접형 발표 |
 
 원본 인강 매핑: [../appendix/source-curriculum-map.md](../appendix/source-curriculum-map.md)
+
+> ⚠️ **재설계 진행 중:** 6·7주차에 BBS·디자인 패턴을 새로 넣으면서, 기존 6주차(프로필 배포·포트폴리오#1) 내용이 밀려났다. 삭제하지 않고 [_displaced/week06-profile-deploy.md](_displaced/week06-profile-deploy.md)에 보관 중 — 8주차 이후 어디로 옮길지 확정되면 정리 예정. `starters/week06/`·`starters/reference/week06-complete/`도 같은 이유로 아직 미정리 상태.

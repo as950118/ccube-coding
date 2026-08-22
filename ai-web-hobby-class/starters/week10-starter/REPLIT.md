@@ -14,8 +14,8 @@ Flask 페이지 안에서 **브라우저 웹캠**으로 TM 이미지 분류를 �
 1. Fork → Run
 2. `app.py` 의 `MODEL_URL` 붙여넣기 (끝에 `/`) — 9주차 모델 재사용 가능
 3. Run 재시작 → 카메라 허용 → 「분류하기」
-4. (🟡) 「지금 뭐야?」로 실시간 분류 체험
-5. (🔴) `script.js` 의 80% 강조 코드 주석 해제
+4. (🟡) 「지금 뭐야?」로 실시간 분류 체험 + **JS 실습**: 「초기화」 버튼 + `addEventListener` 직접 추가 (`weeks/week10-webcam.md` 의 「JS 핵심 개념」 참고)
+5. (🔴) `script.js` 의 80% 강조 코드 주석 해제 / 업로드 모드에도 「초기화」 추가
 
 ## 파일 안내
 
@@ -23,7 +23,7 @@ Flask 페이지 안에서 **브라우저 웹캠**으로 TM 이미지 분류를 �
 |------|-------|
 | `app.py` | `MODEL_URL` (🟢) |
 | `templates/index.html` | `#image-ai` — 웹캠 모드 + 업로드 대체 모드 |
-| `static/script.js` | `tmImage.Webcam` / `predict` (🟡 지금뭐야 · 🔴 80%↑) |
+| `static/script.js` | `tmImage.Webcam` / `predict` (🟡 지금뭐야 · 초기화 버튼 실습 · 🔴 80%↑) |
 | `static/style.css` | 🟢 `.result` / `.webcam-container` |
 
 ## 문제 해결
