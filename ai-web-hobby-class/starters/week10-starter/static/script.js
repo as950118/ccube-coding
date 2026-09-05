@@ -101,16 +101,16 @@ async function predictFrom(source) {
     const top = prediction[0];
 
     // [🔴] 도전: 아래 주석을 해제하면 모든 클래스 확률 % 표시
-    // const lines = prediction.map(
-    //     (p) => `${labelText(p.className)}: ${(p.probability * 100).toFixed(1)}%`
-    // );
-    // resultEl.textContent = lines.join("\n");
+    const lines = prediction.map(
+        (p) => `${labelText(p.className)}: ${(p.probability * 100).toFixed(1)}%`
+    );
+    resultEl.textContent = lines.join("\n");
 
     // [🟢] 기본: 1등만 표시
-    resultEl.textContent = `결과: ${labelText(top.className)}`;
+    // resultEl.textContent = `결과: ${labelText(top.className)}`;
 
     // [🔴] 확률 80% 이상일 때만 강조 (style.css 의 .result-high)
-    // resultEl.classList.toggle("result-high", top.probability >= 0.8);
+    resultEl.classList.toggle("result-high", top.probability >= 0.5);
 }
 
 // ===== [🟢] 「분류하기」 — 1회 분류 =====

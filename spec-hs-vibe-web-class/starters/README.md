@@ -7,12 +7,14 @@
 - [x] `reference/week04-complete/` — 교사·조교용 5섹션 완성 예시
 - [x] `week05/` — Git · GitHub · CLAUDE.md (README/CLAUDE.md 워크시트 · 커밋 기록 템플릿)
 - [x] `reference/week05-complete/` — 교사·조교용 README/CLAUDE.md 완성 예시
-- [x] `week06/` — 프로필 웹 고도화 · 배포 (배포 기록/피드백/모바일 체크 템플릿)
-- [x] `reference/week06-complete/` — 교사·조교용 Live Demo README · Projects 카드 Before/After 예시
-- [x] `week07/` — 모던 웹 · 프롬프트 · Starter Kit (CLAUDE.md/프롬프트 로그/.gitignore 템플릿)
-- [x] `reference/week07-complete/` — 교사·조교용 Vite vanilla Starter Kit 완성 예시
-- [x] `week08/` — 자동화 입문 · 커맨드 · 서브에이전트 · MCP (automation-log 템플릿)
-- [x] `reference/week08-complete/` — 교사·조교용 `.claude/commands` 커맨드 · 자동화 기록 예시
+- [x] `week06/` — 웹은 어떻게 동작하는가 · 나만의 BBS (Flask+SQLite, 핵심 기능은 AI 없이 직접 · architecture/why-3tier 워크시트)
+- [x] `reference/week06-complete/` — 교사·조교용 BBS(목록/상세/작성/수정/삭제 + 🔴 검색) 완성 예시
+- [x] `week07/` — BBS 업그레이드 · 회원가입·로그인·권한 (session-auth/why-auth 워크시트)
+- [x] `reference/week07-complete/` — 교사·조교용 회원가입·로그인·권한(v1) 완성 예시 — week06-complete를 이어받음
+- [x] `reference/week07-design-patterns-complete/` — 구 7주차(디자인 패턴·React) 보관본
+- [x] `week08/` — BBS 확장 · 공공데이터 API · 대시보드 (opendata.py 스켈레톤 · opendata-log 워크시트)
+- [x] `reference/week08-complete/` — 교사·조교용 회원·권한 BBS + 공공데이터 대시보드 완성 예시
+- [x] `_displaced/week08-automation-mcp/` · `reference/week08-automation-mcp-complete/` — 구 8주차(자동화·커맨드·MCP) 보관본
 
 예정:
 

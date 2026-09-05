@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ post.title }}</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #1f2937; }
+    nav { margin-bottom: 16px; font-size: 14px; }
+    nav a, nav span { margin-right: 12px; }
+    a.back { display: inline-block; margin-bottom: 20px; color: #1d4ed8; text-decoration: none; }
+    .meta { color: #94a3b8; font-size: 13px; }
+    .content { line-height: 1.7; white-space: pre-wrap; margin-top: 16px; }
+    .actions { margin-top: 24px; }
+    .actions a, .actions button { margin-right: 8px; }
+    button.delete { color: #b91c1c; background: none; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <nav>
+    {% if session.get("username") %}
+      <span>{{ session.username }}님</span>
+      <form method="POST" action="/logout" style="display:inline">
+        <button type="submit">로그아웃</button>
+      </form>
+    {% else %}
+      <a href="/login">로그인</a>
+      <a href="/signup">회원가입</a>
+    {% endif %}
+  </nav>
+
+  <a class="back" href="/">← 목록으로</a>
+  <h1>{{ post.title }}</h1>
+  <p class="meta">{{ post.username or "익명" }} · {{ post.created_at }}</p>
+  <p class="content">{{ post.content }}</p>
+
+  {% if session.get("user_id") == post.user_id %}
+  <div class="actions">
+    <a href="/posts/{{ post.id }}/edit">수정</a>
+    <form method="POST" action="/posts/{{ post.id }}/delete" style="display:inline">
+      <button class="delete" type="submit">삭제</button>
+    </form>
+  </div>
+  {% endif %}
+</body>
+</html>

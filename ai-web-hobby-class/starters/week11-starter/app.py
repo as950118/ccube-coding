@@ -43,6 +43,7 @@ QUESTIONS = [
 # ===== 9~10주차 Teachable Machine 모델 URL — 끝에 / 포함! =====
 # 예: https://teachablemachine.withgoogle.com/models/XXXXXXXX/
 MODEL_URL = "https://teachablemachine.withgoogle.com/models/GFzCz0vn0/"
+MODEL_URL = "https://teachablemachine.withgoogle.com/models/GFzCz0vn0/"
 
 
 def call_ai(question: str) -> str:

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ post.title }}</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #1f2937; }
+    a.back { display: inline-block; margin-bottom: 20px; color: #1d4ed8; text-decoration: none; }
+    .meta { color: #94a3b8; font-size: 13px; }
+    .content { line-height: 1.7; white-space: pre-wrap; margin-top: 16px; }
+    button.delete { margin-top: 24px; color: #b91c1c; background: none; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <a class="back" href="/">← 목록으로</a>
+  <h1>{{ post.title }}</h1>
+  <p class="meta">{{ post.created_at }}</p>
+  <p class="content">{{ post.content }}</p>
+
+  <form method="POST" action="/posts/{{ post.id }}/delete">
+    <button class="delete" type="submit">삭제</button>
+  </form>
+</body>
+</html>
