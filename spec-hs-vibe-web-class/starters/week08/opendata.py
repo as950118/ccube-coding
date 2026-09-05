@@ -25,7 +25,7 @@ SAMPLE_PATH = Path(__file__).resolve().parent / "data" / "sample_air_quality.jso
 GRADE_LABELS = {"1": "좋음", "2": "보통", "3": "나쁨", "4": "매우나쁨"}
 
 
-def fetch_raw(sido="서울"):
+def fetch_raw(sido="인천"):
     """공공데이터포털 API를 호출해 원본 JSON(dict)을 그대로 돌려준다."""
     api_key = os.environ.get("PUBLIC_DATA_API_KEY")
 
@@ -62,7 +62,7 @@ def load_sample():
         return parse_items(json.load(f))
 
 
-def fetch_air_quality(sido="서울"):
+def fetch_air_quality(sido="인천"):
     """대시보드가 실제로 호출하는 함수.
 
     성공하면 (실시간 데이터, "live"), 실패하면 (샘플 데이터, "sample")을 돌려준다.

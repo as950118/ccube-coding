@@ -223,7 +223,7 @@ def logout():
 # ===== 8주차: 공공데이터 대시보드 =====
 @app.route("/dashboard")
 def dashboard():
-    sido = request.args.get("sido", "서울")
+    sido = request.args.get("sido", "인천")
     rows, source = fetch_air_quality(sido)
     return render_template("dashboard.html", rows=rows, sido=sido, source=source)
 

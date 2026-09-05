@@ -8,6 +8,7 @@
 """
 import json
 import os
+from curses.ascii import isdigit
 from pathlib import Path
 
 import requests
@@ -21,7 +22,7 @@ SAMPLE_PATH = Path(__file__).resolve().parent / "data" / "sample_air_quality.jso
 GRADE_LABELS = {"1": "좋음", "2": "보통", "3": "나쁨", "4": "매우나쁨"}
 
 
-def fetch_raw(sido="서울"):
+def fetch_raw(sido="인천"):
     api_key = os.environ.get("PUBLIC_DATA_API_KEY")
     params = {
         "serviceKey": api_key,
@@ -41,8 +42,8 @@ def parse_items(raw):
     for item in items:
         result.append({
             "station": item.get("stationName", "알 수 없음"),
-            "pm10": int(item.get("pm10Value") or 0),
-            "pm25": int(item.get("pm25Value") or 0),
+            "pm10": int(item.get("pm10Value")) if str(item.get("pm10Value") or "").isdigit() else 0,
+            "pm25": int(item.get("pm25Value")) if str(item.get("pm25Value") or "").isdigit() else 0,
             "grade": GRADE_LABELS.get(item.get("khaiGrade"), "정보없음"),
         })
     result.sort(key=lambda row: row["pm10"], reverse=True)
@@ -54,7 +55,7 @@ def load_sample():
         return parse_items(json.load(f))
 
 
-def fetch_air_quality(sido="서울"):
+def fetch_air_quality(sido="인천"):
     """성공하면 (실시간 데이터, "live"), 실패하면 (샘플 데이터, "sample")을 돌려준다.
 
     이 함수는 예외를 밖으로 던지지 않는다 — /dashboard가 항상 화면을 그릴 수 있어야 한다.
@@ -62,7 +63,8 @@ def fetch_air_quality(sido="서울"):
     try:
         raw = fetch_raw(sido)
         return parse_items(raw), "live"
-    except Exception:
+    except Exception as e:
+        print(e)
         return load_sample(), "sample"
 
 

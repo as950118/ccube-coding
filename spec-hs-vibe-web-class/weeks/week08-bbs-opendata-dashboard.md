@@ -212,7 +212,7 @@ load_dotenv()
 API_URL = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty"
 
 
-def fetch_raw(sido="서울"):
+def fetch_raw(sido="인천"):
     api_key = os.environ.get("PUBLIC_DATA_API_KEY")
     params = {
         "serviceKey": api_key,
@@ -299,7 +299,7 @@ def load_sample():
         return parse_items(json.load(f))
 
 
-def fetch_air_quality(sido="서울"):
+def fetch_air_quality(sido="인천"):
     try:
         raw = fetch_raw(sido)
         return parse_items(raw), "live"
@@ -324,7 +324,7 @@ from opendata import fetch_air_quality
 
 @app.route("/dashboard")
 def dashboard():
-    sido = request.args.get("sido", "서울")
+    sido = request.args.get("sido", "인천")
     rows, source = fetch_air_quality(sido)
     return render_template("dashboard.html", rows=rows, sido=sido, source=source)
 ```
@@ -365,7 +365,7 @@ def dashboard():
       <td>{{ row.grade }}</td>
       <td style="width:40%">
         <div class="bar-track">
-          <div class="bar-fill" style="width: {{ [row.pm10, 100] | min }}%"></div>
+          <div class="bar-fill" style="width: {{ row.pm10 }}%"></div>
         </div>
       </td>
     </tr>
@@ -402,7 +402,7 @@ def dashboard():
 ```html
 <form method="GET" action="/dashboard">
   <select name="sido" onchange="this.form.submit()">
-    {% for name in ["서울", "부산", "경기", "인천", "대구"] %}
+    {% for name in ["인천", "서울", "부산", "경기", "대구"] %}
       <option value="{{ name }}" {{ "selected" if name == sido else "" }}>{{ name }}</option>
     {% endfor %}
   </select>

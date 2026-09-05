@@ -39,7 +39,7 @@
 
   <form method="GET" action="/dashboard">
     <select name="sido" onchange="this.form.submit()">
-      {% for name in ["서울", "부산", "경기", "인천", "대구"] %}
+      {% for name in ["인천", "서울", "부산", "경기", "대구"] %}
         <option value="{{ name }}" {{ "selected" if name == sido else "" }}>{{ name }}</option>
       {% endfor %}
     </select>
@@ -54,7 +54,7 @@
       <td>{{ row.grade }}</td>
       <td style="width:40%">
         <div class="bar-track">
-          <div class="bar-fill" style="width: {{ [row.pm10, 100] | min }}%"></div>
+          <div class="bar-fill" style="width: {{ row.pm10 }}%"></div>
         </div>
       </td>
     </tr>
