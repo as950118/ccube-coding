@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>미니 방명록 — 3단 아키텍처 예제</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+    h1 { font-size: 1.4rem; }
+    form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    input, textarea, button { font: inherit; padding: 8px; }
+    button { cursor: pointer; }
+    ul { list-style: none; padding: 0; }
+    li { border-bottom: 1px solid #ddd; padding: 8px 0; }
+    li strong { display: block; }
+    #status { color: #b00; min-height: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>미니 방명록</h1>
+  <p>Vercel(프론트) → Render(백엔드 API) → Supabase(DB) 3단 구조 예제</p>
+
+  <form id="form">
+    <input id="name" placeholder="이름" required maxlength="50" />
+    <textarea id="message" placeholder="메시지" required maxlength="200"></textarea>
+    <button type="submit">남기기</button>
+  </form>
+  <div id="status"></div>
+
+  <ul id="list"></ul>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

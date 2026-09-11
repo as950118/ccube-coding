@@ -16,7 +16,8 @@
 
 | 도구 | 언제 |
 |------|------|
-| Supabase | 로그인·DB가 꼭 필요할 때 |
+| Supabase | 로그인·DB가 꼭 필요할 때 — Week10 미니앱(🔴, 저장 필요 시)에서 미리 맛볼 수 있고, 본격 사용은 캡스톤(Week12+) |
+| Render | 백엔드 서버(API) 배포가 필요할 때 — Week10부터 Supabase와 세트로 사용 (3단 아키텍처: Vercel/프론트 · Render/백엔드 · Supabase/DB). 무료 티어는 카드 등록 불필요, 단 15분 미사용 시 슬립 |
 | Playwright MCP | UI 테스트 맛보기 |
 | Context7 MCP | 공식문서 조회 |
 | 커스텀 슬래시 커맨드 | Week8 |
