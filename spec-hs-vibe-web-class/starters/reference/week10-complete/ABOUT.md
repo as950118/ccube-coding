@@ -23,20 +23,39 @@ Week10은 매번 다른 미니앱 주제를 그 자리에서 정하므로, 이 �
 Render에 배포된 백엔드만 이 키를 (Render 환경변수로) 가지고 있습니다. 프론트는 백엔드의
 공개 API(Render URL)만 호출합니다.
 
-## 실제로 검증한 내용 (2026-09-11, 이 세션에서 확인)
+## 실제로 검증한 내용 (2026-09-12, 실배포 E2E 완료)
 
-- Supabase 새 프로젝트 생성 → SQL Editor에서 `supabase_schema.sql` 실행까지 **정상 동작 확인**
-- 백엔드 `pip install -r requirements.txt` **로컬에서 클린 설치 확인** (Python 3.14 / supabase-py 2.9.1)
-- Render Web Service 생성 폼(Root Directory·Build/Start Command·Free plan·환경변수 2개)까지 **설정 확인**
-- **주의:** Supabase가 API 키 체계를 새로 바꿨습니다 — 예전 `anon`/`service_role`(JWT 형식) 대신
-  `sb_publishable_...` / `sb_secret_...` 형식이 기본입니다. 이 프로젝트의 `SUPABASE_SERVICE_KEY`는
-  새 형식의 **secret key**(구 service_role과 같은 역할)를 가리킵니다. 프로젝트가 "Legacy anon,
-  service_role API keys" 탭에 있는 이전 형식 키를 쓰는 경우 supabase-py 사용법은 동일합니다.
-- 시크릿 키(SUPABASE_SERVICE_KEY)를 실제로 Render에 입력해 백엔드 배포 → 프론트 배포 → 브라우저
-  E2E CRUD까지는 **이 세션에서 완료하지 않았습니다.** API 키/토큰을 대신 입력하는 행위는 Claude가
-  하지 않기 때문입니다(정책상 금지) — 이 단계는 항상 학생 본인(또는 교사)이 직접 붙여넣어야
-  합니다. 수업 중에도 동일하게 안내하세요: **"AI에게 시크릿 키를 대신 입력해 달라고 하지 않는다"**
-  는 것 자체가 보안 교육 포인트입니다.
+이 Kit은 실제로 Supabase·Render·Vercel에 배포해서 브라우저로 CRUD·새로고침 지속성까지 확인했습니다.
+
+- Supabase 새 프로젝트 생성 → SQL Editor에서 `supabase_schema.sql` 실행 → **정상 동작 확인**
+- Render에 백엔드 배포(Free plan, Root Directory·Build/Start Command 설정) → `/api/health`,
+  `/api/items` GET·POST **실제 응답 확인** (`https://week10-guestbook-api.onrender.com`)
+- Vercel에 프론트 배포(Framework: Vite, Root Directory 지정, `VITE_API_URL` 환경변수) → 배포된
+  페이지에서 폼으로 직접 입력 → **새로고침해도 데이터 유지되는 것까지 확인**
+- 시크릿 키(`SUPABASE_SERVICE_KEY`) 값 자체는 학생/교사가 Render 환경변수 필드에 직접 붙여넣었습니다
+  — Claude는 API 키/토큰 값을 필드에 입력하지 않는다는 원칙을 지켰습니다. 수업 중에도 동일하게
+  안내하세요: **"AI에게 시크릿 키를 대신 입력해 달라고 하지 않는다"**는 것 자체가 보안 교육 포인트입니다.
+
+### 🐛 실배포로 찾은 버그: supabase-py 구버전이 새 키 형식을 거부함
+
+Supabase가 API 키 체계를 `anon`/`service_role`(JWT 형식)에서 `sb_publishable_...` /
+`sb_secret_...`(비-JWT, opaque 형식)로 바꿨습니다. 그런데 **`supabase-py==2.9.1`은 키를
+`^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?...$` 정규식(JWT 형식, 점 2개)으로 검사**해서, 새 형식
+키를 넣으면 `SupabaseException("Invalid API key")`를 던지며 **Render 배포가 크래시**했습니다
+(`gunicorn` exited with status 1 — 실제로 이 세션에서 재현·확인함).
+
+**해결:** `supabase==2.31.0`으로 올리면 이 정규식 검사 자체가 코드에서 사라져 있어 새 키 형식이
+그대로 통과합니다. `requirements.txt`는 이미 2.31.0으로 고정해뒀습니다 — **이보다 낮은 버전으로
+내리지 마세요.** 학생이 옛날 튜토리얼을 보고 `pip install supabase==2.9`처럼 구버전을 깔면 똑같은
+에러가 재현되니, 이 증상이 나오면 먼저 `pip show supabase`로 버전을 확인하게 하세요.
+
+### 검증에 쓴 실제 배포 (수업 자료 검증용 — 학생 개인 프로젝트 아님)
+
+- Supabase 프로젝트: `week10-guestbook-demo` (as950118's Org)
+- Render: `week10-guestbook-api` → `https://week10-guestbook-api.onrender.com`
+- Vercel: `week10-guestbook` → `https://week10-guestbook.vercel.app`
+
+이 셋은 Kit이 실제로 동작하는지 검증하려고 만든 것이라, 계속 켜둘 필요가 없으면 이후에 정리(삭제)해도 됩니다.
 
 ## 파일
 
