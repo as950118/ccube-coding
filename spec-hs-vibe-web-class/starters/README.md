@@ -15,14 +15,10 @@
 - [x] `week08/` — BBS 확장 · 공공데이터 API · 대시보드 (opendata.py 스켈레톤 · opendata-log 워크시트)
 - [x] `reference/week08-complete/` — 교사·조교용 회원·권한 BBS + 공공데이터 대시보드 완성 예시
 - [x] `_displaced/week08-automation-mcp/` · `reference/week08-automation-mcp-complete/` — 구 8주차(자동화·커맨드·MCP) 보관본
-
-예정:
-
-```
-week09/
-...
-week10/   # 미니앱(포트폴리오 #2)용 Kit 파생
-```
+- [x] `week09/` — BBS 확장 · 댓글·검색·권한·실시간 채팅 (notes 워크시트)
+- [x] `reference/week09-complete/` — 교사·조교용 댓글·검색·RBAC·실시간 채팅 완성 예시
+- [x] `week10/` — 미니앱 MVP 구현·배포 (🟢 프론트만 배포 / 🔴 선택: Vercel·Render·Supabase 3단 구조 Kit)
+- [x] `reference/week10-complete/` — 교사·조교용 3단 아키텍처(방명록) 완성 예시
 
 학생용 수업 자료(docx)는 [docs/](../docs/)를 참고하세요.
 

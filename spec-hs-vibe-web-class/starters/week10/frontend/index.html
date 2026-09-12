@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>내 미니앱</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+    form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    input, textarea, button { font: inherit; padding: 8px; }
+    ul { list-style: none; padding: 0; }
+    li { border-bottom: 1px solid #ddd; padding: 8px 0; }
+    #status { color: #b00; min-height: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>내 미니앱</h1>
+  <!-- TODO 0: 입력 필드는 내 미니앱 데이터에 맞게 바꾸기 (예: name/message → title/content) -->
+  <form id="form">
+    <input id="name" placeholder="이름" required maxlength="50" />
+    <textarea id="message" placeholder="메시지" required maxlength="200"></textarea>
+    <button type="submit">저장</button>
+  </form>
+  <div id="status"></div>
+
+  <ul id="list"></ul>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
