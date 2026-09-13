@@ -1,2 +1,22 @@
+# Python
 venv
 .venv
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
+build/
+
+# Env files (keep .env.example tracked)
+.env
+.env.local
+
+# Databases (auto-generated at runtime by Flask/SQLite starter apps)
+*.db
+*.sqlite
+*.sqlite3
+
+# OS / editor
+.DS_Store
