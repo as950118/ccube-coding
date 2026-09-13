@@ -10,6 +10,8 @@
 | 6 | [2026진학반_6주차.docx](2026진학반_6주차.docx) ⚠️ 구식(프로필 배포) — [2026진학반_6주차-draft.md](2026진학반_6주차-draft.md) 내용을 Google Docs에 붙여넣어 재작성 필요 | [weeks/week06-bbs-basics.md](../weeks/week06-bbs-basics.md) |
 | 7 | [2026진학반_7주차.docx](2026진학반_7주차.docx) ⚠️ 구식(Starter Kit) — [2026진학반_7주차-draft.md](2026진학반_7주차-draft.md) 내용을 Google Docs에 붙여넣어 재작성 필요 | [weeks/week07-bbs-auth.md](../weeks/week07-bbs-auth.md) |
 | 8 | [2026진학반_8주차.docx](2026진학반_8주차.docx) ⚠️ 구식(자동화·MCP) — [2026진학반_8주차-draft.md](2026진학반_8주차-draft.md) 내용을 Google Docs에 붙여넣어 재작성 필요 | [weeks/week08-bbs-opendata-dashboard.md](../weeks/week08-bbs-opendata-dashboard.md) |
+| 9 | (신규 작성 필요) — [2026진학반_9주차-draft.md](2026진학반_9주차-draft.md) 내용을 Google Docs에 붙여넣어 새로 작성 | [weeks/week09-bbs-social-features.md](../weeks/week09-bbs-social-features.md) |
+| 10 | (신규 작성 필요) — [2026진학반_10주차-draft.md](2026진학반_10주차-draft.md) 내용을 Google Docs에 붙여넣어 새로 작성 | [weeks/week10-miniapp-mvp.md](../weeks/week10-miniapp-mvp.md) |
 | 보충 | [2026진학반_보충_아키텍처기초.docx](2026진학반_보충_아키텍처기초.docx) | 특정 주차 전용 아님 — 3단(프레젠테이션·애플리케이션·데이터) 아키텍처 개념. Week11 Supabase 필요 여부 판단 직전에 활용 권장 |
 | 보충 | [2026진학반_보충_캡스톤주제선정.docx](2026진학반_보충_캡스톤주제선정.docx) | [appendix/capstone-topic-guide.md](../appendix/capstone-topic-guide.md) 기반 — 계열별 주제 예시 + 몸풀기 질문지 + 주제 확정 워크시트. Week11 블록 A~C(아이디어 워크숍)에서 활용 |
 
