@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: week10-miniapp-api
+    runtime: python
+    plan: free
+    rootDir: spec-hs-vibe-web-class/starters/week10/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
