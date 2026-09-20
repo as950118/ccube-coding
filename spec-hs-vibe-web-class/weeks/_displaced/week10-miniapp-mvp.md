@@ -1,5 +1,7 @@
 # 10주차 — 미니앱 MVP 구현 · 배포 (포트폴리오 #2)
 
+> ⚠️ **보관됨(displaced):** 2026 커리큘럼 재설계로 10주차는 [week10-ai-service.md](../week10-ai-service.md)(AI 서비스 연동 — OpenAI API · 나이스 급식 공공데이터)로 대체되었습니다. 미니앱 MVP 배포·3단 아키텍처(Vercel/Render/Supabase) 실습 틀은 캡스톤(11주~)에서 참고할 수 있어 보관합니다.
+
 **Phase:** 워크플로 | **소요:** 4시간  
 **원본 대응:** S22 정신 · M19 (툴체인만 단순화)
 
@@ -7,7 +9,7 @@
 
 ## 🟢 목표 (전원)
 
-> ⚠️ **2026 재설계 메모:** Week9가 [BBS 확장(댓글·검색·권한·실시간 채팅)](week09-bbs-social-features.md)으로 바뀌면서, 미니앱 주제·PRD를 미리 써 오지 않는다. 아래 블록 A(0:00~0:25)에서 **미니 PRD를 그 자리에서 가볍게 정하고** 바로 구현으로 들어간다. 기존 PRD/ROADMAP 형식이 필요하면 [_displaced/week09-prd-roadmap.md](_displaced/week09-prd-roadmap.md)의 항목을 축약해 쓴다.
+> ⚠️ **2026 재설계 메모:** Week9가 [BBS 확장(댓글·검색·권한·실시간 채팅)](../week09-bbs-social-features.md)으로 바뀌면서, 미니앱 주제·PRD를 미리 써 오지 않는다. 아래 블록 A(0:00~0:25)에서 **미니 PRD를 그 자리에서 가볍게 정하고** 바로 구현으로 들어간다. 기존 PRD/ROADMAP 형식이 필요하면 [week09-prd-roadmap.md](week09-prd-roadmap.md)의 항목을 축약해 쓴다.
 
 미니앱 주제를 정하고, **MVP 기능**을 Starter Kit으로 구현·배포한다.
 데이터 저장·서버 로직이 꼭 필요한 주제라면 **3단 아키텍처**(프레젠테이션·애플리케이션·데이터)를 실제로 나눠 배포해본다(🔴, 선택).

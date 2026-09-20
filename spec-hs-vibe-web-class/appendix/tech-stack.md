@@ -16,8 +16,9 @@
 
 | 도구 | 언제 |
 |------|------|
-| Supabase | 로그인·DB가 꼭 필요할 때 — Week10 미니앱(🔴, 저장 필요 시)에서 미리 맛볼 수 있고, 본격 사용은 캡스톤(Week12+) |
-| Render | 백엔드 서버(API) 배포가 필요할 때 — Week10부터 Supabase와 세트로 사용 (3단 아키텍처: Vercel/프론트 · Render/백엔드 · Supabase/DB). 무료 티어는 카드 등록 불필요, 단 15분 미사용 시 슬립 |
+| Supabase | 로그인·DB가 꼭 필요할 때 — 본격 사용은 캡스톤(Week12+) — 구 10주차 3단 실습 자료(`starters/reference/week10-miniapp-mvp-complete/`) 참고 |
+| Render | 백엔드 서버(API) 배포가 필요할 때 — 캡스톤에서 Supabase와 세트로 사용 (3단 아키텍처: Vercel/프론트 · Render/백엔드 · Supabase/DB). 무료 티어는 카드 등록 불필요, 단 15분 미사용 시 슬립 |
+| OpenAI API | Week10 AI 서비스 연동 — 유료(선불 크레딧) API. 교사가 프로젝트 키·월 예산 상한을 설정해 배포하고, 키는 환경 변수로만 사용 · [week10-ai-service.md](../weeks/week10-ai-service.md) |
 | Playwright MCP | UI 테스트 맛보기 |
 | Context7 MCP | 공식문서 조회 |
 | 커스텀 슬래시 커맨드 | Week8 |

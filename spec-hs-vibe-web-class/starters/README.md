@@ -17,8 +17,9 @@
 - [x] `_displaced/week08-automation-mcp/` · `reference/week08-automation-mcp-complete/` — 구 8주차(자동화·커맨드·MCP) 보관본
 - [x] `week09/` — BBS 확장 · 댓글·검색·권한·실시간 채팅 (notes 워크시트)
 - [x] `reference/week09-complete/` — 교사·조교용 댓글·검색·RBAC·실시간 채팅 완성 예시
-- [x] `week10/` — 미니앱 MVP 구현·배포 (🟢 프론트만 배포 / 🔴 선택: Vercel·Render·Supabase 3단 구조 Kit)
-- [x] `reference/week10-complete/` — 교사·조교용 3단 아키텍처(방명록) 완성 예시
+- [x] `week10/` — AI 서비스 연동 · OpenAI API + 나이스 급식 (step1~4 실습 스크립트 · notes 워크시트)
+- [x] `reference/week10-complete/` — 교사·조교용 `school_bot`(Flask + OpenAI + 나이스) 완성 예시
+- [x] `_displaced/week10-miniapp-mvp/` · `reference/week10-miniapp-mvp-complete/` — 구 10주차(미니앱 MVP · Vercel/Render/Supabase 3단 구조) 보관본
 
 학생용 수업 자료(docx)는 [docs/](../docs/)를 참고하세요.
 

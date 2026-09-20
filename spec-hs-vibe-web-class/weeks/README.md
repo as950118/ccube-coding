@@ -13,8 +13,8 @@
 | 6 | [week06-bbs-basics.md](week06-bbs-basics.md) | 입문(재설계) | 클라이언트·서버·DB + BBS(Flask/SQLite) |
 | 7 | [week07-bbs-auth.md](week07-bbs-auth.md) | 입문(재설계) | BBS 업그레이드 — 회원가입·로그인·권한 |
 | 8 | [week08-bbs-opendata-dashboard.md](week08-bbs-opendata-dashboard.md) | 입문(재설계) | BBS 확장 — 공공데이터 API 연동 + 대시보드 |
-| 9 | [week09-prd-roadmap.md](week09-prd-roadmap.md) | 워크플로 | 미니앱 PRD + ROADMAP |
-| 10 | [week10-miniapp-mvp.md](week10-miniapp-mvp.md) | 워크플로 | **포트폴리오 #2** MVP 배포 |
+| 9 | [week09-bbs-social-features.md](week09-bbs-social-features.md) | 입문(재설계) | BBS 확장 — 댓글·검색·권한(RBAC)·실시간 채팅 |
+| 10 | [week10-ai-service.md](week10-ai-service.md) | 워크플로(재설계) | 웹 서비스에 AI 붙이기 — OpenAI API · 나이스 급식 공공데이터 |
 | 11 | [week11-capstone-ideation.md](week11-capstone-ideation.md) | 캡스톤 | 특목고형 주제 · PRD |
 | 12 | [week12-capstone-build.md](week12-capstone-build.md) | 캡스톤 | 핵심 기능 구현 |
 | 13 | [week13-capstone-polish.md](week13-capstone-polish.md) | 캡스톤 | **포트폴리오 #3** 완성 |
@@ -22,4 +22,4 @@
 
 원본 인강 매핑: [../appendix/source-curriculum-map.md](../appendix/source-curriculum-map.md)
 
-> ⚠️ **재설계 진행 중:** 6·7·8주차에 BBS 트랙을 새로 넣으면서, 기존 6주차(프로필 배포·포트폴리오#1)·7주차(Starter Kit)·8주차(자동화·MCP) 내용이 밀려났다. 삭제하지 않고 [_displaced/](_displaced/)에 보관 중 — 7주차 디자인 패턴+React 수업안은 [_displaced/week07-design-patterns.md](_displaced/week07-design-patterns.md), 8주차 자동화·MCP 수업안은 [_displaced/week08-automation-mcp.md](_displaced/week08-automation-mcp.md)(추후 다른 주차에 재배치 검토). `starters/reference/week07-complete/`는 현재 회원·권한 커리큘럼 기준으로 새로 작성 완료 — 구 버전(디자인 패턴·React)은 `starters/reference/week07-design-patterns-complete/`에 보관.
+> ⚠️ **재설계 진행 중:** 6·7·8주차에 BBS 트랙을 새로 넣으면서, 기존 6주차(프로필 배포·포트폴리오#1)·7주차(Starter Kit)·8주차(자동화·MCP) 내용이 밀려났다. 삭제하지 않고 [_displaced/](_displaced/)에 보관 중 — 7주차 디자인 패턴+React 수업안은 [_displaced/week07-design-patterns.md](_displaced/week07-design-patterns.md), 8주차 자동화·MCP 수업안은 [_displaced/week08-automation-mcp.md](_displaced/week08-automation-mcp.md)(추후 다른 주차에 재배치 검토), 9주차 PRD·ROADMAP은 [_displaced/week09-prd-roadmap.md](_displaced/week09-prd-roadmap.md), 10주차 미니앱 MVP·3단 아키텍처 배포는 [_displaced/week10-miniapp-mvp.md](_displaced/week10-miniapp-mvp.md)(캡스톤 배포 단계에서 참고). `starters/reference/week07-complete/`는 현재 회원·권한 커리큘럼 기준으로 새로 작성 완료 — 구 버전(디자인 패턴·React)은 `starters/reference/week07-design-patterns-complete/`에 보관.

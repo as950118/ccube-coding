@@ -1,116 +1,64 @@
-# 미니앱 MVP · 3단 아키텍처 배포 (교사 참고 · 완성 예시)
+# AI 학교생활 도우미 (OpenAI API + 나이스 급식) — 교사 참고 · 완성 예시
 
-**수업안:** [../../../weeks/week10-miniapp-mvp.md](../../../weeks/week10-miniapp-mvp.md)
+**수업안:** [../../../weeks/week10-ai-service.md](../../../weeks/week10-ai-service.md)
 
 학생용 starter는 [../../week10/](../../week10/) 입니다.
-이 폴더는 **조교·교사 참고용**입니다. 🟢 전원 코스(프론트만 배포)에는 필요 없고, 🔴 3단 아키텍처
-(Vercel·Render·Supabase)를 선택한 학생이 막혔을 때만 참고용으로 보여줍니다.
+이 폴더는 **조교·교사 참고용**입니다. 수업 중에는 학생에게 통째로 배포하지 않고, 막힌 부분만 해당 함수를 보여줍니다.
+학생이 수업 자료(docs 10주차)의 5장 코드를 직접 따라 치는 것이 핵심입니다.
 
 ## 이 예시에 대해
 
-"미니 방명록" — 이름·메시지를 남기면 새로고침해도 남아있는 가장 단순한 저장형 앱입니다.
-Week10은 매번 다른 미니앱 주제를 그 자리에서 정하므로, 이 예시는 **주제가 아니라 배포 구조**를
-보여주는 용도입니다. 학생은 자기 주제에 맞게 `items` 테이블·필드명만 바꿔서 재사용합니다.
+10주차 자료의 `school_bot` 구조(`app.py` · `neis.py` · `templates/index.html`)를 **OpenAI API 기준**으로 구현했습니다.
+원 자료(Gemini)와의 대응:
 
-```
-[Vercel]                [Render]                [Supabase]
- index.html   --fetch-->  Flask app.py  --SUPABASE_SERVICE_KEY-->  Postgres(items)
- (프레젠테이션)              (애플리케이션)                            (데이터)
-```
+| 개념 | Gemini (`google-genai`) | 이 예시 (`openai`) |
+|------|------------------------|--------------------|
+| 클라이언트 | `genai.Client()` (`GEMINI_API_KEY`) | `OpenAI()` (`OPENAI_API_KEY`) |
+| 단일 대화 | `models.generate_content(contents=...)` | `responses.create(input="...")` |
+| 연속 대화 | `chats.create()` + `send_message()` (SDK가 기록 관리) | **대화 기록 리스트를 직접 유지**해 매번 `input=[...]`로 전달 |
+| 시스템 지침 | `GenerateContentConfig(system_instruction=)` | `instructions=` |
+| 이미지 | `types.Part.from_bytes(...)` | `{"type":"input_image","image_url":"data:image/png;base64,..."}` |
+| 응답 텍스트 | `response.text` | `response.output_text` |
 
-**핵심은 키 분리입니다.** Supabase `SUPABASE_SERVICE_KEY`(secret key)는 RLS를 우회하는
-강력한 키라 프론트/공개 저장소에 절대 노출하면 안 됩니다. 그래서 프론트는 이 키를 아예 모르고,
-Render에 배포된 백엔드만 이 키를 (Render 환경변수로) 가지고 있습니다. 프론트는 백엔드의
-공개 API(Render URL)만 호출합니다.
+> 교육 포인트: OpenAI에는 `chats.create`에 해당하는 "세션 객체"가 없다. 그래서 **"연속 대화 = 이전 대화를 매번 함께 보내는 것"** 이라는 원리가 코드에 그대로 드러난다(`chat_with_history`).
 
-## 실제로 검증한 내용 (2026-09-12, 실배포 E2E 완료)
-
-이 Kit은 실제로 Supabase·Render·Vercel에 배포해서 브라우저로 CRUD·새로고침 지속성까지 확인했습니다.
-
-- Supabase 새 프로젝트 생성 → SQL Editor에서 `supabase_schema.sql` 실행 → **정상 동작 확인**
-- Render에 백엔드 배포(Free plan, Root Directory·Build/Start Command 설정) → `/api/health`,
-  `/api/items` GET·POST **실제 응답 확인** (`https://week10-guestbook-api.onrender.com`)
-- Vercel에 프론트 배포(Framework: Vite, Root Directory 지정, `VITE_API_URL` 환경변수) → 배포된
-  페이지에서 폼으로 직접 입력 → **새로고침해도 데이터 유지되는 것까지 확인**
-- 시크릿 키(`SUPABASE_SERVICE_KEY`) 값 자체는 학생/교사가 Render 환경변수 필드에 직접 붙여넣었습니다
-  — Claude는 API 키/토큰 값을 필드에 입력하지 않는다는 원칙을 지켰습니다. 수업 중에도 동일하게
-  안내하세요: **"AI에게 시크릿 키를 대신 입력해 달라고 하지 않는다"**는 것 자체가 보안 교육 포인트입니다.
-
-### 🐛 실배포로 찾은 버그: supabase-py 구버전이 새 키 형식을 거부함
-
-Supabase가 API 키 체계를 `anon`/`service_role`(JWT 형식)에서 `sb_publishable_...` /
-`sb_secret_...`(비-JWT, opaque 형식)로 바꿨습니다. 그런데 **`supabase-py==2.9.1`은 키를
-`^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?...$` 정규식(JWT 형식, 점 2개)으로 검사**해서, 새 형식
-키를 넣으면 `SupabaseException("Invalid API key")`를 던지며 **Render 배포가 크래시**했습니다
-(`gunicorn` exited with status 1 — 실제로 이 세션에서 재현·확인함).
-
-**해결:** `supabase==2.31.0`으로 올리면 이 정규식 검사 자체가 코드에서 사라져 있어 새 키 형식이
-그대로 통과합니다. `requirements.txt`는 이미 2.31.0으로 고정해뒀습니다 — **이보다 낮은 버전으로
-내리지 마세요.** 학생이 옛날 튜토리얼을 보고 `pip install supabase==2.9`처럼 구버전을 깔면 똑같은
-에러가 재현되니, 이 증상이 나오면 먼저 `pip show supabase`로 버전을 확인하게 하세요.
-
-### 검증에 쓴 실제 배포 (수업 자료 검증용 — 학생 개인 프로젝트 아님)
-
-- Supabase 프로젝트: `week10-guestbook-demo` (as950118's Org)
-- Render: `week10-guestbook-api` → `https://week10-guestbook-api.onrender.com`
-- Vercel: `week10-guestbook` → `https://week10-guestbook.vercel.app`
-
-이 셋은 Kit이 실제로 동작하는지 검증하려고 만든 것이라, 계속 켜둘 필요가 없으면 이후에 정리(삭제)해도 됩니다.
+원 자료 대비 바뀐 점(의도적):
+- **나이스 키 하드코딩 제거** — `NEIS_API_KEY` 환경 변수(선택). 키가 없어도 샘플 모드(5건)로 동작한다. 키를 코드에 쓰지 않는다는 오늘의 성공 기준과 모순되지 않게 하려는 것.
+- 챗봇 응답을 `innerHTML`이 아닌 `textContent`로 렌더링(응답 속 HTML 실행 방지), 챗 기록을 서버에서 다시 그려 POST 후에도 유지.
+- 급식: 조식·중식·석식 중 **중식 우선**, 알레르기 번호표를 프롬프트에 함께 제공(AI가 번호 뜻을 추측하지 않도록).
+- 오류(429·인증 실패)를 화면에 친절한 문장으로 표시, 업로드 5MB 제한.
 
 ## 파일
 
 ```
 week10-complete/
-├── ABOUT.md                 ← 이 안내 (교사용)
-├── backend/
-│   ├── app.py                ← Flask API (GET/POST /api/items)
-│   ├── requirements.txt
-│   ├── render.yaml            ← Render Blueprint (선택 — 대시보드로 직접 만들어도 됨)
-│   ├── supabase_schema.sql    ← Supabase SQL Editor에 붙여넣을 스키마
-│   └── .env.example
-└── frontend/
-    ├── index.html
-    ├── src/main.js             ← fetch로 백엔드 API 호출
-    ├── package.json            ← Vite
-    └── .env.example            ← VITE_API_URL
+├── ABOUT.md            ← 이 안내 (교사용)
+├── README.md           ← 완성된 프로젝트 README 예시
+├── app.py              ← Flask 서버 (급식·공지·사진·챗봇 라우트, 세션별 대화 기록)
+├── neis.py             ← 나이스 API 모듈 (학교코드·오늘 급식)
+├── requirements.txt
+├── .env.example
+├── templates/
+│   └── index.html      ← 원문(초록)/AI 해설(보라) 영역 분리 화면
+└── notes/
+    ├── ai-log.md           ← 실험 기록 예시
+    └── why-ai-service.md   ← 회고 예시
 ```
 
-## 실행 방법 (로컬 시연용)
+## 실행 방법 (시연용)
 
-```bash
-# 1. Supabase 프로젝트 생성 후 backend/supabase_schema.sql 실행
-# 2. 백엔드
-cd backend
-python3 -m venv .venv && source .venv/bin/activate
+```
 pip install -r requirements.txt
-cp .env.example .env   # SUPABASE_URL / SUPABASE_SERVICE_KEY 채우기
-python app.py           # http://localhost:5000
-
-# 3. 프론트 (새 터미널)
-cd frontend
-npm install
-cp .env.example .env   # VITE_API_URL=http://localhost:5000
-npm run dev
+cp .env.example .env    # OPENAI_API_KEY 입력
+python app.py
 ```
 
-## 실제 배포 절차 (Render + Vercel)
-
-1. **Supabase**: 프로젝트 생성 → SQL Editor에서 `supabase_schema.sql` 실행 → Project Settings →
-   API Keys에서 URL과 secret key 확인 (secret key는 "Reveal"을 눌러야 보임)
-2. **Render**: New → Web Service → GitHub repo 연결 → Root Directory를
-   `spec-hs-vibe-web-class/starters/reference/week10-complete/backend`로 지정 → Build Command
-   `pip install -r requirements.txt` / Start Command `gunicorn app:app` → **Instance Type: Free**
-   선택 → Environment Variables에 `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` 등록 → Deploy
-3. **Vercel**: New Project → 같은 repo → Root Directory를
-   `spec-hs-vibe-web-class/starters/reference/week10-complete/frontend`로 지정 → Framework
-   Preset: Vite → Environment Variables에 `VITE_API_URL` = (2번에서 나온 Render URL) 등록 → Deploy
-4. 배포된 Vercel URL 접속 → 이름/메시지 남기기 → 새로고침해도 남아있는지 확인
+`http://localhost:5001` — 학교 이름 조회 → 원문/AI 해설 분리 확인 → 챗봇에 "내일 체육 준비물은 물이야" 후 "내일 뭘 챙겨야 해?" → 「초기화」 → 다시 질문(모르게 됨) → 다른 브라우저(시크릿 창)에서 대화가 섞이지 않는지 확인.
 
 ## 확인 포인트
 
-- `app.py`에서 `SUPABASE_SERVICE_KEY`를 쓰지, `SUPABASE_URL`만 쓰고 anon/publishable 키를
-  섞어 쓰고 있지 않은지 (섞으면 RLS 때문에 조용히 실패함)
-- 프론트 코드 어디에도 `sb_secret_...` 또는 legacy `service_role` 키 문자열이 없는지
-  (있다면 프론트 번들에 그대로 노출됨 — 반드시 백엔드에서만)
-- Render 무료 티어 콜드스타트(15분 미사용 후 첫 요청 30~60초) 때문에 "안 되는 줄" 착각하지
-  않도록 학생에게 미리 안내했는지
+- `app.py`: 키가 코드에 없는가 (`OpenAI()`가 환경 변수를 읽음), `chat_with_history`가 기록을 매번 함께 보내는가
+- `app.py`: `session["user_key"]` → `user_chats` 딕셔너리로 브라우저별 대화가 분리되는가
+- `neis.py`: 원문을 가공하지 않고 `<br/>`만 줄바꿈으로 바꾸는가, 급식이 없을 때 AI를 호출하지 않는가
+- `index.html`: 원문 영역(`.official`)과 AI 영역(`.ai`)이 시각적으로 분리되는가
+- 실제 호출 검증 상태: 나이스 API는 실제 호출로 학교 검색·중식 파싱 확인. OpenAI 호출부는 로컬 모의 서버로 요청 형식·문맥 누적·오류 처리만 확인했으므로, **수업 전 교사가 실제 키로 한 번 시연**해 모델 응답 품질을 확인할 것.

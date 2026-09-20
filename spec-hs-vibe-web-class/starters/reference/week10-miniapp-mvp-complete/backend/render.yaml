@@ -3,7 +3,7 @@ services:
     name: week10-guestbook-api
     runtime: python
     plan: free
-    rootDir: spec-hs-vibe-web-class/starters/reference/week10-complete/backend
+    rootDir: spec-hs-vibe-web-class/starters/reference/week10-miniapp-mvp-complete/backend
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
