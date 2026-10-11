@@ -1,7 +1,9 @@
 # 캡스톤 주제 선정 가이드
 
-> [weeks/week11-capstone-ideation.md](../weeks/week11-capstone-ideation.md)의 「특목고형 주제 가이드」를 확장한 문서.
-> Week11 수업 준비용이자, 학생에게 그대로 나눠줘도 되는 워크시트.
+> [weeks/_displaced/week11-capstone-ideation.md](../weeks/_displaced/week11-capstone-ideation.md)의 「특목고형 주제 가이드」를 확장한 문서.
+> 학생에게 그대로 나눠줘도 되는 워크시트.
+>
+> ⚠️ **2026-10 일정 변경:** 11주차가 AI 에이전트·하네스·MCP로 바뀌면서, 이 문서는 **11주차 숙제(3. 몸풀기 질문지 + 한 문장 피치) → 12주차 블록 A(주제 확정)**에서 쓴다. 아래 본문의 「Week11 블록 ○」 표기는 원래 4시간 수업 기준이다.
 
 ---
 

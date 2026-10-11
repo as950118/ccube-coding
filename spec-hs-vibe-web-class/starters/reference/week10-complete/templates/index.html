@@ -36,13 +36,11 @@
         </form>
         {% if errors.meal %}<div class="box error">{{ errors.meal }}</div>{% endif %}
         {% if meal %}
-            <div class="box official">
-                <div class="label">📋 나이스 공식 원문 — {{ meal_school }} · {{ meal.meal_name }} ({{ meal.date }})</div>{{ meal.menu }}{% if meal.calorie %}
+            <div class="box official"><div class="label">📋 나이스 공식 원문 — {{ meal_school }} · {{ meal.meal_name }} ({{ meal.date }})</div>{{ meal.menu }}{% if meal.calorie %}
 
 칼로리: {{ meal.calorie }}{% endif %}</div>
             {% if ai_meal %}
-                <div class="box ai">
-                    <div class="label">🤖 AI 브리핑 (원문을 해석한 참고용 설명 — 틀릴 수 있어요)</div>{{ ai_meal }}</div>
+                <div class="box ai"><div class="label">🤖 AI 브리핑 (원문을 해석한 참고용 설명 — 틀릴 수 있어요)</div>{{ ai_meal }}</div>
             {% endif %}
             {% if errors.ai_meal %}<div class="box error">{{ errors.ai_meal }}</div>{% endif %}
         {% endif %}
@@ -81,7 +79,7 @@
             {% endfor %}
         </div>
         <div class="chat-row">
-            <input type="text" id="chatInput" placeholder="질문을 입력하세요" onkeydown="if (event.key === 'Enter') sendChat()">
+            <input type="text" id="chatInput" placeholder="질문 (예: 경기고등학교 9월 17일 급식 알려줘)" onkeydown="if (event.key === 'Enter') sendChat()">
             <button type="button" onclick="sendChat()">전송</button>
             <button type="button" class="sub" onclick="resetChat()">초기화</button>
         </div>

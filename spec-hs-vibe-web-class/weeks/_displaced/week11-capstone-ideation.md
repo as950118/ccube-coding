@@ -1,5 +1,7 @@
 # 11주차 — 캡스톤 주제 · 린캔버스 · PRD
 
+> ⚠️ **보관됨(displaced):** 2026-10 재설계로 11주차는 [week11-agent-harness-mcp.md](../week11-agent-harness-mcp.md)(AI 에이전트 · 하네스 · MCP, 2시간)로 대체되었습니다. 캡스톤 주제 확정은 **11주차 숙제(몸풀기 질문지) + 12주차 블록 A**로 옮겼습니다. 주제 가이드·PRD 틀은 여전히 유효하므로 12주차에서 이 문서와 [appendix/capstone-topic-guide.md](../../appendix/capstone-topic-guide.md)를 그대로 씁니다.
+
 **Phase:** 캡스톤 | **소요:** 4시간  
 **원본 대응:** S25 · M22 (이벤트앱 대신 **학생 주제**)
 
@@ -14,7 +16,7 @@
 
 ## 특목고형 주제 가이드
 
-> 5단계 사고 과정 · 계열별 주제 뱅크 · 워크시트: [appendix/capstone-topic-guide.md](../appendix/capstone-topic-guide.md)
+> 5단계 사고 과정 · 계열별 주제 뱅크 · 워크시트: [appendix/capstone-topic-guide.md](../../appendix/capstone-topic-guide.md)
 
 | 방향 | 질문 |
 |------|------|
@@ -61,7 +63,7 @@
 
 ### 🔴
 - [ ] 데이터/API 조사
-- [ ] 3단 아키텍처(Vercel/Render/Supabase) 필요 여부 결정 (기본은 프론트만. 구 10주차 3단 실습 자료는 [_displaced/week10-miniapp-mvp.md](_displaced/week10-miniapp-mvp.md)와 `starters/reference/week10-miniapp-mvp-complete/` 참고) — 판단 전 [docs/2026진학반_보충_아키텍처기초.docx](../docs/2026진학반_보충_아키텍처기초.docx) 참고
+- [ ] 3단 아키텍처(Vercel/Render/Supabase) 필요 여부 결정 (기본은 프론트만. 구 10주차 3단 실습 자료는 [_displaced/week10-miniapp-mvp.md](week10-miniapp-mvp.md)와 `starters/reference/week10-miniapp-mvp-complete/` 참고) — 판단 전 [docs/2026진학반_보충_아키텍처기초.docx](../../docs/2026진학반_보충_아키텍처기초.docx) 참고
 
 ---
 

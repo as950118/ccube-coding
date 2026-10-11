@@ -36,14 +36,14 @@ def get_school_code(school_name: str):
     return row["ATPT_OFCDC_SC_CODE"], row["SD_SCHUL_CODE"], row["SCHUL_NM"]
 
 
-def get_today_meal(office_code: str, school_code: str):
-    """오늘 급식 원문을 dict로 돌려준다. 급식이 없으면 None."""
-    today = datetime.now().strftime("%Y%m%d")
+def get_meal(office_code: str, school_code: str, date: str | None = None):
+    """급식 원문을 dict로 돌려준다(date는 YYYYMMDD, 생략하면 오늘). 급식이 없으면 None."""
+    date = date or datetime.now().strftime("%Y%m%d")
     res = _get(
         "mealServiceDietInfo",
         ATPT_OFCDC_SC_CODE=office_code,
         SD_SCHUL_CODE=school_code,
-        MLSV_YMD=today,
+        MLSV_YMD=date,
     )
     if "mealServiceDietInfo" not in res:
         return None
@@ -52,7 +52,7 @@ def get_today_meal(office_code: str, school_code: str):
     # 조식(1)·중식(2)·석식(3) 중 중식을 우선 사용한다.
     row = next((r for r in rows if r.get("MMEAL_SC_CODE") == "2"), rows[0])
     return {
-        "date": today,
+        "date": date,
         "meal_name": row.get("MMEAL_SC_NM", ""),
         "menu": row["DDISH_NM"].replace("<br/>", "\n"),
         "calorie": row.get("CAL_INFO", ""),

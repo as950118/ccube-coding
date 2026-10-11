@@ -1,6 +1,8 @@
 import base64
+import json
 import os
 import uuid
+from datetime import datetime
 
 import openai
 from dotenv import load_dotenv
@@ -29,8 +31,26 @@ SYSTEM_PROMPT = (
 CHAT_PROMPT = (
     "너는 학교생활 도우미 '김반장'이야. 친절하고 간결하게 답해. "
     "사용자가 대화 중에 알려준 공지·일정·준비물은 기억해서 답에 사용해. "
-    "대화에 없는 날짜, 장소, 준비물은 절대로 추측하지 말고 '확인 필요'라고 표시해."
+    "학교 급식을 물으면 기억이나 추측으로 답하지 말고 반드시 get_school_meal 도구로 조회한 결과만 사용해. "
+    "학교 이름을 모르면 먼저 물어보고, 한 번 알려준 학교 이름은 다시 묻지 마. "
+    "대화나 도구 결과에 없는 날짜, 장소, 준비물은 절대로 추측하지 말고 '확인 필요'라고 표시해. "
+    "마크다운 기호(#, *, **)는 쓰지 말고 일반 문장과 줄바꿈으로만 써."
 )
+
+# 챗봇이 필요할 때 스스로 호출하는 도구(함수 호출). 모델은 "조회해 달라"고 요청만 하고, 실제 조회는 우리 코드(neis.py)가 한다.
+MEAL_TOOL = {
+    "type": "function",
+    "name": "get_school_meal",
+    "description": "나이스(NEIS) 공식 데이터에서 학교의 특정 날짜 급식(중식) 메뉴를 조회한다.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "school_name": {"type": "string", "description": "학교 이름 (예: 경기고등학교)"},
+            "date": {"type": "string", "description": "조회할 날짜 YYYYMMDD. 오늘이면 생략"},
+        },
+        "required": ["school_name"],
+    },
+}
 
 IMAGE_MIME = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
 
@@ -43,17 +63,18 @@ class AIError(Exception):
     """화면에 그대로 보여줄 수 있는 AI 호출 오류 메시지."""
 
 
-def ask(user_input, instructions=SYSTEM_PROMPT) -> str:
-    """OpenAI에 한 번 요청하고 텍스트 답변을 돌려준다.
+def call_model(user_input, instructions=SYSTEM_PROMPT, tools=None):
+    """OpenAI에 한 번 요청한다. 오류는 화면에 보여줄 AIError로 바꾼다.
 
     user_input이 문자열이면 단일 대화, 메시지 리스트면 대화 기록을 함께 보내는 연속 대화다.
     """
     try:
-        response = client.responses.create(
+        return client.responses.create(
             model=MODEL,
             instructions=instructions,  # 시스템 지침(역할·규칙·환각 방지)
             input=user_input,
             temperature=0.2,
+            **({"tools": tools} if tools else {}),
         )
     except openai.AuthenticationError:
         raise AIError("API 키가 올바르지 않아요. OPENAI_API_KEY 환경 변수를 확인하세요.")
@@ -61,7 +82,10 @@ def ask(user_input, instructions=SYSTEM_PROMPT) -> str:
         raise AIError("요청이 너무 많거나 사용 한도를 넘었어요. 잠시 뒤에 다시 시도하세요.")
     except openai.OpenAIError as e:
         raise AIError(f"AI 호출 중 오류가 났어요. ({type(e).__name__})")
-    return response.output_text
+
+
+def ask(user_input, instructions=SYSTEM_PROMPT) -> str:
+    return call_model(user_input, instructions).output_text
 
 
 def get_user_key() -> str:
@@ -70,11 +94,49 @@ def get_user_key() -> str:
     return session["user_key"]
 
 
+def run_meal_tool(arguments: str) -> str:
+    """모델이 요청한 get_school_meal 호출을 실제로 실행하고, 결과를 JSON 문자열로 돌려준다."""
+    args = json.loads(arguments)
+    date = args.get("date")
+    if date:
+        try:
+            datetime.strptime(date, "%Y%m%d")
+        except ValueError:
+            return json.dumps({"error": "날짜 형식이 올바르지 않음(YYYYMMDD)"}, ensure_ascii=False)
+    school = neis.get_school_code(args.get("school_name", ""))
+    if school is None:
+        return json.dumps({"error": "학교를 찾지 못함"}, ensure_ascii=False)
+    meal = neis.get_meal(school[0], school[1], date)
+    if meal is None:
+        return json.dumps({"error": "해당 날짜의 급식 정보가 없음(주말·방학·휴업일일 수 있음)"}, ensure_ascii=False)
+    return json.dumps({"school": school[2], **meal, "allergy_codes": neis.ALLERGY_CODES}, ensure_ascii=False)
+
+
+def chat_reply(history: list[dict]) -> str:
+    """대화 기록으로 답을 만든다. 모델이 급식 도구를 요청하면 조회해서 결과를 돌려주고 다시 묻는다."""
+    today = datetime.now()
+    instructions = CHAT_PROMPT + f" 오늘 날짜는 {today:%Y년 %m월 %d일} ({'월화수목금토일'[today.weekday()]}요일)이야."
+    work = list(history)  # 도구 호출 과정은 이번 답변에만 쓰고, 저장하는 기록에는 남기지 않는다
+    for _ in range(3):
+        response = call_model(work, instructions, tools=[MEAL_TOOL])
+        calls = [item for item in response.output if item.type == "function_call"]
+        if not calls:
+            return response.output_text
+        work += response.output
+        for call in calls:
+            work.append({
+                "type": "function_call_output",
+                "call_id": call.call_id,
+                "output": run_meal_tool(call.arguments),
+            })
+    raise AIError("조회가 너무 길어졌어요. 질문을 다시 해 주세요.")
+
+
 def chat_with_history(user_key: str, message: str) -> str:
     history = user_chats.setdefault(user_key, [])
     history.append({"role": "user", "content": message})
     try:
-        reply = ask(history, instructions=CHAT_PROMPT)
+        reply = chat_reply(history)
     except AIError:
         history.pop()  # 실패한 질문은 기록에서 뺀다
         raise
@@ -155,7 +217,7 @@ def index():
             else:
                 office_code, school_code, school_full_name = school
                 view["meal_school"] = school_full_name
-                view["meal"] = neis.get_today_meal(office_code, school_code)
+                view["meal"] = neis.get_meal(office_code, school_code)
                 if view["meal"] is None:
                     view["errors"]["meal"] = "오늘 급식 정보가 등록되지 않았습니다. (주말·방학·휴업일일 수 있어요)"
                 else:
