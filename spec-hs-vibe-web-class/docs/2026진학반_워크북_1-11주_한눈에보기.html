@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>진학반 워크북 한눈에보기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Roboto+Mono:wght@400;700&family=Roboto:wght@400&display=swap">
+<style>
+/* Layout: C3 Coding 교재 양식. 흰 A4 쪽(794px) 위에 청록 헤더 밴드, 남색·파랑 번호 제목, 검은 실선 표, 둥근 회색 코드 블록. */
+:root {
+  --brand-teal: #3abcd2; --logo-gray: #595959;
+  --heading-navy: #1c4587; --heading-blue: #4a86e8;
+  --ink: #000000; --paper: #ffffff; --desk: #f1f3f4;
+  --code-surface: #f1f3f4; --code-label: #747775; --code-ink: #37474f;
+  --syn-keyword: #1967d2; --syn-string: #188038; --syn-number: #c5221f; --syn-comment: #b80672; --syn-constant: #9334e6;
+  --sans: Arial, Gulim, "Noto Sans KR", sans-serif;
+  --mono: "Roboto Mono", BatangChe, "Nanum Gothic Coding", monospace;
+  --label: Roboto, Arial, sans-serif;
+  --page-margin: clamp(16px, 12vw, 96px);
+  --rule: 1.33px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--desk); color: var(--ink); font-family: var(--sans); font-size: 14.67px; line-height: 19.4px; word-break: keep-all; overflow-wrap: anywhere; }
+.sheet { max-width: 794px; margin: 0 auto; background: var(--paper); min-height: 100vh; }
+.band { display: block; width: 100%; height: auto; min-height: 60px; }
+.body { padding: 28px var(--page-margin) 40px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+.body > * { min-width: 0; }
+@media (min-width: 900px) { body { padding-block: 24px; } }
+p { margin: 0 0 10px; }
+b, .b { font-weight: 700; }
+a { color: var(--heading-navy); }
+a:focus-visible { outline: 2px solid var(--heading-navy); outline-offset: 2px; }
+code { font-family: var(--mono); font-size: .98em; color: var(--syn-string); }
+
+.doc-title { text-align: center; font-size: 20px; line-height: 26px; font-weight: 400; color: var(--heading-blue); margin: 8px 0 0; }
+.doc-sub { text-align: center; font-size: 18.67px; line-height: 24px; font-weight: 400; color: var(--heading-navy); margin: 2px 0 28px; }
+h1 { font-size: 18.67px; line-height: 22px; font-weight: 400; color: var(--heading-navy); margin: 31px 0 0; text-wrap: balance; }
+h1 + h2, h1 + .h2sp { margin-top: 35px; }
+h2 { font-size: 16px; line-height: 19px; font-weight: 400; color: var(--heading-blue); margin: 31px 0 8px; text-wrap: balance; }
+h1.first { margin-top: 0; }
+h1 + p, h1 + .tablewrap { margin-top: 8px; }
+
+.tablewrap { overflow-x: auto; margin: 0 0 8px; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+td { border: var(--rule) solid var(--ink); padding: 8px 7px; vertical-align: top; text-align: left; width: 50%; }
+table.sm td { font-size: 13.33px; line-height: 23px; padding-block: 0 0; }
+td.k { font-weight: 700; }
+@media (max-width: 560px) { table { table-layout: auto; } td { width: auto; } }
+
+.code { background: var(--code-surface); border-radius: 12px; padding: 14px; margin: 8px 0; }
+.code .lab { display: block; font-family: var(--label); font-size: 12px; line-height: 14px; color: var(--code-label); margin-bottom: 8px; }
+.code pre { margin: 0; font-family: var(--mono); font-size: 13.33px; line-height: 19px; color: var(--code-ink); white-space: pre; overflow-x: auto; }
+.kw { color: var(--syn-keyword); } .st { color: var(--syn-string); } .nu { color: var(--syn-number); } .cm { color: var(--syn-comment); } .co { color: var(--syn-constant); }
+
+.warn { margin: 8px 0; }
+ul.list { margin: 0 0 10px; padding: 0 0 0 26px; }
+ul.list li { margin: 0 0 3px; }
+ul.check { list-style: none; margin: 4px 0 10px; padding: 0 0 0 26px; }
+ul.check li { position: relative; padding-left: 22px; margin: 0 0 4px; }
+ul.check li::before { content: ""; position: absolute; left: 0; top: 4px; width: 12px; height: 12px; border: var(--rule) solid var(--logo-gray); border-radius: 0; }
+.sub { font-weight: 700; margin: 12px 0 4px; }
+.gap-block { height: 31px; }
+
+.foot { padding: 18px 0 22px; text-align: center; }
+.foot .pn { font-size: 13.33px; line-height: 16px; margin-bottom: 8px; }
+.foot img { display: inline-block; width: 94px; height: auto; }
+.foot .note { font-size: 12px; color: var(--logo-gray); margin-top: 8px; }
+
+/* 그림 쪽 */
+.fig { margin: 8px calc(16px - var(--page-margin)) 10px; border: var(--rule) solid var(--ink); padding: 10px; background: var(--paper); }
+.fig .scroll { overflow-x: auto; }
+.fig svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.key { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13.33px; margin: 0 0 8px; }
+.sw { display: inline-block; width: 22px; height: 13px; vertical-align: -2px; margin-right: 6px; border: 1.5px solid var(--ink); }
+.sw.o { background: #fff; } .sw.e { background: var(--code-surface); border-color: var(--logo-gray); }
+.sw.m { background: #fff; border: 3px solid var(--heading-navy); } .sw.d { background: var(--code-surface); border-color: var(--heading-blue); }
+.toc { margin: 0 0 10px; padding: 0 0 0 26px; columns: 2; column-gap: 24px; }
+.toc li { margin: 0 0 2px; break-inside: avoid; }
+@media (max-width: 560px) { .toc { columns: 1; } }
+
+svg text { font-family: var(--sans); fill: var(--ink); }
+svg .t { font-size: 15px; } svg .tb { font-size: 15px; font-weight: 700; } svg .h { font-size: 16px; font-weight: 700; }
+svg .s { font-size: 12.5px; fill: var(--logo-gray); }
+svg .m, svg .mono { font-family: var(--mono); }
+svg .m { font-size: 12.5px; font-weight: 700; } svg .mono { font-size: 12.5px; } svg .tb.mono { font-size: 14px; }
+svg .lbl { font-size: 12px; } svg .lbl.muted { fill: var(--logo-gray); }
+svg .halo { paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
+svg .bx { stroke-width: 1.5; }
+svg .bx.o { fill: #fff; stroke: var(--ink); }
+svg .bx.e { fill: var(--code-surface); stroke: var(--logo-gray); }
+svg .bx.m { fill: #fff; stroke: var(--heading-navy); stroke-width: 3; }
+svg .bx.d { fill: var(--code-surface); stroke: var(--heading-blue); }
+svg .bx.g { fill: #fff; stroke: var(--code-label); }
+svg .bx.hd { fill: #fff; stroke: var(--heading-blue); }
+svg .bx.hz { fill: #fff; stroke: var(--logo-gray); }
+svg .ar { fill: none; stroke: var(--ink); stroke-width: 1.6; }
+svg .mk { fill: var(--ink); }
+svg .life { stroke: var(--code-label); stroke-width: 1.2; stroke-dasharray: 4 4; }
+
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .sheet { max-width: none; }
+  .body { padding-inline: 0; }
+  h1, h2 { break-after: avoid; }
+  .tablewrap, .code, .fig { break-inside: avoid; }
+  .fig .scroll { overflow: visible; } .fig svg { min-width: 0; }
+}
+@page { size: A4; margin: 14mm 18mm; }
+
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 1 L10 5 L0 9 z" class="mk"/></marker>
+</defs></svg>
+<div class="sheet">
+<img class="band" src="assets/c3/header-band.png" alt="C3 CODING 씨큐브코딩 www.c3coding.com">
+<div class="body">
+<div class="doc-title">2026 진학반 - 1~11주차</div><div class="doc-sub">웹 서비스 만들기 - 그림 15장으로 한눈에 보기</div>
+<h1 class="first">그림 읽는 법</h1>
+<p>시험·면접 전에 그림 → 노트 순서로 본다. 그림만 보고 「이게 뭐였지?」를 말로 풀 수 있으면 통과한다. 막히는 그림은 정리노트의 같은 주차로 돌아가 읽는다. 1~2주차는 별도 선행 과정이므로 3주차부터 정리한다.</p>
+<div class="key"><span><i class="sw o"></i>우리가 만든 코드</span><span><i class="sw e"></i>외부 서비스</span><span><i class="sw m"></i>AI 모델</span><span><i class="sw d"></i>데이터·결과</span><span>실선 → 요청 · 점선 ⇢ 응답/결과/참조</span></div>
+<ol class="toc"><li><a href="#roadmap">11주 로드맵</a></li><li><a href="#vibe">AI 도구 다루기</a></li><li><a href="#tier">3단 구조와 BBS v0</a></li><li><a href="#http">HTTP 요청과 응답</a></li><li><a href="#pkfk">기본키와 외래키</a></li><li><a href="#evolution">BBS 진화 v0 → v3</a></li><li><a href="#auth">가입 → 로그인 → 권한 검사</a></li><li><a href="#er">테이블 관계 (1 : N)</a></li><li><a href="#apibasic">API와 JSON</a></li><li><a href="#api">외부 API → 대시보드</a></li><li><a href="#ws">요청/응답 vs WebSocket</a></li><li><a href="#ai">웹 서비스에 AI 붙이기</a></li><li><a href="#conv">단일 대화 vs 연속 대화</a></li><li><a href="#agent">에이전트 · 하네스 · MCP</a></li><li><a href="#map">전체 지도</a></li></ol>
+<p>정리노트: <a href="2026진학반_워크북_1-11주_정리노트.html">2026진학반_워크북_1-11주_정리노트.html</a></p>
+<section id="roadmap">
+<h1>1. 11주 로드맵 — 3~11주차</h1>
+<p>세 덩어리로 기억한다 — <b>도구 → 웹 서비스 → 서비스에 AI</b>. 아래 칸은 그 주에 남은 <b>결과물</b>(파란 알약)과 <b>핵심 키워드</b>.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 256" role="img" aria-label="3주부터 11주까지의 로드맵" xmlns="http://www.w3.org/2000/svg"><title>3주부터 11주까지의 로드맵</title>
+<rect x="12" y="8" width="280" height="28" rx="14" class="bx o"/>
+<text x="152.0" y="27" class="tb" text-anchor="middle">① AI 도구 다루기</text>
+<rect x="300" y="8" width="376" height="28" rx="14" class="bx m"/>
+<text x="488.0" y="27" class="tb" text-anchor="middle">② 웹 서비스 만들기 (BBS)</text>
+<rect x="684" y="8" width="184" height="28" rx="14" class="bx e"/>
+<text x="776.0" y="27" class="tb" text-anchor="middle">③ 서비스에 AI 붙이기</text>
+<rect x="12" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="56.0" y="70" class="tb mono" text-anchor="middle">3주</text>
+<text x="56.0" y="94" class="s" text-anchor="middle">바이브코딩</text>
+<text x="56.0" y="112" class="s" text-anchor="middle">입문</text>
+<rect x="12" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="56.0" y="164" class="lbl" text-anchor="middle">index.html</text>
+<text x="56.0" y="196" class="lbl muted" text-anchor="middle">4단계 루프</text>
+<text x="56.0" y="213" class="lbl muted" text-anchor="middle">모델≠도구</text>
+<rect x="108" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="152.0" y="70" class="tb mono" text-anchor="middle">4주</text>
+<text x="152.0" y="94" class="s" text-anchor="middle">Plan·권한</text>
+<text x="152.0" y="112" class="s" text-anchor="middle">프로필 초안</text>
+<rect x="108" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="152.0" y="164" class="lbl" text-anchor="middle">프로필 v0</text>
+<text x="152.0" y="196" class="lbl muted" text-anchor="middle">Plan</text>
+<text x="152.0" y="213" class="lbl muted" text-anchor="middle">Permission</text>
+<rect x="204" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="248.0" y="70" class="tb mono" text-anchor="middle">5주</text>
+<text x="248.0" y="94" class="s" text-anchor="middle">Git·GitHub</text>
+<text x="248.0" y="112" class="s" text-anchor="middle">CLAUDE.md</text>
+<rect x="204" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="248.0" y="164" class="lbl" text-anchor="middle">GitHub repo</text>
+<text x="248.0" y="196" class="lbl muted" text-anchor="middle">commit</text>
+<text x="248.0" y="213" class="lbl muted" text-anchor="middle">CLAUDE.md</text>
+<rect x="300" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="344.0" y="70" class="tb mono" text-anchor="middle">6주</text>
+<text x="344.0" y="94" class="s" text-anchor="middle">BBS v0</text>
+<text x="344.0" y="112" class="s" text-anchor="middle">기본 CRUD</text>
+<rect x="300" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="344.0" y="164" class="lbl" text-anchor="middle">게시판</text>
+<text x="344.0" y="196" class="lbl muted" text-anchor="middle">3단 구조</text>
+<text x="344.0" y="213" class="lbl muted" text-anchor="middle">라우트·SQL</text>
+<rect x="396" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="440.0" y="70" class="tb mono" text-anchor="middle">7주</text>
+<text x="440.0" y="94" class="s" text-anchor="middle">BBS v1</text>
+<text x="440.0" y="112" class="s" text-anchor="middle">로그인·권한</text>
+<rect x="396" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="440.0" y="164" class="lbl" text-anchor="middle">회원 기능</text>
+<text x="440.0" y="196" class="lbl muted" text-anchor="middle">세션·해시</text>
+<text x="440.0" y="213" class="lbl muted" text-anchor="middle">인증≠인가</text>
+<rect x="492" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="536.0" y="70" class="tb mono" text-anchor="middle">8주</text>
+<text x="536.0" y="94" class="s" text-anchor="middle">BBS v2</text>
+<text x="536.0" y="112" class="s" text-anchor="middle">공공데이터</text>
+<rect x="492" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="536.0" y="164" class="lbl" text-anchor="middle">대시보드</text>
+<text x="536.0" y="196" class="lbl muted" text-anchor="middle">API·.env</text>
+<text x="536.0" y="213" class="lbl muted" text-anchor="middle">파싱·예외</text>
+<rect x="588" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="632.0" y="70" class="tb mono" text-anchor="middle">9주</text>
+<text x="632.0" y="94" class="s" text-anchor="middle">BBS v3</text>
+<text x="632.0" y="112" class="s" text-anchor="middle">댓글·채팅</text>
+<rect x="588" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="632.0" y="164" class="lbl" text-anchor="middle">커뮤니티</text>
+<text x="632.0" y="196" class="lbl muted" text-anchor="middle">1:N·RBAC</text>
+<text x="632.0" y="213" class="lbl muted" text-anchor="middle">WebSocket</text>
+<rect x="684" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="728.0" y="70" class="tb mono" text-anchor="middle">10주</text>
+<text x="728.0" y="94" class="s" text-anchor="middle">AI 붙이기</text>
+<text x="728.0" y="112" class="s" text-anchor="middle">김반장 봇</text>
+<rect x="684" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="728.0" y="164" class="lbl" text-anchor="middle">school_bot</text>
+<text x="728.0" y="196" class="lbl muted" text-anchor="middle">Stateless</text>
+<text x="728.0" y="213" class="lbl muted" text-anchor="middle">Grounding</text>
+<rect x="780" y="48" width="88" height="86" rx="9" class="bx o"/>
+<text x="824.0" y="70" class="tb mono" text-anchor="middle">11주</text>
+<text x="824.0" y="94" class="s" text-anchor="middle">에이전트</text>
+<text x="824.0" y="112" class="s" text-anchor="middle">하네스·MCP</text>
+<rect x="780" y="146" width="88" height="26" rx="13" class="bx d"/>
+<text x="824.0" y="164" class="lbl" text-anchor="middle">MCP 서버</text>
+<text x="824.0" y="196" class="lbl muted" text-anchor="middle">루프·하네스</text>
+<text x="824.0" y="213" class="lbl muted" text-anchor="middle">MCP</text>
+<text x="12" y="246" class="s" text-anchor="start">▶ 다음: 12~14주 캡스톤 — 주제 확정 · 구현 · 포트폴리오 · 면접형 발표</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>면접에서 「11주 동안 뭘 했나요?」에는 이 그림의 3덩어리 순서로 말한다.</li><li>각 주의 결과물은 앞 주 위에 <b>이어서</b> 쌓였다 (BBS는 v0→v3로 같은 폴더를 계속 확장).</li></ul>
+</section><section id="vibe">
+<h1>2. AI 도구 다루기 — 3~5주</h1>
+<p>AI에게 <b>시키는 방법</b>(루프)과 <b>맡기는 방식</b>(Plan → 권한 → 기록)을 한 장에.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 380" role="img" aria-label="바이브코딩 4단계 루프와 모델·도구 구분" xmlns="http://www.w3.org/2000/svg"><title>바이브코딩 4단계 루프와 모델·도구 구분</title>
+<text x="12" y="24" class="h" text-anchor="start">바이브코딩 4단계 루프 (3주)</text>
+<rect x="30" y="46" width="160" height="60" rx="9" class="bx o"/>
+<text x="110.0" y="71.5" class="tb" text-anchor="middle">① 목표</text>
+<text x="110.0" y="89.5" class="s" text-anchor="middle">무엇을? 한 문장</text>
+<rect x="250" y="46" width="160" height="60" rx="9" class="bx o"/>
+<text x="330.0" y="71.5" class="tb" text-anchor="middle">② 계획</text>
+<text x="330.0" y="89.5" class="s" text-anchor="middle">어떤 파일·화면?</text>
+<rect x="250" y="160" width="160" height="60" rx="9" class="bx o"/>
+<text x="330.0" y="185.5" class="tb" text-anchor="middle">③ 실행</text>
+<text x="330.0" y="203.5" class="s" text-anchor="middle">AI에게 구체적으로</text>
+<rect x="30" y="160" width="160" height="60" rx="9" class="bx o"/>
+<text x="110.0" y="185.5" class="tb" text-anchor="middle">④ 검증</text>
+<text x="110.0" y="203.5" class="s" text-anchor="middle">브라우저로 확인</text>
+<path d="M190 76 L250 76" class="ar " marker-end="url(#ah)"/>
+<path d="M330 106 L330 160" class="ar " marker-end="url(#ah)"/>
+<path d="M250 190 L190 190" class="ar " marker-end="url(#ah)"/>
+<path d="M110 160 L110 106" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="118" y="138" class="lbl" text-anchor="start">이상하면 ①로</text>
+<text x="460" y="24" class="h" text-anchor="start">모델 ≠ 도구 (3주)</text>
+<rect x="480" y="46" width="380" height="56" rx="9" class="bx m"/>
+<text x="670.0" y="69.5" class="tb" text-anchor="middle">LLM / 모델 = 뇌</text>
+<text x="670.0" y="87.5" class="s" text-anchor="middle">Claude · GPT · Gemini</text>
+<rect x="480" y="128" width="380" height="56" rx="9" class="bx o"/>
+<text x="670.0" y="151.5" class="tb" text-anchor="middle">AI 코딩 도구 = 작업실</text>
+<text x="670.0" y="169.5" class="s" text-anchor="middle">Cursor · Claude Code — 폴더 파일을 직접 읽고 고침</text>
+<rect x="480" y="210" width="380" height="56" rx="9" class="bx d"/>
+<text x="670.0" y="233.5" class="tb" text-anchor="middle">나 + 프로젝트 폴더</text>
+<text x="670.0" y="251.5" class="s" text-anchor="middle">목표를 정하고 결과를 검증하는 사람</text>
+<path d="M670 128 L670 102" class="ar " marker-end="url(#ah)"/>
+<path d="M670 210 L670 184" class="ar " marker-end="url(#ah)"/>
+<text x="12" y="296" class="h" text-anchor="start">4~5주 작업 흐름</text>
+<rect x="12" y="308" width="152" height="58" rx="9" class="bx o"/>
+<text x="88.0" y="332.5" class="tb" text-anchor="middle">큰 변경</text>
+<text x="88.0" y="350.5" class="s" text-anchor="middle">요청</text>
+<path d="M164 337 L188 337" class="ar " marker-end="url(#ah)"/>
+<rect x="188" y="308" width="152" height="58" rx="9" class="bx o"/>
+<text x="264.0" y="332.5" class="tb" text-anchor="middle">AI가 Plan</text>
+<text x="264.0" y="350.5" class="s" text-anchor="middle">제안 (4주)</text>
+<path d="M340 337 L364 337" class="ar " marker-end="url(#ah)"/>
+<rect x="364" y="308" width="152" height="58" rx="9" class="bx o"/>
+<text x="440.0" y="332.5" class="tb" text-anchor="middle">내가 승인·수정</text>
+<text x="440.0" y="350.5" class="s" text-anchor="middle">Non-goals</text>
+<path d="M516 337 L540 337" class="ar " marker-end="url(#ah)"/>
+<rect x="540" y="308" width="152" height="58" rx="9" class="bx e"/>
+<text x="616.0" y="332.5" class="tb" text-anchor="middle">권한 질문</text>
+<text x="616.0" y="350.5" class="s" text-anchor="middle">Accept / Deny</text>
+<path d="M692 337 L716 337" class="ar " marker-end="url(#ah)"/>
+<rect x="716" y="308" width="152" height="58" rx="9" class="bx o"/>
+<text x="792.0" y="332.5" class="tb" text-anchor="middle">commit 기록</text>
+<text x="792.0" y="350.5" class="s" text-anchor="middle">+ CLAUDE.md (5주)</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>「검증」은 사람의 일 — LLM은 틀릴 수 있다 · 앞을 잊는다 · 비밀을 지켜 주지 않는다.</li><li>삭제·모르는 명령은 Deny 또는 교사 확인. 「무조건 Allow all」은 쓰지 않는다.</li></ul>
+</section><section id="tier">
+<h1>3. 3단 구조와 BBS v0 — 6주</h1>
+<p>웹 서비스의 뼈대. <b>손님(브라우저) → 주방(Flask) → 창고(SQLite)</b>가 정해진 창구(라우트)로만 주고받는다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 316" role="img" aria-label="클라이언트 서버 DB 3단 구조와 BBS 라우트" xmlns="http://www.w3.org/2000/svg"><title>클라이언트 서버 DB 3단 구조와 BBS 라우트</title>
+<text x="120" y="46" class="s" text-anchor="middle">손님</text>
+<text x="440" y="46" class="s" text-anchor="middle">주방</text>
+<text x="760" y="46" class="s" text-anchor="middle">창고</text>
+<rect x="20" y="56" width="200" height="104" rx="9" class="bx o"/>
+<text x="120.0" y="94.0" class="tb" text-anchor="middle">클라이언트</text>
+<text x="120.0" y="112.0" class="s" text-anchor="middle">프레젠테이션 층</text>
+<text x="120.0" y="131.0" class="s" text-anchor="middle">브라우저 · HTML</text>
+<rect x="340" y="56" width="200" height="104" rx="9" class="bx o"/>
+<text x="440.0" y="94.0" class="tb" text-anchor="middle">서버</text>
+<text x="440.0" y="112.0" class="s" text-anchor="middle">애플리케이션 층</text>
+<text x="440.0" y="131.0" class="s" text-anchor="middle">Flask · 라우트 · 로직</text>
+<rect x="660" y="56" width="200" height="104" rx="9" class="bx d"/>
+<text x="760.0" y="94.0" class="tb" text-anchor="middle">DB</text>
+<text x="760.0" y="112.0" class="s" text-anchor="middle">데이터 층</text>
+<text x="760.0" y="131.0" class="s" text-anchor="middle">SQLite · bbs.db</text>
+<path d="M220 92 L340 92" class="ar " marker-end="url(#ah)"/>
+<text x="280" y="84" class="lbl" text-anchor="middle">요청 Request</text>
+<path d="M340 128 L220 128" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="280" y="148" class="lbl" text-anchor="middle">응답 Response</text>
+<path d="M540 92 L660 92" class="ar " marker-end="url(#ah)"/>
+<text x="600" y="84" class="lbl" text-anchor="middle">SQL 조회·저장</text>
+<path d="M660 128 L540 128" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="600" y="148" class="lbl" text-anchor="middle">결과</text>
+<text x="12" y="204" class="h" text-anchor="start">BBS 라우트 5개 = CRUD (6주)</text>
+<rect x="12" y="216" width="160" height="62" rx="9" class="bx o"/>
+<text x="92" y="242" class="tb" text-anchor="middle">목록 · R</text>
+<text x="92" y="264" class="mono" text-anchor="middle">GET /</text>
+<rect x="186" y="216" width="160" height="62" rx="9" class="bx o"/>
+<text x="266" y="242" class="tb" text-anchor="middle">상세 · R</text>
+<text x="266" y="264" class="mono" text-anchor="middle">GET /posts/‹id›</text>
+<rect x="360" y="216" width="160" height="62" rx="9" class="bx o"/>
+<text x="440" y="242" class="tb" text-anchor="middle">작성 · C</text>
+<text x="440" y="264" class="mono" text-anchor="middle">POST /posts</text>
+<rect x="534" y="216" width="160" height="62" rx="9" class="bx o"/>
+<text x="614" y="242" class="tb" text-anchor="middle">수정 · U</text>
+<text x="614" y="264" class="mono" text-anchor="middle">POST …/edit</text>
+<rect x="708" y="216" width="160" height="62" rx="9" class="bx o"/>
+<text x="788" y="242" class="tb" text-anchor="middle">삭제 · D</text>
+<text x="788" y="264" class="mono" text-anchor="middle">POST …/delete</text>
+<text x="12" y="304" class="s" text-anchor="start">서버를 껐다 켜도 글이 남아 있다 = DB(파일)에 저장됐다는 증거</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>GET = 조회, POST = 보내서 저장. 입력값은 SQL에 이어 붙이지 않고 <code>?</code>로 넘긴다(SQL Injection 방지).</li><li>「왜 셋으로 나눴나?」 → 역할을 분리해야 고치기·확장하기 쉽다.</li></ul>
+</section><section id="http">
+<h1>4. HTTP 요청과 응답 — 6주</h1>
+<p>브라우저와 서버는 <b>HTTP</b>라는 약속으로 대화한다. 요청은 <b>메서드·URL·본문·쿠키</b>, 응답은 <b>상태 코드·내용</b>.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 304" role="img" aria-label="HTTP 요청과 응답에 들어 있는 것" xmlns="http://www.w3.org/2000/svg"><title>HTTP 요청과 응답에 들어 있는 것</title>
+<rect x="20" y="16" width="200" height="64" rx="9" class="bx o"/>
+<text x="120.0" y="43.5" class="tb" text-anchor="middle">브라우저</text>
+<text x="120.0" y="61.5" class="s" text-anchor="middle">클라이언트</text>
+<rect x="660" y="16" width="200" height="64" rx="9" class="bx o"/>
+<text x="760.0" y="43.5" class="tb" text-anchor="middle">서버</text>
+<text x="760.0" y="61.5" class="s" text-anchor="middle">Flask</text>
+<path d="M220 36 L660 36" class="ar " marker-end="url(#ah)"/>
+<text x="440" y="28" class="lbl" text-anchor="middle">요청 Request</text>
+<path d="M660 62 L220 62" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="440" y="78" class="lbl" text-anchor="middle">응답 Response</text>
+<rect x="20" y="110" width="410" height="150" rx="9" class="bx o"/>
+<text x="36" y="134" class="tb" text-anchor="start">요청에 들어 있는 것</text>
+<text x="36" y="164" class="tb" text-anchor="start">메서드</text>
+<text x="110" y="164" class="mono" text-anchor="start">GET  /  POST</text>
+<text x="36" y="190" class="tb" text-anchor="start">URL</text>
+<text x="110" y="190" class="mono" text-anchor="start">/posts/3  또는  /?q=급식</text>
+<text x="36" y="216" class="tb" text-anchor="start">본문</text>
+<text x="110" y="216" class="mono" text-anchor="start">POST일 때 폼 데이터</text>
+<text x="36" y="242" class="tb" text-anchor="start">쿠키</text>
+<text x="110" y="242" class="mono" text-anchor="start">세션 정보 (로그인 상태)</text>
+<rect x="450" y="110" width="410" height="150" rx="9" class="bx o"/>
+<text x="466" y="134" class="tb" text-anchor="start">응답에 들어 있는 것</text>
+<text x="466" y="164" class="tb" text-anchor="start">상태 코드</text>
+<text x="546" y="164" class="mono" text-anchor="start">200 성공 · 302 이동 · 403 권한 없음</text>
+<text x="546" y="190" class="mono" text-anchor="start">404 없는 주소 · 500 서버 오류</text>
+<text x="466" y="216" class="tb" text-anchor="start">내용</text>
+<text x="546" y="216" class="mono" text-anchor="start">HTML 화면 또는 JSON 데이터</text>
+<text x="466" y="242" class="tb" text-anchor="start">쿠키</text>
+<text x="546" y="242" class="mono" text-anchor="start">로그인하면 세션 쿠키 설정</text>
+<text x="12" y="292" class="s" text-anchor="start">GET = 조회 · POST = 보내서 저장/수정/삭제 · localhost:5001 = 내 컴퓨터의 5001번 포트</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>GET과 POST의 차이, 상태 코드 200·302·403·404의 뜻을 말할 수 있어야 한다.</li><li>쿼리스트링(<code>?q=…</code>)은 URL 뒤에 붙어 조건을 전달한다 (9주 검색).</li></ul>
+</section><section id="pkfk">
+<h1>5. 기본키와 외래키 — 6·7·9주</h1>
+<p><b>PK</b>는 행의 이름표, <b>FK</b>는 다른 표의 이름표를 적어 둔 열. 점선 화살표가 가리키는 행이 연결된 데이터다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 292" role="img" aria-label="기본키와 외래키가 연결되는 예시" xmlns="http://www.w3.org/2000/svg"><title>기본키와 외래키가 연결되는 예시</title>
+<text x="20" y="42" class="tb mono" text-anchor="start">users</text>
+<rect x="20" y="50" width="56" height="30" class="bx hd"/>
+<text x="48.0" y="70" class="lbl" text-anchor="middle">id PK</text>
+<rect x="76" y="50" width="100" height="30" class="bx hd"/>
+<text x="126.0" y="70" class="lbl" text-anchor="middle">username</text>
+<rect x="176" y="50" width="64" height="30" class="bx hd"/>
+<text x="208.0" y="70" class="lbl" text-anchor="middle">role</text>
+<rect x="20" y="80" width="56" height="30" class="bx d"/>
+<text x="48.0" y="100" class="lbl" text-anchor="middle">1</text>
+<rect x="76" y="80" width="100" height="30" class="bx o"/>
+<text x="126.0" y="100" class="lbl" text-anchor="middle">mina</text>
+<rect x="176" y="80" width="64" height="30" class="bx o"/>
+<text x="208.0" y="100" class="lbl" text-anchor="middle">user</text>
+<rect x="20" y="110" width="56" height="30" class="bx d"/>
+<text x="48.0" y="130" class="lbl" text-anchor="middle">2</text>
+<rect x="76" y="110" width="100" height="30" class="bx o"/>
+<text x="126.0" y="130" class="lbl" text-anchor="middle">admin</text>
+<rect x="176" y="110" width="64" height="30" class="bx o"/>
+<text x="208.0" y="130" class="lbl" text-anchor="middle">admin</text>
+<text x="330" y="42" class="tb mono" text-anchor="start">posts</text>
+<rect x="330" y="50" width="50" height="30" class="bx hd"/>
+<text x="355.0" y="70" class="lbl" text-anchor="middle">id PK</text>
+<rect x="380" y="50" width="84" height="30" class="bx hd"/>
+<text x="422.0" y="70" class="lbl" text-anchor="middle">title</text>
+<rect x="464" y="50" width="86" height="30" class="bx hd"/>
+<text x="507.0" y="70" class="lbl" text-anchor="middle">user_id FK</text>
+<rect x="330" y="80" width="50" height="30" class="bx o"/>
+<text x="355.0" y="100" class="lbl" text-anchor="middle">1</text>
+<rect x="380" y="80" width="84" height="30" class="bx o"/>
+<text x="422.0" y="100" class="lbl" text-anchor="middle">첫 글</text>
+<rect x="464" y="80" width="86" height="30" class="bx d"/>
+<text x="507.0" y="100" class="lbl" text-anchor="middle">1</text>
+<rect x="330" y="110" width="50" height="30" class="bx o"/>
+<text x="355.0" y="130" class="lbl" text-anchor="middle">2</text>
+<rect x="380" y="110" width="84" height="30" class="bx o"/>
+<text x="422.0" y="130" class="lbl" text-anchor="middle">공지</text>
+<rect x="464" y="110" width="86" height="30" class="bx d"/>
+<text x="507.0" y="130" class="lbl" text-anchor="middle">2</text>
+<rect x="330" y="140" width="50" height="30" class="bx o"/>
+<text x="355.0" y="160" class="lbl" text-anchor="middle">3</text>
+<rect x="380" y="140" width="84" height="30" class="bx o"/>
+<text x="422.0" y="160" class="lbl" text-anchor="middle">두 번째</text>
+<rect x="464" y="140" width="86" height="30" class="bx d"/>
+<text x="507.0" y="160" class="lbl" text-anchor="middle">1</text>
+<text x="640" y="42" class="tb mono" text-anchor="start">comments</text>
+<rect x="640" y="50" width="56" height="30" class="bx hd"/>
+<text x="668.0" y="70" class="lbl" text-anchor="middle">id PK</text>
+<rect x="696" y="50" width="80" height="30" class="bx hd"/>
+<text x="736.0" y="70" class="lbl" text-anchor="middle">post_id FK</text>
+<rect x="776" y="50" width="84" height="30" class="bx hd"/>
+<text x="818.0" y="70" class="lbl" text-anchor="middle">content</text>
+<rect x="640" y="80" width="56" height="30" class="bx o"/>
+<text x="668.0" y="100" class="lbl" text-anchor="middle">1</text>
+<rect x="696" y="80" width="80" height="30" class="bx d"/>
+<text x="736.0" y="100" class="lbl" text-anchor="middle">1</text>
+<rect x="776" y="80" width="84" height="30" class="bx o"/>
+<text x="818.0" y="100" class="lbl" text-anchor="middle">좋아요</text>
+<rect x="640" y="110" width="56" height="30" class="bx o"/>
+<text x="668.0" y="130" class="lbl" text-anchor="middle">2</text>
+<rect x="696" y="110" width="80" height="30" class="bx d"/>
+<text x="736.0" y="130" class="lbl" text-anchor="middle">3</text>
+<rect x="776" y="110" width="84" height="30" class="bx o"/>
+<text x="818.0" y="130" class="lbl" text-anchor="middle">감사</text>
+<path d="M330 110 L240 110" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<path d="M330 140 L240 140" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<path d="M330 170 L240 118" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<path d="M640 110 L550 110" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<path d="M640 140 L550 170" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="12" y="238" class="s" text-anchor="start">PK(기본키): 행을 하나로 구분하는 열 · 중복과 빈 값이 없다</text>
+<text x="12" y="258" class="s" text-anchor="start">FK(외래키): 다른 테이블의 PK 값을 가리키는 열 · 점선 화살표가 가리키는 대상</text>
+<text x="12" y="278" class="s" text-anchor="start">N쪽 테이블에 FK를 둔다 → 사용자 1 : 글 N, 글 1 : 댓글 N</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>posts의 user_id가 1이면 users에서 id가 1인 mina가 쓴 글이다.</li><li>면접 단골: 「기본키와 외래키의 차이와 사용한 곳」 → posts.user_id, comments.post_id.</li></ul>
+</section><section id="evolution">
+<h1>6. BBS 진화 v0 → v3 — 6~9주</h1>
+<p>하나의 프로젝트가 4주 동안 <b>층층이 자랐다</b>. 한 주에 하나의 새 개념만 얹었다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 348" role="img" aria-label="BBS v0에서 v3까지 기능이 쌓이는 모습" xmlns="http://www.w3.org/2000/svg"><title>BBS v0에서 v3까지 기능이 쌓이는 모습</title>
+<text x="116" y="18" class="s" text-anchor="start">기능 (같은 폴더에 계속 쌓음)</text>
+<text x="606" y="18" class="s" text-anchor="start">함께 늘어난 DB · 파일</text>
+<rect x="12" y="28" width="96" height="60" rx="9" class="bx g"/>
+<text x="60" y="64" class="tb mono" text-anchor="middle">v3 · 9주</text>
+<rect x="116" y="28" width="480" height="60" rx="9" class="bx o"/>
+<text x="356.0" y="63.0" class="tb" text-anchor="middle">＋ 댓글 · 검색 · 관리자(RBAC) · 실시간 채팅</text>
+<rect x="606" y="28" width="262" height="60" rx="9" class="bx d"/>
+<text x="737.0" y="63.0" class="m" text-anchor="middle">comments · role · socketio</text>
+<path d="M60 102 L60 90" class="ar " marker-end="url(#ah)"/>
+<rect x="12" y="102" width="96" height="60" rx="9" class="bx g"/>
+<text x="60" y="138" class="tb mono" text-anchor="middle">v2 · 8주</text>
+<rect x="116" y="102" width="480" height="60" rx="9" class="bx o"/>
+<text x="356.0" y="137.0" class="tb" text-anchor="middle">＋ 공공데이터 API → 대시보드 (표 + 막대)</text>
+<rect x="606" y="102" width="262" height="60" rx="9" class="bx d"/>
+<text x="737.0" y="137.0" class="m" text-anchor="middle">opendata.py · .env · 샘플 JSON</text>
+<path d="M60 176 L60 164" class="ar " marker-end="url(#ah)"/>
+<rect x="12" y="176" width="96" height="60" rx="9" class="bx g"/>
+<text x="60" y="212" class="tb mono" text-anchor="middle">v1 · 7주</text>
+<rect x="116" y="176" width="480" height="60" rx="9" class="bx o"/>
+<text x="356.0" y="211.0" class="tb" text-anchor="middle">＋ 회원가입 · 로그인 · 세션 · 본인 글만 수정/삭제</text>
+<rect x="606" y="176" width="262" height="60" rx="9" class="bx d"/>
+<text x="737.0" y="211.0" class="m" text-anchor="middle">users 테이블 · posts.user_id</text>
+<path d="M60 250 L60 238" class="ar " marker-end="url(#ah)"/>
+<rect x="12" y="250" width="96" height="60" rx="9" class="bx g"/>
+<text x="60" y="286" class="tb mono" text-anchor="middle">v0 · 6주</text>
+<rect x="116" y="250" width="480" height="60" rx="9" class="bx o"/>
+<text x="356.0" y="285.0" class="tb" text-anchor="middle">목록 · 상세 · 작성 · 수정 · 삭제</text>
+<rect x="606" y="250" width="262" height="60" rx="9" class="bx d"/>
+<text x="737.0" y="285.0" class="m" text-anchor="middle">posts 테이블</text>
+<text x="12" y="336" class="s" text-anchor="start">▲ 아래에서 위로 쌓인다. 6주 5기능은 8·9주에도 계속 동작해야 한다.</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>면접에서 「가장 크게 만든 프로젝트」는 이 그림 순서로 설명한다 (구조 → 로그인 → 외부 데이터 → 상호작용).</li><li>기능이 늘수록 테이블·파일이 어떻게 늘었는지를 같이 말하면 설계를 이해하고 있다는 신호가 된다.</li></ul>
+</section><section id="auth">
+<h1>7. 가입 → 로그인 → 권한 검사 — 7주</h1>
+<p>로그인은 <b>인증</b>, 수정 가능 여부는 <b>인가</b>. 두 검사 모두 <b>서버</b>에서 한다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 496" role="img" aria-label="회원가입 로그인 세션 권한 검사 흐름" xmlns="http://www.w3.org/2000/svg"><title>회원가입 로그인 세션 권한 검사 흐름</title>
+<rect x="70" y="8" width="160" height="40" rx="9" class="bx o"/>
+<text x="150.0" y="33.0" class="tb" text-anchor="middle">브라우저</text>
+<line x1="150" y1="48" x2="150" y2="486" class="life"/>
+<rect x="370" y="8" width="160" height="40" rx="9" class="bx o"/>
+<text x="450.0" y="33.0" class="tb" text-anchor="middle">Flask 서버</text>
+<line x1="450" y1="48" x2="450" y2="486" class="life"/>
+<rect x="670" y="8" width="160" height="40" rx="9" class="bx d"/>
+<text x="750.0" y="33.0" class="tb" text-anchor="middle">SQLite DB</text>
+<line x1="750" y1="48" x2="750" y2="486" class="life"/>
+<text x="8" y="88" class="tb" text-anchor="start">① 가입</text>
+<path d="M150 96 L450 96" class="ar " marker-end="url(#ah)"/>
+<text x="300.0" y="89" class="lbl" text-anchor="middle">POST /signup (아이디·비번)</text>
+<rect x="300.0" y="114" width="300" height="30" rx="7" class="bx e"/>
+<text x="450" y="134" class="s" text-anchor="middle">generate_password_hash(비번)</text>
+<path d="M450 168 L750 168" class="ar " marker-end="url(#ah)"/>
+<text x="600.0" y="161" class="lbl" text-anchor="middle">INSERT users (password_hash)</text>
+<text x="8" y="226" class="tb" text-anchor="start">② 로그인</text>
+<path d="M150 232 L450 232" class="ar " marker-end="url(#ah)"/>
+<text x="300.0" y="225" class="lbl" text-anchor="middle">POST /login</text>
+<path d="M450 262 L750 262" class="ar " marker-end="url(#ah)"/>
+<text x="600.0" y="255" class="lbl" text-anchor="middle">SELECT … WHERE username</text>
+<path d="M750 290 L450 290" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="600.0" y="283" class="lbl" text-anchor="middle">user 행</text>
+<rect x="280.0" y="308" width="340" height="30" rx="7" class="bx e"/>
+<text x="450" y="328" class="s" text-anchor="middle">check_password_hash → session["user_id"] 저장</text>
+<path d="M450 360 L150 360" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="300.0" y="353" class="lbl" text-anchor="middle">세션 쿠키 (로그인 상태 기억)</text>
+<text x="8" y="398" class="tb" text-anchor="start">③ 권한</text>
+<path d="M150 404 L450 404" class="ar " marker-end="url(#ah)"/>
+<text x="300.0" y="397" class="lbl" text-anchor="middle">POST /posts/3/edit (쿠키 포함)</text>
+<rect x="250.0" y="422" width="400" height="30" rx="7" class="bx e"/>
+<text x="450" y="442" class="s" text-anchor="middle">인증: session에 user_id? · 인가: 글 작성자 == 나?</text>
+<path d="M450 474 L150 474" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="300.0" y="467" class="lbl" text-anchor="middle">✓ 허용  /  ✗ 403 권한 없음</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>비밀번호는 해시로 저장 → DB가 유출돼도 원문을 알 수 없다. 로그인 땐 해시끼리 비교.</li><li>버튼을 숨기는 것만으로는 부족 — URL로 직접 접근해도 서버가 막아야 한다.</li><li>세션이 필요한 이유: 웹 요청은 매번 독립적이라 서버가 방금 로그인한 사람을 잊기 때문.</li></ul>
+</section><section id="er">
+<h1>8. 테이블 관계 (1 : N) — 6·7·9주</h1>
+<p>한 사람이 글 여러 개, 한 글에 댓글 여러 개. <b>N쪽에 FK</b>를 둔다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 300" role="img" aria-label="users posts comments 테이블 관계" xmlns="http://www.w3.org/2000/svg"><title>users posts comments 테이블 관계</title>
+<rect x="20" y="24" width="240" height="134" rx="9" class="bx d"/>
+<rect x="20" y="24" width="240" height="34" rx="9" class="bx hd"/>
+<text x="34" y="47" class="tb mono" text-anchor="start">users</text>
+<text x="248" y="47" class="s" text-anchor="end">7주</text>
+<text x="34" y="80" class="mono" text-anchor="start">id</text>
+<text x="248" y="80" class="s" text-anchor="end">PK</text>
+<text x="34" y="104" class="mono" text-anchor="start">username</text>
+<text x="248" y="104" class="s" text-anchor="end">UNIQUE</text>
+<text x="34" y="128" class="mono" text-anchor="start">password_hash</text>
+<text x="34" y="152" class="mono" text-anchor="start">role</text>
+<text x="248" y="152" class="s" text-anchor="end">9주</text>
+<rect x="320" y="24" width="240" height="182" rx="9" class="bx d"/>
+<rect x="320" y="24" width="240" height="34" rx="9" class="bx hd"/>
+<text x="334" y="47" class="tb mono" text-anchor="start">posts</text>
+<text x="548" y="47" class="s" text-anchor="end">6주</text>
+<text x="334" y="80" class="mono" text-anchor="start">id</text>
+<text x="548" y="80" class="s" text-anchor="end">PK</text>
+<text x="334" y="104" class="mono" text-anchor="start">title</text>
+<text x="334" y="128" class="mono" text-anchor="start">content</text>
+<text x="334" y="152" class="mono" text-anchor="start">user_id</text>
+<text x="548" y="152" class="s" text-anchor="end">FK</text>
+<text x="334" y="176" class="mono" text-anchor="start">is_notice</text>
+<text x="548" y="176" class="s" text-anchor="end">9주</text>
+<text x="334" y="200" class="mono" text-anchor="start">created_at</text>
+<rect x="620" y="24" width="240" height="134" rx="9" class="bx d"/>
+<rect x="620" y="24" width="240" height="34" rx="9" class="bx hd"/>
+<text x="634" y="47" class="tb mono" text-anchor="start">comments</text>
+<text x="848" y="47" class="s" text-anchor="end">9주</text>
+<text x="634" y="80" class="mono" text-anchor="start">id</text>
+<text x="848" y="80" class="s" text-anchor="end">PK</text>
+<text x="634" y="104" class="mono" text-anchor="start">post_id</text>
+<text x="848" y="104" class="s" text-anchor="end">FK</text>
+<text x="634" y="128" class="mono" text-anchor="start">user_id</text>
+<text x="848" y="128" class="s" text-anchor="end">FK</text>
+<text x="634" y="152" class="mono" text-anchor="start">content</text>
+<path d="M260 76 L320 76" class="ar " marker-end="url(#ah)"/>
+<text x="290" y="68" class="lbl" text-anchor="middle">1 : N</text>
+<path d="M560 76 L620 76" class="ar " marker-end="url(#ah)"/>
+<text x="590" y="68" class="lbl" text-anchor="middle">1 : N</text>
+<path d="M140 154 L140 250 L740 250 L740 160" class="ar" marker-end="url(#ah)" stroke-dasharray="5 4"/>
+<text x="440" y="242" class="lbl" text-anchor="middle">1 : N  (댓글 작성자)</text>
+<text x="12" y="286" class="s" text-anchor="start">FK(외래키) = 다른 테이블의 id를 가리키는 컬럼 · N쪽 테이블에 1쪽을 가리키는 컬럼을 둔다</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>1:N 구현 한 줄 요약 → 「N쪽 테이블에 1쪽의 id 컬럼(FK)을 넣는다」.</li><li>7주 <code>posts.user_id</code>(작성자 연결) · 9주 <code>comments.post_id</code>(어느 글의 댓글) · <code>users.role</code>(RBAC).</li></ul>
+</section><section id="apibasic">
+<h1>9. API와 JSON — 8주</h1>
+<p><b>API</b>는 프로그램끼리 쓰는 창구, <b>JSON</b>은 그 창구가 주는 데이터 형식. 받은 JSON에서 필요한 값만 <b>파싱</b>한다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 304" role="img" aria-label="API 호출과 JSON 응답" xmlns="http://www.w3.org/2000/svg"><title>API 호출과 JSON 응답</title>
+<rect x="20" y="40" width="170" height="70" rx="9" class="bx o"/>
+<text x="105.0" y="70.5" class="tb" text-anchor="middle">내 Flask 서버</text>
+<text x="105.0" y="88.5" class="s" text-anchor="middle">requests.get(…)</text>
+<rect x="380" y="40" width="190" height="70" rx="9" class="bx e"/>
+<text x="475.0" y="70.5" class="tb" text-anchor="middle">API 서버</text>
+<text x="475.0" y="88.5" class="s" text-anchor="middle">공공데이터 · OpenAI</text>
+<path d="M190 62 L380 62" class="ar " marker-end="url(#ah)"/>
+<text x="285" y="54" class="lbl" text-anchor="middle">요청 + 인증키</text>
+<path d="M380 90 L190 90" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="285" y="108" class="lbl" text-anchor="middle">JSON 응답</text>
+<rect x="610" y="20" width="258" height="150" rx="9" class="bx d"/>
+<text x="626" y="42" class="tb" text-anchor="start">JSON 응답 예시</text>
+<text x="622" y="70" class="mono" text-anchor="start">{ "response": { "body": {</text>
+<text x="622" y="94" class="mono" text-anchor="start">   "items": [</text>
+<text x="622" y="118" class="mono" text-anchor="start">     {"stationName": "종로구",</text>
+<text x="622" y="142" class="mono" text-anchor="start">      "pm10Value": "38"} ] } } }</text>
+<path d="M739 170 L739 206" class="ar " marker-end="url(#ah)"/>
+<rect x="560" y="206" width="308" height="54" rx="9" class="bx o"/>
+<text x="714.0" y="228.5" class="m" text-anchor="middle">item["stationName"] → 종로구</text>
+<text x="714.0" y="246.5" class="s" text-anchor="middle">파싱 = 필요한 값만 꺼내기</text>
+<rect x="20" y="160" width="540" height="100" rx="9" class="bx o"/>
+<text x="290.0" y="196.0" class="tb" text-anchor="middle">서버의 두 가지 역할</text>
+<text x="290.0" y="214.0" class="s" text-anchor="middle">브라우저의 요청에는 응답하는 주방</text>
+<text x="290.0" y="233.0" class="s" text-anchor="middle">외부 API에는 요청하는 손님</text>
+<text x="12" y="292" class="s" text-anchor="start">API = 프로그램끼리 요청·응답을 주고받는 약속된 창구 · 인증키는 코드가 아니라 .env에 둔다</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>API 호출 3요소: 주소(엔드포인트) · 요청(파라미터+인증키) · 응답(JSON).</li><li>8주 공공데이터, 10주 OpenAI, 11주 나이스 도구 호출 모두 같은 구조다.</li></ul>
+</section><section id="api">
+<h1>10. 외부 API → 대시보드 — 8주</h1>
+<p>이번엔 우리 서버가 <b>손님</b>. <b>수집(API) → 가공(파싱) → 표현(대시보드)</b> = 탐구 보고서의 흐름과 같다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 372" role="img" aria-label="공공데이터 API 호출에서 대시보드까지" xmlns="http://www.w3.org/2000/svg"><title>공공데이터 API 호출에서 대시보드까지</title>
+
+<rect x="390" y="6" width="170" height="40" rx="9" class="bx e"/>
+<text x="475" y="24" class="tb mono" text-anchor="middle">.env</text>
+<text x="475" y="40" class="s" text-anchor="middle">인증키는 여기에만</text>
+<path d="M475 46 L475 80" class="ar " marker-end="url(#ah)"/>
+<rect x="12" y="80" width="130" height="64" rx="9" class="bx o"/>
+<text x="77.0" y="107.5" class="tb" text-anchor="middle">브라우저</text>
+<text x="77.0" y="125.5" class="s" text-anchor="middle">/dashboard 접속</text>
+<rect x="190" y="80" width="150" height="64" rx="9" class="bx o"/>
+<text x="265.0" y="107.5" class="tb" text-anchor="middle">Flask 라우트</text>
+<text x="265.0" y="125.5" class="s" text-anchor="middle">/dashboard</text>
+<rect x="390" y="80" width="170" height="64" rx="9" class="bx o"/>
+<text x="475.0" y="107.5" class="tb" text-anchor="middle">opendata.py</text>
+<text x="475.0" y="125.5" class="s" text-anchor="middle">fetch_air_quality()</text>
+<rect x="700" y="80" width="168" height="64" rx="9" class="bx e"/>
+<text x="784.0" y="107.5" class="tb" text-anchor="middle">공공데이터포털</text>
+<text x="784.0" y="125.5" class="s" text-anchor="middle">에어코리아 (외부)</text>
+<path d="M142 112 L190 112" class="ar " marker-end="url(#ah)"/>
+<path d="M340 112 L390 112" class="ar " marker-end="url(#ah)"/>
+<path d="M560 100 L700 100" class="ar " marker-end="url(#ah)"/>
+<text x="630" y="92" class="lbl" text-anchor="middle">requests + 인증키</text>
+
+<rect x="700" y="200" width="168" height="60" rx="9" class="bx d"/>
+<text x="784.0" y="225.5" class="tb" text-anchor="middle">JSON 원본</text>
+<text x="784.0" y="243.5" class="s" text-anchor="middle">response.body.items</text>
+<path d="M784 144 L784 200" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="792" y="176" class="lbl" text-anchor="start">JSON 응답</text>
+<rect x="390" y="200" width="170" height="60" rx="9" class="bx d"/>
+<text x="475.0" y="225.5" class="tb" text-anchor="middle">가공된 리스트</text>
+<text x="475.0" y="243.5" class="s" text-anchor="middle">station·pm10·grade</text>
+<path d="M700 230 L560 230" class="ar " marker-end="url(#ah)"/>
+<text x="630" y="222" class="lbl" text-anchor="middle">파싱 (필요한 값만)</text>
+<rect x="190" y="200" width="150" height="60" rx="9" class="bx o"/>
+<text x="265.0" y="225.5" class="tb" text-anchor="middle">dashboard.html</text>
+<text x="265.0" y="243.5" class="s" text-anchor="middle">표 + 막대그래프</text>
+<path d="M390 230 L340 230" class="ar " marker-end="url(#ah)"/>
+<rect x="12" y="200" width="130" height="60" rx="9" class="bx o"/>
+<text x="77.0" y="225.5" class="tb" text-anchor="middle">브라우저</text>
+<text x="77.0" y="243.5" class="s" text-anchor="middle">화면에 표시</text>
+<path d="M190 230 L142 230" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="165" y="192" class="lbl" text-anchor="middle">응답</text>
+
+<rect x="680" y="304" width="188" height="56" rx="9" class="bx d" stroke-dasharray="5 4"/>
+<text x="774" y="328" class="m" text-anchor="middle">sample_air_quality.json</text>
+<text x="774" y="347" class="s" text-anchor="middle">같은 모양의 대체 데이터</text>
+<path d="M680 332 L475 332 L475 262" class="ar" marker-end="url(#ah)" stroke-dasharray="5 4"/>
+<text x="580" y="324" class="lbl" text-anchor="middle">API 실패 · 키 없음 → 대체</text>
+<text x="12" y="304" class="s" text-anchor="start">앱이 죽지 않는 이유 = 예외 처리 + 샘플 데이터</text>
+<text x="12" y="324" class="s" text-anchor="start">(키를 지우거나 인터넷을 끊어도 화면이 뜬다)</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>인증키는 코드에 쓰지 않고 <code>.env</code> → <code>.gitignore</code>로 저장소에 올리지 않는다.</li><li>파싱 = 받은 JSON에서 필요한 값만 꺼내 정리. 실패해도 샘플 JSON으로 화면은 뜬다.</li></ul>
+</section><section id="ws">
+<h1>11. 요청/응답 vs WebSocket — 9주</h1>
+<p>지금까지는 <b>브라우저가 먼저 묻는</b> 방식. 채팅만 <b>서버가 먼저 보내는</b> 방식을 썼다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 284" role="img" aria-label="요청 응답 방식과 WebSocket 비교" xmlns="http://www.w3.org/2000/svg"><title>요청 응답 방식과 WebSocket 비교</title>
+<text x="12" y="24" class="h" text-anchor="start">요청 / 응답 (기본)</text>
+<rect x="20" y="70" width="130" height="64" rx="9" class="bx o"/>
+<text x="85.0" y="107.0" class="tb" text-anchor="middle">브라우저</text>
+<rect x="290" y="70" width="130" height="64" rx="9" class="bx o"/>
+<text x="355.0" y="107.0" class="tb" text-anchor="middle">서버</text>
+<path d="M150 92 L290 92" class="ar " marker-end="url(#ah)"/>
+<text x="220" y="84" class="lbl" text-anchor="middle">① 요청</text>
+<path d="M290 116 L150 116" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="220" y="134" class="lbl" text-anchor="middle">② 응답</text>
+<text x="12" y="176" class="s" text-anchor="start">브라우저가 물어야 서버가 답한다</text>
+<text x="12" y="196" class="s" text-anchor="start">새 글을 보려면 새로고침 (또는 새 요청)</text>
+<text x="460" y="24" class="h" text-anchor="start">WebSocket (실시간 채팅)</text>
+<rect x="470" y="40" width="130" height="52" rx="9" class="bx o"/>
+<text x="535.0" y="71.0" class="tb" text-anchor="middle">브라우저 A</text>
+<rect x="470" y="190" width="130" height="52" rx="9" class="bx o"/>
+<text x="535.0" y="221.0" class="tb" text-anchor="middle">브라우저 B</text>
+<rect x="728" y="112" width="140" height="80" rx="9" class="bx o"/>
+<text x="798.0" y="147.5" class="tb" text-anchor="middle">서버</text>
+<text x="798.0" y="165.5" class="s" text-anchor="middle">flask-socketio</text>
+<path d="M600 84 L728 140" class="ar " marker-end="url(#ah)"/>
+<text x="640" y="132" class="lbl halo" text-anchor="middle">① send_message</text>
+<path d="M728 122 L600 52" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="668" y="62" class="lbl halo" text-anchor="middle">② new_message</text>
+<path d="M728 176 L600 222" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="650" y="188" class="lbl halo" text-anchor="middle">② emit(new_message)</text>
+<text x="650" y="204" class="lbl halo" text-anchor="middle">broadcast=True</text>
+<text x="460" y="268" class="s" text-anchor="start">연결을 유지해서 서버가 먼저 보낼 수 있다 → 새로고침 없이 화면이 바뀐다</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>댓글·검색·권한은 전부 요청/응답 4단계(요청 → 코드 실행 → 응답 → 화면 갱신).</li><li>AI가 짠 채팅 코드는 붙여넣기만 하지 말고 <code>send_message</code>가 서버에서 broadcast로 퍼지는 흐름을 설명할 수 있어야 한다.</li></ul>
+</section><section id="ai">
+<h1>12. 웹 서비스에 AI 붙이기 — 10주</h1>
+<p>AI는 검색창이 아니라 <b>서비스의 부품</b>. 기존 Flask 서버에 <b>외부 LLM API</b>가 하나 더 붙었다.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 352" role="img" aria-label="AI 서비스 요청 흐름과 화면 표시 원칙" xmlns="http://www.w3.org/2000/svg"><title>AI 서비스 요청 흐름과 화면 표시 원칙</title>
+<rect x="12" y="60" width="150" height="64" rx="9" class="bx o"/>
+<text x="87.0" y="87.5" class="tb" text-anchor="middle">브라우저</text>
+<text x="87.0" y="105.5" class="s" text-anchor="middle">공지·질문 입력</text>
+<rect x="232" y="60" width="190" height="64" rx="9" class="bx o"/>
+<text x="327.0" y="87.5" class="tb" text-anchor="middle">Flask app.py</text>
+<text x="327.0" y="105.5" class="s" text-anchor="middle">🔑 OPENAI_API_KEY</text>
+<rect x="552" y="14" width="180" height="64" rx="9" class="bx m"/>
+<text x="642.0" y="41.5" class="tb" text-anchor="middle">OpenAI 모델</text>
+<text x="642.0" y="59.5" class="s" text-anchor="middle">instructions 규칙</text>
+<rect x="552" y="112" width="180" height="64" rx="9" class="bx e"/>
+<text x="642.0" y="139.5" class="tb" text-anchor="middle">나이스 급식 API</text>
+<text x="642.0" y="157.5" class="s" text-anchor="middle">공공데이터 = 근거</text>
+<path d="M162 92 L232 92" class="ar " marker-end="url(#ah)"/>
+<text x="197" y="84" class="lbl" text-anchor="middle">①</text>
+<path d="M422 72 L552 52" class="ar " marker-end="url(#ah)"/>
+<text x="478" y="50" class="lbl halo" text-anchor="middle">② 질문+지침</text>
+<path d="M552 66 L422 86" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="504" y="90" class="lbl halo" text-anchor="middle">③ 응답</text>
+<path d="M422 108 L552 140" class="ar " marker-end="url(#ah)"/>
+<text x="472" y="138" class="lbl halo" text-anchor="middle">급식 조회</text>
+<path d="M327 124 L327 222 L87 222 L87 126" class="ar" marker-end="url(#ah)" stroke-dasharray="5 4"/>
+<text x="207" y="214" class="lbl" text-anchor="middle">④ 템플릿으로 렌더링</text>
+<text x="12" y="262" class="h" text-anchor="start">화면에는 이렇게 분리해서 보여 준다</text>
+<rect x="12" y="274" width="250" height="66" rx="9" class="bx e"/>
+<text x="137.0" y="302.5" class="tb" text-anchor="middle">급식 원문 (사실)</text>
+<text x="137.0" y="320.5" class="s" text-anchor="middle">나이스에서 가져온 그대로</text>
+<rect x="282" y="274" width="250" height="66" rx="9" class="bx m"/>
+<text x="407.0" y="302.5" class="tb" text-anchor="middle">AI 해석 (틀릴 수 있음)</text>
+<text x="407.0" y="320.5" class="s" text-anchor="middle">알레르기·칼로리 설명</text>
+<rect x="552" y="274" width="316" height="66" rx="9" class="bx o"/>
+<text x="710" y="294" class="tb" text-anchor="middle">지킬 것 4가지</text>
+<text x="710" y="313" class="s" text-anchor="middle">① 키는 서버에만  ② 규칙(instructions) 고정</text>
+<text x="710" y="331" class="s" text-anchor="middle">③ 사실은 공공데이터  ④ 원문·AI 해석 분리</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>키는 서버에서만 호출 — 브라우저 코드는 누구나 볼 수 있다.</li><li>환각 대응 2가지: ① 시스템 지침(원문에 없으면 「확인 필요」) ② Grounding(공공데이터를 먼저 조회해 근거로 제공).</li></ul>
+</section><section id="conv">
+<h1>13. 단일 대화 vs 연속 대화 — 10주</h1>
+<p>챗봇이 앞말을 아는 비밀: <b>이전 대화를 매번 같이 보내는 것</b>.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 246" role="img" aria-label="단일 대화와 연속 대화 비교" xmlns="http://www.w3.org/2000/svg"><title>단일 대화와 연속 대화 비교</title>
+<text x="12" y="24" class="h" text-anchor="start">단일 대화 (Stateless)</text>
+<rect x="20" y="50" width="100" height="46" rx="9" class="bx o"/>
+<text x="70.0" y="78.0" class="tb" text-anchor="middle">질문 1</text>
+<path d="M120 73 L180 73" class="ar " marker-end="url(#ah)"/>
+<rect x="180" y="50" width="90" height="46" rx="9" class="bx m"/>
+<text x="225.0" y="78.0" class="tb" text-anchor="middle">모델</text>
+<path d="M270 73 L330 73" class="ar " marker-end="url(#ah)"/>
+<rect x="330" y="50" width="90" height="46" rx="9" class="bx o"/>
+<text x="375.0" y="78.0" class="tb" text-anchor="middle">답 1</text>
+<rect x="20" y="124" width="100" height="46" rx="9" class="bx o"/>
+<text x="70.0" y="152.0" class="tb" text-anchor="middle">질문 2</text>
+<path d="M120 147 L180 147" class="ar " marker-end="url(#ah)"/>
+<rect x="180" y="124" width="90" height="46" rx="9" class="bx m"/>
+<text x="225.0" y="152.0" class="tb" text-anchor="middle">모델</text>
+<path d="M270 147 L330 147" class="ar " marker-end="url(#ah)"/>
+<rect x="330" y="124" width="90" height="46" rx="9" class="bx o"/>
+<text x="375.0" y="152.0" class="tb" text-anchor="middle">답 2</text>
+<text x="12" y="212" class="s" text-anchor="start">각 요청이 독립 — 앞 내용을 모른다</text>
+<text x="460" y="24" class="h" text-anchor="start">연속 대화 (Context)</text>
+<rect x="470" y="46" width="170" height="130" rx="9" class="bx d"/>
+<text x="555" y="68" class="tb" text-anchor="middle">매번 통째로 전송</text>
+<text x="555" y="96" class="t" text-anchor="middle">질문 1</text>
+<text x="555" y="120" class="t" text-anchor="middle">답 1</text>
+<text x="555" y="144" class="t" text-anchor="middle">질문 2 (새 질문)</text>
+<path d="M640 111 L690 111" class="ar " marker-end="url(#ah)"/>
+<rect x="690" y="88" width="80" height="46" rx="9" class="bx m"/>
+<text x="730.0" y="116.0" class="tb" text-anchor="middle">모델</text>
+<path d="M770 111 L800 111" class="ar " marker-end="url(#ah)"/>
+<rect x="800" y="88" width="68" height="46" rx="9" class="bx o"/>
+<text x="834.0" y="116.0" class="tb" text-anchor="middle">답 2</text>
+<text x="460" y="212" class="s" text-anchor="start">AI가 「기억」하는 게 아니라 우리 코드가 기록을 쌓아 보낸다</text>
+<text x="460" y="232" class="s" text-anchor="start">→ 서버를 재시작하면 기록이 사라진다 (한계)</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>면접 단골 — 「챗봇은 어떻게 기억하나요?」 → 기록 리스트를 우리가 관리해서 매 요청에 함께 전송.</li><li>그래서 대화가 길어지면 보내는 양이 늘고, 서버가 꺼지면 기록도 사라진다.</li></ul>
+</section><section id="agent">
+<h1>14. 에이전트 · 하네스 · MCP — 11주</h1>
+<p><b>모델 + 도구 + 루프 = 에이전트</b>. 그 루프를 모델 바깥에서 돌려 주는 프로그램이 <b>하네스</b>, 도구를 꽂는 표준이 <b>MCP</b>.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 420" role="img" aria-label="에이전트 루프 하네스 MCP 구조" xmlns="http://www.w3.org/2000/svg"><title>에이전트 루프 하네스 MCP 구조</title>
+<rect x="12" y="150" width="84" height="60" rx="9" class="bx o"/>
+<text x="54.0" y="175.5" class="tb" text-anchor="middle">사용자</text>
+<text x="54.0" y="193.5" class="s" text-anchor="middle">질문</text>
+<rect x="112" y="34" width="756" height="300" rx="14" class="bx hz" stroke-dasharray="7 5"/>
+<text x="126" y="56" class="tb" text-anchor="start">하네스 (Claude Code · step5_agent.py)</text>
+<text x="126" y="74" class="s" text-anchor="start">도구 실행 · 반복 횟수 제한 · 권한 확인 · 기억(대화 기록)</text>
+<rect x="140" y="96" width="170" height="70" rx="9" class="bx m"/>
+<text x="225.0" y="126.5" class="tb" text-anchor="middle">모델</text>
+<text x="225.0" y="144.5" class="s" text-anchor="middle">두뇌 — 도구 요청만 함</text>
+<rect x="140" y="236" width="170" height="70" rx="9" class="bx o"/>
+<text x="225.0" y="266.5" class="tb" text-anchor="middle">하네스 실행기</text>
+<text x="225.0" y="284.5" class="s" text-anchor="middle">도구를 대신 실행</text>
+<path d="M96 170 L140 130" class="ar " marker-end="url(#ah)"/>
+<text x="100" y="140" class="lbl" text-anchor="end">①</text>
+<path d="M205 166 L205 236" class="ar " marker-end="url(#ah)"/>
+<text x="197" y="206" class="lbl" text-anchor="end">② 도구 요청</text>
+<path d="M255 236 L255 166" class="ar " stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="263" y="206" class="lbl" text-anchor="start">④ 결과 보여주기</text>
+<path d="M310 271 L440 271" class="ar " marker-end="url(#ah)"/>
+<text x="375" y="263" class="lbl" text-anchor="middle">③ 🔌 MCP</text>
+<rect x="440" y="236" width="150" height="70" rx="9" class="bx o"/>
+<text x="515.0" y="266.5" class="m" text-anchor="middle">school_mcp.py</text>
+<text x="515.0" y="284.5" class="s" text-anchor="middle">@mcp.tool()</text>
+<path d="M590 271 L620 271" class="ar " marker-end="url(#ah)"/>
+<rect x="620" y="236" width="100" height="70" rx="9" class="bx o"/>
+<text x="670.0" y="276.0" class="m" text-anchor="middle">neis.py</text>
+<path d="M720 271 L748 271" class="ar " marker-end="url(#ah)"/>
+<rect x="748" y="236" width="108" height="70" rx="9" class="bx e"/>
+<text x="802.0" y="266.5" class="tb" text-anchor="middle">나이스</text>
+<text x="802.0" y="284.5" class="s" text-anchor="middle">급식·학사일정</text>
+<rect x="360" y="92" width="496" height="104" rx="9" class="bx g"/>
+<text x="380" y="116" class="mono" text-anchor="start">🧠 생각  급식 조회가 필요해</text>
+<text x="380" y="136" class="mono" text-anchor="start">🔧 도구  get_school_meal(…)</text>
+<text x="380" y="156" class="mono" text-anchor="start">👀 결과  급식 데이터</text>
+<text x="380" y="176" class="mono" text-anchor="start">✅ 답변  「오늘 급식은 …」</text>
+<text x="680" y="116" class="s" text-anchor="start">답이 나올 때까지</text>
+<text x="680" y="134" class="s" text-anchor="start">반복한다 (최대 N번)</text>
+<text x="680" y="160" class="tb" text-anchor="start">= 에이전트 루프</text>
+<rect x="12" y="354" width="198" height="54" rx="9" class="bx o"/>
+<text x="111.0" y="376.5" class="tb" text-anchor="middle">모델</text>
+<text x="111.0" y="394.5" class="s" text-anchor="middle">손 없는 두뇌</text>
+<rect x="228" y="354" width="198" height="54" rx="9" class="bx o"/>
+<text x="327.0" y="376.5" class="tb" text-anchor="middle">도구</text>
+<text x="327.0" y="394.5" class="s" text-anchor="middle">손 (조회·실행)</text>
+<rect x="444" y="354" width="198" height="54" rx="9" class="bx o"/>
+<text x="543.0" y="376.5" class="tb" text-anchor="middle">하네스</text>
+<text x="543.0" y="394.5" class="s" text-anchor="middle">두뇌와 손을 잇는 몸</text>
+<rect x="660" y="354" width="198" height="54" rx="9" class="bx o"/>
+<text x="759.0" y="376.5" class="tb" text-anchor="middle">MCP</text>
+<text x="759.0" y="394.5" class="s" text-anchor="middle">어느 몸에나 맞는 표준 손</text></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>「AI가 직접 나이스에 접속한다」는 오해 — 모델은 <b>요청만</b>, 실제 실행은 하네스가 내 코드(도구)를 호출.</li><li>10주 챗봇의 급식 조회도 이미 최소 에이전트였다 (모델 판단 → 우리 코드 실행 → 결과 재전달).</li><li>MCP로 만든 도구는 MCP를 지원하는 어느 하네스에서도 쓸 수 있다 (AI용 USB-C).</li></ul>
+</section><section id="map">
+<h1>15. 전체 지도 — 3~11주차</h1>
+<p>11주 동안 쌓은 것을 <b>한 지도</b>에. 각 칸의 작은 글씨는 그 기능을 만든 주.</p>
+<div class="fig"><div class="scroll"><svg viewBox="0 0 880 412" role="img" aria-label="완성된 서비스 전체 지도" xmlns="http://www.w3.org/2000/svg"><title>완성된 서비스 전체 지도</title>
+<rect x="330" y="8" width="220" height="50" rx="9" class="bx o"/>
+<text x="440.0" y="28.5" class="tb" text-anchor="middle">사용자 · 브라우저</text>
+<text x="440.0" y="46.5" class="s" text-anchor="middle">HTML 템플릿 (3~6주)</text>
+<path d="M440 58 L440 92" class="ar " marker-end="url(#ah)" marker-start="url(#ah)"/>
+<rect x="60" y="92" width="520" height="184" rx="14" class="bx o" stroke-dasharray="7 5"/>
+<text x="76" y="114" class="tb" text-anchor="start">Flask 서버 (우리 코드)</text>
+<rect x="76" y="128" width="160" height="58" rx="9" class="bx o"/>
+<text x="156.0" y="152.5" class="tb" text-anchor="middle">라우트 CRUD</text>
+<text x="156.0" y="170.5" class="s" text-anchor="middle">6주</text>
+<rect x="246" y="128" width="160" height="58" rx="9" class="bx o"/>
+<text x="326.0" y="152.5" class="tb" text-anchor="middle">세션 · 권한</text>
+<text x="326.0" y="170.5" class="s" text-anchor="middle">7주</text>
+<rect x="416" y="128" width="160" height="58" rx="9" class="bx o"/>
+<text x="496.0" y="152.5" class="s" text-anchor="middle">/dashboard</text>
+<text x="496.0" y="170.5" class="s" text-anchor="middle">8주</text>
+<rect x="76" y="198" width="160" height="58" rx="9" class="bx o"/>
+<text x="156.0" y="222.5" class="s" text-anchor="middle">댓글 · 검색 · RBAC</text>
+<text x="156.0" y="240.5" class="s" text-anchor="middle">9주</text>
+<rect x="246" y="198" width="160" height="58" rx="9" class="bx o"/>
+<text x="326.0" y="222.5" class="tb" text-anchor="middle">실시간 채팅</text>
+<text x="326.0" y="240.5" class="s" text-anchor="middle">9주</text>
+<rect x="416" y="198" width="160" height="58" rx="9" class="bx o"/>
+<text x="496.0" y="222.5" class="s" text-anchor="middle">AI 챗봇 · 사진 분석</text>
+<text x="496.0" y="240.5" class="s" text-anchor="middle">10주</text>
+<rect x="640" y="92" width="228" height="52" rx="9" class="bx e"/>
+<text x="754.0" y="113.5" class="tb" text-anchor="middle">공공데이터포털</text>
+<text x="754.0" y="131.5" class="s" text-anchor="middle">에어코리아 · 8주</text>
+<rect x="640" y="156" width="228" height="52" rx="9" class="bx m"/>
+<text x="754.0" y="177.5" class="tb" text-anchor="middle">OpenAI 모델</text>
+<text x="754.0" y="195.5" class="s" text-anchor="middle">지침 · 사진 분석 · 10주</text>
+<rect x="640" y="220" width="228" height="56" rx="9" class="bx e"/>
+<text x="754.0" y="243.5" class="tb" text-anchor="middle">나이스 급식 API</text>
+<text x="754.0" y="261.5" class="s" text-anchor="middle">10·11주</text>
+<path d="M580 118 L640 118" class="ar " marker-end="url(#ah)" marker-start="url(#ah)"/>
+<path d="M580 182 L640 182" class="ar " marker-end="url(#ah)" marker-start="url(#ah)"/>
+<path d="M580 248 L640 248" class="ar " marker-end="url(#ah)" marker-start="url(#ah)"/>
+<rect x="60" y="330" width="300" height="70" rx="9" class="bx d"/>
+<text x="210.0" y="360.5" class="tb" text-anchor="middle">SQLite bbs.db</text>
+<text x="210.0" y="378.5" class="s" text-anchor="middle">users · posts · comments</text>
+<path d="M210 276 L210 330" class="ar " marker-end="url(#ah)" marker-start="url(#ah)"/>
+<text x="222" y="308" class="lbl" text-anchor="start">SQL</text>
+<rect x="400" y="330" width="468" height="70" rx="9" class="bx o"/>
+<text x="634.0" y="360.5" class="s" text-anchor="middle">AI 하네스 (Claude Code) ⇄ MCP ⇄ school_mcp.py → neis.py</text>
+<text x="634.0" y="378.5" class="s" text-anchor="middle">11주 · 내 도구를 MCP 서버로 연결</text>
+<path d="M754 330 L754 276" class="ar " marker-end="url(#ah)"/></svg></div></div>
+<p class="sub">시험·면접 포인트</p>
+<ul class="list"><li>프로젝트를 설명할 땐 이 지도에서 <b>안쪽(서버·DB) → 바깥쪽(외부 API·AI)</b> 순서로 손가락으로 짚는다.</li><li>14주 발표에서는 내 캡스톤이 이 지도의 어느 칸과 이어지는지 표시해 보자.</li></ul>
+</section>
+<h1>외워 두면 편한 비유 4개</h1>
+<div class="tablewrap"><table><tr><td class="k">식당 비유</td><td>클라이언트 · 서버 · DB는 손님 · 주방 · 창고. 우리 서버가 손님이 되면 외부 API.</td></tr><tr><td class="k">조교 비유</td><td>LLM은 아주 많이 읽은 조교. 초안은 빠르지만 틀릴 수 있어 검증은 내 몫.</td></tr><tr><td class="k">두뇌와 손 비유</td><td>모델은 손 없는 두뇌, 도구는 손, 하네스는 둘을 잇는 몸.</td></tr><tr><td class="k">USB-C 비유</td><td>MCP는 도구를 어느 하네스에나 꽂는 표준 규격.</td></tr></table></div>
+<div class="foot"><div class="pn">1</div><img src="assets/c3/footer-logo.png" alt="C3 CODING 씨큐브코딩"></div>
+</div>
+</div>
+</html>

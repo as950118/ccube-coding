@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>진학반 워크북 정리노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Roboto+Mono:wght@400;700&family=Roboto:wght@400&display=swap">
+<style>
+/* Layout: C3 Coding 교재 양식. 흰 A4 쪽(794px) 위에 청록 헤더 밴드, 남색·파랑 번호 제목, 검은 실선 표, 둥근 회색 코드 블록. */
+:root {
+  --brand-teal: #3abcd2; --logo-gray: #595959;
+  --heading-navy: #1c4587; --heading-blue: #4a86e8;
+  --ink: #000000; --paper: #ffffff; --desk: #f1f3f4;
+  --code-surface: #f1f3f4; --code-label: #747775; --code-ink: #37474f;
+  --syn-keyword: #1967d2; --syn-string: #188038; --syn-number: #c5221f; --syn-comment: #b80672; --syn-constant: #9334e6;
+  --sans: Arial, Gulim, "Noto Sans KR", sans-serif;
+  --mono: "Roboto Mono", BatangChe, "Nanum Gothic Coding", monospace;
+  --label: Roboto, Arial, sans-serif;
+  --page-margin: clamp(16px, 12vw, 96px);
+  --rule: 1.33px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--desk); color: var(--ink); font-family: var(--sans); font-size: 14.67px; line-height: 19.4px; word-break: keep-all; overflow-wrap: anywhere; }
+.sheet { max-width: 794px; margin: 0 auto; background: var(--paper); min-height: 100vh; }
+.band { display: block; width: 100%; height: auto; min-height: 60px; }
+.body { padding: 28px var(--page-margin) 40px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+.body > * { min-width: 0; }
+@media (min-width: 900px) { body { padding-block: 24px; } }
+p { margin: 0 0 10px; }
+b, .b { font-weight: 700; }
+a { color: var(--heading-navy); }
+a:focus-visible { outline: 2px solid var(--heading-navy); outline-offset: 2px; }
+code { font-family: var(--mono); font-size: .98em; color: var(--syn-string); }
+
+.doc-title { text-align: center; font-size: 20px; line-height: 26px; font-weight: 400; color: var(--heading-blue); margin: 8px 0 0; }
+.doc-sub { text-align: center; font-size: 18.67px; line-height: 24px; font-weight: 400; color: var(--heading-navy); margin: 2px 0 28px; }
+h1 { font-size: 18.67px; line-height: 22px; font-weight: 400; color: var(--heading-navy); margin: 31px 0 0; text-wrap: balance; }
+h1 + h2, h1 + .h2sp { margin-top: 35px; }
+h2 { font-size: 16px; line-height: 19px; font-weight: 400; color: var(--heading-blue); margin: 31px 0 8px; text-wrap: balance; }
+h1.first { margin-top: 0; }
+h1 + p, h1 + .tablewrap { margin-top: 8px; }
+
+.tablewrap { overflow-x: auto; margin: 0 0 8px; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+td { border: var(--rule) solid var(--ink); padding: 8px 7px; vertical-align: top; text-align: left; width: 50%; }
+table.sm td { font-size: 13.33px; line-height: 23px; padding-block: 0 0; }
+td.k { font-weight: 700; }
+@media (max-width: 560px) { table { table-layout: auto; } td { width: auto; } }
+
+.code { background: var(--code-surface); border-radius: 12px; padding: 14px; margin: 8px 0; }
+.code .lab { display: block; font-family: var(--label); font-size: 12px; line-height: 14px; color: var(--code-label); margin-bottom: 8px; }
+.code pre { margin: 0; font-family: var(--mono); font-size: 13.33px; line-height: 19px; color: var(--code-ink); white-space: pre; overflow-x: auto; }
+.kw { color: var(--syn-keyword); } .st { color: var(--syn-string); } .nu { color: var(--syn-number); } .cm { color: var(--syn-comment); } .co { color: var(--syn-constant); }
+
+.warn { margin: 8px 0; }
+ul.list { margin: 0 0 10px; padding: 0 0 0 26px; }
+ul.list li { margin: 0 0 3px; }
+ul.check { list-style: none; margin: 4px 0 10px; padding: 0 0 0 26px; }
+ul.check li { position: relative; padding-left: 22px; margin: 0 0 4px; }
+ul.check li::before { content: ""; position: absolute; left: 0; top: 4px; width: 12px; height: 12px; border: var(--rule) solid var(--logo-gray); border-radius: 0; }
+.sub { font-weight: 700; margin: 12px 0 4px; }
+.gap-block { height: 31px; }
+
+.foot { padding: 18px 0 22px; text-align: center; }
+.foot .pn { font-size: 13.33px; line-height: 16px; margin-bottom: 8px; }
+.foot img { display: inline-block; width: 94px; height: auto; }
+.foot .note { font-size: 12px; color: var(--logo-gray); margin-top: 8px; }
+
+/* 그림 쪽 */
+.fig { margin: 8px calc(16px - var(--page-margin)) 10px; border: var(--rule) solid var(--ink); padding: 10px; background: var(--paper); }
+.fig .scroll { overflow-x: auto; }
+.fig svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.key { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13.33px; margin: 0 0 8px; }
+.sw { display: inline-block; width: 22px; height: 13px; vertical-align: -2px; margin-right: 6px; border: 1.5px solid var(--ink); }
+.sw.o { background: #fff; } .sw.e { background: var(--code-surface); border-color: var(--logo-gray); }
+.sw.m { background: #fff; border: 3px solid var(--heading-navy); } .sw.d { background: var(--code-surface); border-color: var(--heading-blue); }
+.toc { margin: 0 0 10px; padding: 0 0 0 26px; columns: 2; column-gap: 24px; }
+.toc li { margin: 0 0 2px; break-inside: avoid; }
+@media (max-width: 560px) { .toc { columns: 1; } }
+
+svg text { font-family: var(--sans); fill: var(--ink); }
+svg .t { font-size: 15px; } svg .tb { font-size: 15px; font-weight: 700; } svg .h { font-size: 16px; font-weight: 700; }
+svg .s { font-size: 12.5px; fill: var(--logo-gray); }
+svg .m, svg .mono { font-family: var(--mono); }
+svg .m { font-size: 12.5px; font-weight: 700; } svg .mono { font-size: 12.5px; } svg .tb.mono { font-size: 14px; }
+svg .lbl { font-size: 12px; } svg .lbl.muted { fill: var(--logo-gray); }
+svg .halo { paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
+svg .bx { stroke-width: 1.5; }
+svg .bx.o { fill: #fff; stroke: var(--ink); }
+svg .bx.e { fill: var(--code-surface); stroke: var(--logo-gray); }
+svg .bx.m { fill: #fff; stroke: var(--heading-navy); stroke-width: 3; }
+svg .bx.d { fill: var(--code-surface); stroke: var(--heading-blue); }
+svg .bx.g { fill: #fff; stroke: var(--code-label); }
+svg .bx.hd { fill: #fff; stroke: var(--heading-blue); }
+svg .bx.hz { fill: #fff; stroke: var(--logo-gray); }
+svg .ar { fill: none; stroke: var(--ink); stroke-width: 1.6; }
+svg .mk { fill: var(--ink); }
+svg .life { stroke: var(--code-label); stroke-width: 1.2; stroke-dasharray: 4 4; }
+
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .sheet { max-width: none; }
+  .body { padding-inline: 0; }
+  h1, h2 { break-after: avoid; }
+  .tablewrap, .code, .fig { break-inside: avoid; }
+  .fig .scroll { overflow: visible; } .fig svg { min-width: 0; }
+}
+@page { size: A4; margin: 14mm 18mm; }
+
+</style>
+<div class="sheet">
+<img class="band" src="assets/c3/header-band.png" alt="C3 CODING 씨큐브코딩 www.c3coding.com">
+<div class="body">
+<div class="doc-title">2026 진학반 - 1~11주차</div><div class="doc-sub">웹 서비스 만들기 - 11주 정리 워크북</div>
+<h1 class=first>복습 목표</h1>
+<div class="tablewrap"><table class=""><tr><td>목표</td><td>확인 방법</td></tr><tr><td>웹 서비스의 기본 구조(3단 구조·HTTP·API·DB)를 안다</td><td>그림을 보고 요청이 지나가는 길을 순서대로 말하기</td></tr><tr><td>11주 동안 만든 것을 순서대로 설명한다</td><td>주차별 결과물과 새로 얹은 개념을 한 문장씩 말하기</td></tr><tr><td>AI를 어떻게 썼는지 근거와 함께 설명한다</td><td>「면접에서는」 문장을 내 경험으로 바꿔 말하기</td></tr><tr><td>핵심 용어를 정확히 쓴다</td><td>용어 사전에서 가린 뜻을 말하고 맞는지 확인하기</td></tr></table></div>
+<h2>복습 순서</h2>
+<div class="tablewrap"><table class=""><tr><td class=k>단계</td><td>할 일</td></tr><tr><td class=k>1단계 (3분)</td><td>그림 페이지(한눈에보기)로 전체 흐름을 먼저 본다.</td></tr><tr><td class=k>2단계 (20분)</td><td>이 노트를 위에서 아래로 읽는다. 2장은 모든 주차의 바탕이 되는 개념이다.</td></tr><tr><td class=k>3단계 (15분)</td><td>각 절 끝의 체크리스트를 하나씩 소리 내어 설명해 보고 ☐ 칸을 표시한다.</td></tr></table></div>
+<p>1~2주차는 별도 선행 과정이므로 이 노트는 3주차부터 정리한다.</p>
+<p>그림 페이지: <a href="2026진학반_워크북_1-11주_한눈에보기.html">2026진학반_워크북_1-11주_한눈에보기.html</a></p>
+<h1>1. 전체 흐름 — 11주 한눈에</h1>
+<p>11주는 세 덩어리로 기억한다. <b>AI 도구 다루기(3~5주) → 웹 서비스 만들기(6~9주) → 서비스에 AI 붙이기(10~11주)</b> 순서이며, 6~9주는 같은 게시판(BBS) 프로젝트를 v0에서 v3까지 키웠다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>주차</td><td>결과물과 새로 얹은 개념</td></tr><tr><td class=k>3주</td><td>자기소개 웹페이지(<code>index.html</code>) · 바이브코딩 4단계 루프, 모델과 도구의 차이</td></tr><tr><td class=k>4주</td><td>프로필 웹 초안 v0 · Plan 모드, 권한(Permission)</td></tr><tr><td class=k>5주</td><td>GitHub 저장소 · commit, README, CLAUDE.md</td></tr><tr><td class=k>6주</td><td>BBS v0 · 3단 구조, Flask 라우트, SQLite, CRUD</td></tr><tr><td class=k>7주</td><td>BBS v1 · 회원가입·로그인, 세션, 해시, 인증과 인가</td></tr><tr><td class=k>8주</td><td>BBS v2 · 공공데이터 API, <code>.env</code>, 파싱, 예외 처리, 대시보드</td></tr><tr><td class=k>9주</td><td>BBS v3 · 1:N 관계, 검색(쿼리스트링), RBAC, WebSocket</td></tr><tr><td class=k>10주</td><td>school_bot · 단일/연속 대화, 시스템 지침, Grounding, 멀티모달</td></tr><tr><td class=k>11주</td><td>에이전트 + school MCP 서버 · 에이전트, 하네스, MCP</td></tr></table></div>
+<h1>2. 웹 핵심 개념 — 모든 주차의 바탕</h1>
+<p>주차별 내용을 읽기 전에 웹 서비스 전체에 공통으로 쓰이는 개념부터 정리한다. 6~11주의 모든 기능은 이 개념 위에 쌓였다.</p>
+<h2>2.1. 3단 구조(3-tier)</h2>
+<p>웹 서비스는 맡은 일에 따라 세 층으로 나눈다. 층을 나누면 한 층을 고쳐도 다른 층이 영향을 덜 받는다. (식당의 손님 · 주방 · 창고에 비유한다.)</p>
+<div class="tablewrap"><table class=""><tr><td class=k>층</td><td>하는 일 (이 수업에서)</td></tr><tr><td class=k>프레젠테이션 층 (클라이언트)</td><td>사용자가 보고 누르는 화면. 브라우저와 HTML 템플릿. 프론트엔드라고도 부른다.</td></tr><tr><td class=k>애플리케이션 층 (서버)</td><td>요청을 받아 무엇을 할지 처리하는 로직. Flask의 라우트, 세션·권한 검사. 백엔드라고도 부른다.</td></tr><tr><td class=k>데이터 층 (DB)</td><td>데이터가 실제로 저장되는 곳. SQLite의 <code>bbs.db</code> 파일.</td></tr></table></div>
+<div class="code"><span class="lab">None</span><pre>클라이언트 --요청(Request)--&gt; 서버 --SQL 조회·저장--&gt; DB
+(브라우저)  &lt;--응답(Response)--  (Flask) &lt;------- 결과 -------- (SQLite)</pre></div>
+<ul class="list"><li>클라이언트는 DB에 직접 접근하지 않는다. 반드시 서버의 정해진 창구(라우트)를 거친다.</li><li>권한 검사·비밀번호 확인 같은 중요한 판단은 서버에서 한다. 브라우저 코드는 누구나 볼 수 있기 때문이다.</li></ul>
+<ul class="check"><li>세 층의 이름과 역할을 설명할 수 있다.</li><li>「왜 층을 나누는가」를 한 문장으로 말할 수 있다.</li><li>중요한 검사를 서버에서 해야 하는 이유를 설명할 수 있다.</li></ul>
+<h2>2.2. HTTP — 요청과 응답</h2>
+<p>브라우저와 서버는 HTTP라는 약속에 따라 대화한다. 요청 하나에는 <b>메서드 · 주소(URL) · (필요하면) 보내는 데이터</b>가 들어 있고, 응답 하나에는 <b>상태 코드 · 내용</b>이 들어 있다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>URL</td><td>서버 안의 자원을 가리키는 주소. <code>http://localhost:5001/posts/3</code></td></tr><tr><td class=k>메서드</td><td>요청의 종류. <code>GET</code>은 조회, <code>POST</code>는 보내서 저장·수정·삭제. (REST 규칙에서는 <code>PUT</code>·<code>DELETE</code>도 쓰지만 이 수업은 <code>GET</code>·<code>POST</code>만 쓴다.)</td></tr><tr><td class=k>쿼리스트링</td><td>URL 뒤 <code>?key=value</code>. 검색어 같은 조건을 전달한다. <code>/?q=급식</code></td></tr><tr><td class=k>폼 데이터</td><td><code>POST</code> 요청의 본문에 담겨 가는 입력값. 서버는 <code>request.form</code>으로 읽는다.</td></tr><tr><td class=k>상태 코드</td><td>응답 결과를 알리는 숫자. <code>200</code> 성공 · <code>302</code> 다른 주소로 이동(redirect) · <code>403</code> 권한 없음 · <code>404</code> 없는 주소 · <code>500</code> 서버 오류</td></tr><tr><td class=k>localhost / 포트</td><td>내 컴퓨터를 가리키는 주소 / 프로그램이 문을 여는 번호. 이 수업은 <code>5001</code>번을 쓴다.</td></tr><tr><td class=k>쿠키</td><td>브라우저가 보관했다가 요청마다 함께 보내는 작은 정보. 세션 식별에 쓰인다.</td></tr></table></div>
+<div class="code"><span class="lab">Python</span><pre>@app.route(<span class="st">"/posts/&lt;int:post_id&gt;"</span>)   <span class="cm"># GET /posts/3</span>
+<span class="kw">def</span> detail(post_id):
+    ...
+    <span class="kw">return</span> render_template(<span class="st">"detail.html"</span>, post=post)   <span class="cm"># 200 + HTML</span></pre></div>
+<ul class="check"><li>GET과 POST를 언제 쓰는지 설명할 수 있다.</li><li>상태 코드 <code>200</code>, <code>302</code>, <code>403</code>, <code>404</code>의 뜻을 말할 수 있다.</li><li>브라우저 주소창의 URL에서 경로와 쿼리스트링을 구분할 수 있다.</li></ul>
+<h2>2.3. API와 JSON</h2>
+<p>API(Application Programming Interface)는 <b>프로그램끼리 요청을 주고받는 약속된 창구</b>다. 사람은 화면을 보지만, 프로그램은 API로 데이터를 직접 주고받는다. 8주차에는 공공데이터 API를, 10주차에는 OpenAI API를 호출했다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>API</td><td>다른 프로그램이 쓸 수 있도록 공개한 요청·응답 창구. 메뉴판(명세)을 보고 주문(요청)하는 것과 같다.</td></tr><tr><td class=k>엔드포인트</td><td>API의 주소. 서버의 라우트도 하나의 엔드포인트다.</td></tr><tr><td class=k>JSON</td><td>API가 주고받는 데이터 형식. <code>{"키": 값}</code> 형태의 글자 데이터.</td></tr><tr><td class=k>인증키(API 키)</td><td>「내가 누구인지」 API 서버에 증명하는 열쇠. 코드에 쓰지 않고 <code>.env</code>에 보관한다.</td></tr><tr><td class=k>파싱</td><td>받은 JSON에서 필요한 값만 꺼내 정리하는 것.</td></tr><tr><td class=k>SDK / 라이브러리</td><td>API 호출을 쉽게 해 주는 도구. <code>requests</code>(HTTP 호출), <code>openai</code>(OpenAI 호출).</td></tr></table></div>
+<div class="code"><span class="lab">Python</span><pre>res = requests.get(URL, params={<span class="st">"serviceKey"</span>: KEY, <span class="st">"stationName"</span>: <span class="st">"종로구"</span>})
+data = res.json()                          <span class="cm"># JSON → 파이썬 딕셔너리</span>
+item = data[<span class="st">"response"</span>][<span class="st">"body"</span>][<span class="st">"items"</span>][<span class="nu">0</span>]
+print(item[<span class="st">"stationName"</span>], item[<span class="st">"pm10Value"</span>])</pre></div>
+<p>서버 입장에서 보면 두 가지 역할이 있다. 브라우저의 요청에 <b>응답하는 주방</b>이면서, 외부 API에 <b>요청하는 손님</b>이 되기도 한다.</p>
+<ul class="check"><li>API를 한 문장으로 정의할 수 있다.</li><li>API 키를 코드에 직접 쓰면 안 되는 이유를 설명할 수 있다.</li><li>JSON에서 필요한 값만 꺼내는 과정을 설명할 수 있다.</li></ul>
+<h2>2.4. 데이터베이스 — 테이블 · 기본키 · 외래키</h2>
+<p>관계형 DB는 데이터를 <b>표(테이블)</b> 로 저장한다. 표 한 줄이 <b>행(row)</b>, 한 칸의 이름이 <b>열(column)</b> 이다. 표끼리는 <b>키(key)</b> 로 연결한다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>테이블</td><td>같은 종류의 데이터를 모은 표. <code>users</code>, <code>posts</code>, <code>comments</code></td></tr><tr><td class=k>행 · 열</td><td>행은 데이터 한 건(글 하나), 열은 항목(title, content).</td></tr><tr><td class=k>기본키 PK (Primary Key)</td><td>행을 <b>하나로 구분하는</b> 열. 중복되거나 비어 있으면 안 된다. 보통 <code>id</code>.</td></tr><tr><td class=k>외래키 FK (Foreign Key)</td><td><b>다른 테이블의 기본키를 가리키는</b> 열. <code>posts.user_id</code>는 <code>users.id</code>를 가리켜 글과 작성자를 연결한다.</td></tr><tr><td class=k>UNIQUE</td><td>같은 값이 두 번 들어갈 수 없게 하는 제약. 아이디 중복 방지에 쓴다.</td></tr><tr><td class=k>1:N 관계</td><td>한 행에 여러 행이 연결되는 관계. 사용자 1 : 글 N, 글 1 : 댓글 N. <b>N쪽 테이블에 FK를 둔다.</b></td></tr><tr><td class=k>CRUD</td><td>Create(INSERT) · Read(SELECT) · Update · Delete. 데이터를 다루는 네 가지 기본 동작.</td></tr></table></div>
+<p class="sub">users 테이블과 posts 테이블 예시</p>
+<div class="code"><span class="lab">None</span><pre>users                          posts
+id(PK) | username | role       id(PK) | title    | user_id(FK)
+   <span class="nu">1</span>   | mina     | user          <span class="nu">1</span>   | 첫 글    |     <span class="nu">1</span>     ──▶ users.id = <span class="nu">1</span> (mina)
+   <span class="nu">2</span>   | admin    | admin         <span class="nu">2</span>   | 공지     |     <span class="nu">2</span>     ──▶ users.id = <span class="nu">2</span> (admin)
+                                  <span class="nu">3</span>   | 두 번째  |     <span class="nu">1</span>     ──▶ users.id = <span class="nu">1</span> (mina)</pre></div>
+<div class="code"><span class="lab">SQL</span><pre><span class="kw">CREATE</span> <span class="kw">TABLE</span> posts (
+    id <span class="kw">INTEGER</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span> <span class="kw">AUTOINCREMENT</span>,   <span class="cm">-- 기본키</span>
+    title <span class="kw">TEXT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    content <span class="kw">TEXT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,
+    user_id <span class="kw">INTEGER</span> <span class="kw">REFERENCES</span> users(id)    <span class="cm">-- 외래키</span>
+);
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> posts <span class="kw">WHERE</span> user_id = ?       <span class="cm">-- 이 사용자가 쓴 글만</span></pre></div>
+<p class="warn">⚠️ SQL 문장에 입력값을 문자열로 이어 붙이면 SQL Injection에 노출됩니다. 값은 항상 <code>?</code> 자리에 따로 넘깁니다.</p>
+<ul class="check"><li>기본키와 외래키의 차이를 예로 설명할 수 있다.</li><li>1:N 관계를 DB로 표현하는 방법(N쪽에 FK)을 말할 수 있다.</li><li><code>?</code> 바인딩을 쓰는 이유를 설명할 수 있다.</li></ul>
+<h2>2.5. 프론트엔드 · 백엔드 · 세션</h2>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>프론트엔드</td><td>사용자가 보는 화면을 만드는 쪽. HTML(구조) · CSS(모양) · JavaScript(동작).</td></tr><tr><td class=k>백엔드</td><td>요청을 처리하고 데이터를 다루는 쪽. 이 수업에서는 Python Flask.</td></tr><tr><td class=k>템플릿</td><td>서버가 데이터를 끼워 넣어 HTML을 완성하는 틀. <code>render_template</code>.</td></tr><tr><td class=k>세션</td><td>웹 요청은 매번 독립적이라 서버가 방금 로그인한 사람을 잊는다. 세션이 로그인 상태를 서버에 기억시킨다.</td></tr><tr><td class=k>인증 / 인가</td><td>인증은 「누구인지」 확인(로그인), 인가는 「무엇을 해도 되는지」 판단(권한).</td></tr><tr><td class=k>해시</td><td>원문을 알 수 없게 바꾼 값. 비밀번호는 해시로 저장한다.</td></tr></table></div>
+<ul class="check"><li>프론트엔드와 백엔드가 맡은 일을 구분할 수 있다.</li><li>세션이 필요한 이유를 설명할 수 있다.</li><li>인증과 인가의 차이를 예로 설명할 수 있다.</li></ul>
+<h2>2.6. 보안 기본 습관</h2>
+<ul class="list"><li>비밀(API 키, 비밀번호)은 코드에 쓰지 않고 <code>.env</code>에 둔다. <code>.env</code>는 GitHub에 올리지 않는다.</li><li>비밀번호는 해시로 저장한다. 그대로 저장하지 않는다.</li><li>SQL에는 값을 <code>?</code>로 넘긴다.</li><li>권한 검사는 서버에서 한다. 버튼을 숨기는 것만으로는 부족하다.</li><li>AI 채팅창에 비밀을 입력하지 않는다. AI의 답은 틀릴 수 있으므로 직접 검증한다.</li></ul>
+<h1>3. AI 도구 다루기 — 3~5주차</h1>
+<h2>3.1. 3주차 — 바이브코딩 입문</h2>
+<p>만든 것: 자기소개 웹페이지 <code>index.html</code>. 바이브코딩은 「느낌대로 코딩」이 아니라 <b>목표 → 계획 → 실행 → 검증</b>을 반복하는 방식이다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>4단계 루프</td><td>목표(한 문장) → 계획(파일·화면) → 실행(AI에게 구체적으로) → 검증(브라우저로 확인, 이상하면 처음으로)</td></tr><tr><td class=k>LLM</td><td>많은 글을 학습해 다음 말을 예측하는 AI. 아주 많이 읽은 조교에 비유한다.</td></tr><tr><td class=k>모델 vs 도구</td><td>모델(Claude, GPT)은 뇌, AI 코딩 도구(Cursor, Claude Code)는 폴더의 파일을 직접 읽고 고치는 작업실이다.</td></tr><tr><td class=k>LLM의 한계 3가지</td><td>틀릴 수 있다(검증 필수) · 앞부분을 잊는다(목표 반복) · 비밀을 지켜 주지 않는다.</td></tr><tr><td class=k>터미널</td><td><code>pwd</code> 지금 위치 · <code>ls</code> 파일 목록 · <code>cd 폴더</code> 이동</td></tr></table></div>
+<div class="code"><span class="lab">None</span><pre>✗ 웹사이트 만들어줘
+✓ 단일 index.html로 자기소개 페이지. 제목·한 줄 소개·관심사 목록. 한국어. 읽기 쉽게.</pre></div>
+<p><b>면접에서는</b> 「AI에게 시키기만 한 게 아니라, 목표를 한 문장으로 정하고 결과를 브라우저로 검증하는 루프로 작업했습니다.」</p>
+<ul class="check"><li>바이브코딩 4단계를 순서대로 말할 수 있다.</li><li>채팅 AI와 AI 코딩 도구의 차이를 설명할 수 있다.</li><li>AI 채팅에 넣으면 안 되는 정보를 말할 수 있다.</li></ul>
+<h2>3.2. 4주차 — Plan 모드와 권한</h2>
+<p>만든 것: Hero · About · Interests · Projects · Contact 5섹션 프로필 웹 초안(v0). 구조를 먼저 정하고(Plan), 위험한 행동은 사람이 허락한다(Permission).</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>Plan 모드</td><td>「구조 먼저, 코드 나중」. AI가 설계안을 내면 내가 승인·수정·거절한 뒤에 코드를 쓴다.</td></tr><tr><td class=k>언제 Plan?</td><td>파일이 2개 이상 생기거나 섹션이 늘어날 때. 오타·색 하나는 바로 수정한다.</td></tr><tr><td class=k>Non-goals</td><td>이번에 하지 않을 것. 먼저 적어서 범위가 번지는 것을 막는다.</td></tr><tr><td class=k>Permission</td><td>「이 행동을 해도 될까?」를 묻는 안전장치. Accept(진행) / Deny(거부).</td></tr><tr><td class=k><code>/init</code></td><td>프로젝트를 분석해 AI용 안내 파일을 만든다.</td></tr></table></div>
+<div class="code"><span class="lab">None</span><pre>읽기        → 보통 허용
+쓰기/수정   → 목표와 맞으면 허용
+삭제        → 한 번 더 읽기
+모르는 명령 → 교사에게 확인 (curl ... | sh 는 Deny)</pre></div>
+<p class="warn">⚠️ 실명·학교·전화번호·집주소·얼굴 사진은 프로필에 넣지 않아도 완성입니다. 닉네임과 플레이스홀더로 충분합니다.</p>
+<p><b>면접에서는</b> 「바로 코드를 시키지 않고 Plan으로 섹션 구조와 하지 않을 것을 먼저 합의했습니다. 탐구에서 가설을 세우고 실행하는 순서와 같습니다.」</p>
+<ul class="check"><li>Plan이 필요한 경우와 바로 수정해도 되는 경우를 하나씩 말할 수 있다.</li><li>삭제나 모르는 명령을 제안받았을 때 Deny하는 이유를 설명할 수 있다.</li><li>Non-goals를 적는 이유를 설명할 수 있다.</li></ul>
+<h2>3.3. 5주차 — Git · GitHub · CLAUDE.md</h2>
+<p>만든 것: GitHub 저장소(README 5줄 + CLAUDE.md)와 의미 있는 커밋 2개 이상. 작업 기록은 Git에, AI가 기억할 규칙은 CLAUDE.md에 남긴다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>status → add → commit → push</td><td>상태 확인 → 올릴 변경 담기 → 메시지와 함께 기록 → GitHub로 올리기</td></tr><tr><td class=k>README</td><td>저장소의 얼굴이자 포트폴리오의 첫 화면. 프로젝트 설명 5줄.</td></tr><tr><td class=k>CLAUDE.md</td><td>AI용 프로젝트 메모리. 이름(닉네임)·말투·금지사항을 적어 두면 다음 대화에서도 기억한다.</td></tr><tr><td class=k>커밋 메시지</td><td>기능 단위로 나눠 의미 있게 남긴다. 커밋 히스토리가 시행착오의 기록이 된다.</td></tr><tr><td class=k><code>/compact</code></td><td>긴 대화를 요약해 컨텍스트를 아끼는 습관.</td></tr></table></div>
+<div class="code"><span class="lab">Shell</span><pre>git status
+git add .
+git commit -m <span class="st">"프로필 Hero 섹션 추가"</span>
+git push</pre></div>
+<p class="warn">⚠️ API 키·비밀번호가 든 파일은 절대 커밋하지 않습니다. 한 번 올라가면 지워도 기록에 남습니다.</p>
+<p><b>면접에서는</b> 「커밋 히스토리가 곧 시행착오의 기록입니다. 기능 단위로 커밋해서 어떤 순서로 만들고 고쳤는지 보이게 했습니다.」</p>
+<ul class="check"><li>add, commit, push의 차이를 설명할 수 있다.</li><li>CLAUDE.md가 없을 때의 불편을 설명할 수 있다.</li><li>비밀 파일을 커밋하면 안 되는 이유를 말할 수 있다.</li></ul>
+<h1>4. 웹 서비스 만들기 — BBS v0 → v3 (6~9주차)</h1>
+<h2>4.1. 6주차 — 클라이언트 · 서버 · DB (v0)</h2>
+<p>만든 것: Flask + SQLite 게시판의 목록·상세·작성·수정·삭제 5기능(AI 없이 직접 코딩). 파일을 열면 보이던 페이지에서 <b>데이터가 저장되고 다시 불러와지는 서비스</b>로 넘어갔다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>라우트</td><td>「이 주소로 요청이 오면 이 함수를 실행」. <code>@app.route("/")</code></td></tr><tr><td class=k>CRUD 5기능</td><td>목록 <code>GET /</code> · 상세 <code>GET /posts/&lt;id&gt;</code> · 작성 <code>POST /posts</code> · 수정 <code>POST …/edit</code> · 삭제 <code>POST …/delete</code></td></tr><tr><td class=k>SQLite</td><td>설치 없이 파일 하나(<code>.db</code>)로 동작하는 DB.</td></tr><tr><td class=k>저장 확인</td><td>서버를 껐다 켜도 글이 남아 있으면 DB에 저장된 것이다.</td></tr></table></div>
+<div class="code"><span class="lab">Python</span><pre>@app.route(<span class="st">"/"</span>)
+<span class="kw">def</span> index():
+    conn = get_db()
+    posts = conn.execute(<span class="st">"SELECT * FROM posts"</span>).fetchall()
+    <span class="kw">return</span> render_template(<span class="st">"list.html"</span>, posts=posts)
+
+app.run(debug=<span class="co">True</span>, port=<span class="nu">5001</span>)</pre></div>
+<p><b>면접에서는</b> 「화면·처리·저장을 나눈 이유는 역할을 분리해야 고치기 쉽고 확장하기 쉽기 때문입니다. 서버를 껐다 켜도 글이 남는 것으로 DB 저장을 확인했습니다.」</p>
+<ul class="check"><li>「글쓰기」 버튼 이후의 흐름을 클라이언트 → 서버 → DB 순서로 설명할 수 있다.</li><li>서버를 껐다 켜도 글이 남는 이유를 설명할 수 있다.</li><li>CRUD 5기능이 어떤 라우트와 SQL로 만들어졌는지 말할 수 있다.</li></ul>
+<h2>4.2. 7주차 — 회원가입 · 로그인 · 권한 (v1)</h2>
+<p>만든 것: 회원가입/로그인/로그아웃, 작성자 표시, 본인 글만 수정·삭제(<code>users</code> 테이블, <code>posts.user_id</code>). 「누가 썼는지」와 「누가 고칠 수 있는지」를 코드로 정했다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>인증 / 인가</td><td>로그인으로 누구인지 확인 / 본인 글인지 확인해 수정 허용.</td></tr><tr><td class=k>세션</td><td>로그인 상태를 서버가 기억하는 방법. <code>session["user_id"]</code>. <code>secret_key</code>로 서명한다.</td></tr><tr><td class=k>비밀번호 해시</td><td><code>generate_password_hash</code>로 저장하고 <code>check_password_hash</code>로 비교한다.</td></tr><tr><td class=k>외래키</td><td><code>posts.user_id</code>가 <code>users.id</code>를 가리켜 글과 작성자를 연결한다.</td></tr></table></div>
+<div class="code"><span class="lab">Python</span><pre><span class="kw">if</span> <span class="st">"user_id"</span> <span class="kw">not</span> <span class="kw">in</span> session:                 <span class="cm"># 인증: 로그인했나?</span>
+    <span class="kw">return</span> redirect(url_for(<span class="st">"login"</span>))
+
+<span class="kw">if</span> post[<span class="st">"user_id"</span>] != session[<span class="st">"user_id"</span>]:    <span class="cm"># 인가: 내 글인가?</span>
+    <span class="kw">return</span> <span class="st">"권한 없음"</span>, <span class="nu">403</span></pre></div>
+<p class="warn">⚠️ 버튼만 숨기면 안 됩니다. URL로 직접 접근해도 막히도록 서버에서 반드시 검사합니다.</p>
+<p><b>면접에서는</b> 「비밀번호는 해시로 저장해 DB가 유출돼도 원문을 알 수 없게 했고, 수정·삭제는 서버에서 작성자 본인인지 확인하도록 권한을 구현했습니다.」</p>
+<ul class="check"><li>인증과 인가의 차이를 예로 설명할 수 있다.</li><li>비밀번호를 그대로 저장하면 위험한 이유를 설명할 수 있다.</li><li>세션이 필요한 이유를 설명할 수 있다.</li></ul>
+<h2>4.3. 8주차 — 공공데이터 API와 대시보드 (v2)</h2>
+<p>만든 것: 에어코리아 미세먼지 API를 <code>opendata.py</code>로 가공해 <code>/dashboard</code>(표 + 막대그래프)로 보여주고, API 실패 시 샘플 데이터로 대체한다. <b>수집 → 가공 → 표현</b>은 탐구 보고서의 흐름과 같다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>오픈 API · 인증키</td><td>신청하면 누구나 쓰는 공개 API / 나를 증명하는 열쇠.</td></tr><tr><td class=k><code>.env</code></td><td>비밀 값을 코드 밖에 보관하는 파일. Git에 올리지 않는다.</td></tr><tr><td class=k>파싱</td><td>받은 JSON에서 필요한 값만 꺼내 정리한다.</td></tr><tr><td class=k>예외 처리</td><td>키가 없거나 인터넷이 끊겨도 앱이 죽지 않고 <code>sample_air_quality.json</code>으로 화면을 띄운다.</td></tr></table></div>
+<div class="code"><span class="lab">Python</span><pre>key = os.environ.get(<span class="st">"PUBLIC_DATA_API_KEY"</span>)     <span class="cm"># 코드에는 이름만, 값은 .env에</span>
+
+items = raw[<span class="st">"response"</span>][<span class="st">"body"</span>][<span class="st">"items"</span>]
+result = [{<span class="st">"station"</span>: i[<span class="st">"stationName"</span>],
+           <span class="st">"pm10"</span>: int(i.get(<span class="st">"pm10Value"</span>) <span class="kw">or</span> <span class="nu">0</span>)} <span class="kw">for</span> i <span class="kw">in</span> items]</pre></div>
+<p><b>면접에서는</b> 「API 키는 .env로 분리해 저장소에 올리지 않았고, 외부 API가 실패해도 샘플 데이터로 화면이 뜨도록 예외 처리를 넣었습니다.」</p>
+<ul class="check"><li>인증키를 <code>.env</code>에 두는 이유를 설명할 수 있다.</li><li>파싱이 무엇이고 왜 필요한지 설명할 수 있다.</li><li>API 실패 시 앱이 죽지 않게 한 방법을 설명할 수 있다.</li></ul>
+<h2>4.4. 9주차 — 댓글 · 검색 · 관리자 · 실시간 채팅 (v3)</h2>
+<p>만든 것: 댓글(1:N), 검색(<code>?q=</code>), 관리자 권한(RBAC), 실시간 채팅(WebSocket, AI와 함께). 혼자 쓰는 게시판에서 사람과 사람이 상호작용하는 커뮤니티로 올라갔다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>요청/응답 사이클</td><td>① 브라우저 요청 → ② 서버 코드 실행 → ③ 응답 → ④ 화면 갱신. 댓글·검색·권한 모두 이 4단계다.</td></tr><tr><td class=k>1:N 관계</td><td>글 하나에 댓글 여러 개. <code>comments.post_id</code>가 <code>posts.id</code>를 가리킨다.</td></tr><tr><td class=k>쿼리스트링 + LIKE</td><td><code>/?q=키워드</code>로 검색어를 보내고, SQL <code>LIKE ?</code>에 <code>%키워드%</code>를 넘겨 포함된 글을 찾는다.</td></tr><tr><td class=k>RBAC</td><td>사용자를 역할(role)로 나눠 역할마다 할 수 있는 일을 다르게 한다. <code>users.role</code> = user / admin.</td></tr><tr><td class=k>WebSocket</td><td>연결을 유지해 서버가 먼저 메시지를 보낼 수 있는 양방향 통신.</td></tr></table></div>
+<div class="code"><span class="lab">Python</span><pre>is_admin = session.get(<span class="st">"role"</span>) == <span class="st">"admin"</span>        <span class="cm"># RBAC: 역할로 판단</span>
+
+@socketio.on(<span class="st">"send_message"</span>)                     <span class="cm"># 브라우저 → 서버</span>
+<span class="kw">def</span> handle(data):
+    emit(<span class="st">"new_message"</span>, data, broadcast=<span class="co">True</span>)    <span class="cm"># 서버 → 모든 브라우저</span></pre></div>
+<p><b>면접에서는</b> 「실시간 채팅은 AI와 함께 만들었지만, 코드를 그대로 붙이지 않고 send_message 이벤트가 서버에서 broadcast로 모두에게 전달되는 흐름을 직접 설명할 수 있도록 읽고 확인했습니다.」</p>
+<ul class="check"><li>1:N 관계를 DB로 표현하는 방법을 설명할 수 있다.</li><li>일반 요청/응답과 WebSocket의 차이를 설명할 수 있다.</li><li>7주차의 본인 글 검사와 9주차의 역할(RBAC) 검사의 차이를 말할 수 있다.</li></ul>
+<h1>5. 서비스에 AI 붙이기 — 10~11주차</h1>
+<h2>5.1. 10주차 — AI 서비스 (김반장 school_bot)</h2>
+<p>만든 것: 공지 요약(단일 대화), 김반장 챗봇(연속 대화), 시간표 사진 분석, 나이스 급식 + AI 해석. AI는 「똑똑한 검색창」이 아니라 <b>우리 서비스의 부품</b>이다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>API 키·환경변수</td><td><code>OPENAI_API_KEY</code>는 서버에만 둔다. 브라우저에 보내지 않는다.</td></tr><tr><td class=k>단일 vs 연속 대화</td><td>단일은 문맥 없는 단발 호출(Stateless). 연속은 이전 대화 기록을 우리가 쌓아 매번 함께 보낸다.</td></tr><tr><td class=k>System Instruction</td><td><code>instructions</code>로 역할·응답 규칙을 고정한다. 원문에 없으면 「확인 필요」로 답하게 한다.</td></tr><tr><td class=k>환각 / Grounding</td><td>AI가 지어내는 것(환각) / 공공데이터를 먼저 조회해 근거로 제공해 막는 방법(Grounding).</td></tr><tr><td class=k>멀티모달</td><td>글뿐 아니라 이미지(<code>input_image</code>)도 입력. 시간표·공지 사진에서 텍스트를 추출한다.</td></tr></table></div>
+<div class="code"><span class="lab">None</span><pre>① 브라우저 → Flask   (공지·질문)
+② Flask → OpenAI     (키 + 지침 + 질문, 서버에서만)
+③ 모델이 규칙에 따라 응답 생성
+④ Flask → 브라우저   (급식 원문과 AI 해석을 분리해 렌더링)</pre></div>
+<p><b>면접에서는</b> 「AI가 준 답을 그대로 믿지 않도록 키를 숨기고, 규칙을 고정하고, 사실은 공공데이터에서 가져오고, 화면에서 원문과 AI 해석을 구분했습니다.」</p>
+<ul class="check"><li>챗봇이 앞의 대화를 기억하는 원리를 설명할 수 있다.</li><li>환각을 줄이는 방법 두 가지를 말할 수 있다.</li><li>API 키를 브라우저에서 호출하면 안 되는 이유를 설명할 수 있다.</li></ul>
+<h2>5.2. 11주차 — 에이전트 · 하네스 · MCP</h2>
+<p>만든 것: 에이전트 루프 관찰(<code>step5_agent.py</code>), 학사일정 도구 추가, 내 함수를 MCP 서버(<code>school_mcp.py</code>)로 만들어 Claude Code에 연결. AI가 똑똑해 보이는 이유의 절반은 모델이 아니라 <b>모델을 감싼 프로그램(하네스)과 쥐여 준 도구</b>다.</p>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>AI 에이전트</td><td>모델 + 도구 + 루프. 생각 → 도구 사용 → 결과 확인을 답이 나올 때까지 반복한다.</td></tr><tr><td class=k>하네스 (harness)</td><td>모델 바깥에서 반복을 돌리는 프로그램. 도구 실행 · 반복 횟수 제한 · 권한 확인 · 기억 관리.</td></tr><tr><td class=k>MCP</td><td>Model Context Protocol. 도구를 어느 하네스에나 꽂을 수 있는 표준 규격(AI용 USB-C).</td></tr><tr><td class=k>요청은 AI가, 실행은 우리 코드가</td><td>모델은 도구 호출을 요청만 하고, 실제 실행은 하네스가 내 코드를 호출해서 한다.</td></tr></table></div>
+<div class="code"><span class="lab">Python</span><pre>@mcp.tool()
+<span class="kw">def</span> school_meal(school: str, date: str):
+    <span class="st">""</span><span class="st">"학교 급식을 조회한다."</span><span class="st">""</span>
+    ...</pre></div>
+<div class="code"><span class="lab">Shell</span><pre>claude mcp add school <span class="cm">-- python school_mcp.py</span>
+<span class="cm"># Claude Code에서 /mcp → school connected</span></pre></div>
+<p><b>면접에서는</b> 「10주차에 만든 챗봇의 급식 조회가 이미 에이전트의 최소 형태였다는 걸 알았습니다. 무엇을 AI에게 맡기고 무엇을 내 코드가 통제할지 설계하는 게 중요하다고 배웠습니다.」</p>
+<ul class="check"><li>에이전트를 한 문장으로 정의할 수 있다.</li><li>하네스가 하는 일 네 가지를 말할 수 있다.</li><li>「AI가 직접 나이스에 접속한다」가 틀린 이유를 설명할 수 있다.</li><li>MCP를 쓰면 좋은 점을 설명할 수 있다.</li></ul>
+<h1>6. 면접 예상 질문과 용어 사전</h1>
+<h2>6.1. 면접 예상 질문 12개</h2>
+<p>오른쪽 칸은 정답이 아니라 답변의 뼈대다. 내 프로젝트의 경험으로 바꿔 말한다.</p>
+<div class="tablewrap"><table class=""><tr><td>질문</td><td>답변 뼈대</td></tr><tr><td>1. 바이브코딩이 뭔가요? AI가 다 해주는 것 아닌가요?</td><td>목표를 한 문장으로 정하고, 계획을 합의하고, AI가 실행한 결과를 내가 검증하는 반복이다. 4주차에 Plan으로 구조를 먼저 정했고 6~9주차 핵심 기능은 AI 없이 직접 코딩했다.</td></tr><tr><td>2. AI가 틀린 코드를 줬을 때 어떻게 했나요?</td><td>LLM은 틀릴 수 있어서 검증이 필수다. 직접 실행해 확인하고, 에러 메시지를 근거로 목표를 구체적으로 다시 적어 재요청했다. (본인의 실제 사례를 하나 넣는다.)</td></tr><tr><td>3. 웹 서비스가 동작하는 구조를 설명해 보세요.</td><td>클라이언트가 요청을 보내면 서버(Flask)가 처리하고, 필요하면 DB(SQLite)에서 읽고 써서 응답한다. 이 3단 구조 위에 로그인·API·AI를 하나씩 얹었다.</td></tr><tr><td>4. 기본키와 외래키가 뭔가요? 어디에 썼나요?</td><td>기본키는 행을 구분하는 열(<code>id</code>), 외래키는 다른 테이블의 기본키를 가리키는 열이다. <code>posts.user_id</code>로 글과 작성자를, <code>comments.post_id</code>로 댓글과 글을 연결했다.</td></tr><tr><td>5. 로그인은 어떻게 구현했나요? 비밀번호는 안전한가요?</td><td>비밀번호는 해시로 저장하고 로그인 시 해시를 비교한다. 로그인하면 세션에 <code>user_id</code>를 저장하고, 수정·삭제는 서버에서 작성자 본인인지 검사한다.</td></tr><tr><td>6. 인증과 인가의 차이는?</td><td>인증은 누구인지 확인(로그인), 인가는 무엇을 해도 되는지 판단(본인 글만 수정, 관리자만 공지 고정)이다.</td></tr><tr><td>7. API가 뭔가요? 어떤 API를 써 봤나요?</td><td>프로그램끼리 요청을 주고받는 약속된 창구다. 에어코리아 공공데이터 API, 나이스 급식 API, OpenAI API를 호출했고, 키는 <code>.env</code>로 관리했다.</td></tr><tr><td>8. 외부 API가 실패하면 어떻게 되나요?</td><td>예외 처리를 넣어 샘플 데이터로 대체해 앱이 죽지 않게 했다. 키를 지우거나 인터넷을 끊고 직접 테스트했다.</td></tr><tr><td>9. AI의 환각 문제는 어떻게 대응했나요?</td><td>시스템 지침으로 「원문에 없으면 확인 필요」로 답하게 했고, 급식·일정은 공공데이터를 먼저 조회해 근거로 줬다(Grounding). 화면에서도 원문과 AI 해석을 분리했다.</td></tr><tr><td>10. 챗봇은 어떻게 앞의 대화를 기억하나요?</td><td>AI가 기억하는 것이 아니라 내 코드가 대화 기록을 쌓아 매번 함께 보낸다. 서버를 재시작하면 기록이 사라지는 한계가 있다.</td></tr><tr><td>11. AI 에이전트와 MCP를 설명해 보세요.</td><td>에이전트는 모델에 도구와 반복 루프가 붙어 목표가 해결될 때까지 도구를 골라 쓴다. MCP는 도구를 어느 하네스에나 꽂는 표준 규격이다. 내 급식 조회 함수를 MCP 서버로 만들어 Claude Code에 연결했다.</td></tr><tr><td>12. 11주 동안 가장 크게 배운 점과 시행착오는?</td><td>(본인 경험) 예: 구조를 먼저 나누는 것이 중요했다, AI에게 맡길 부분과 직접 통제할 부분을 나누는 설계가 핵심이었다. 커밋 히스토리를 근거로 말한다.</td></tr></table></div>
+<h2>6.2. 용어 사전</h2>
+<div class="tablewrap"><table class=""><tr><td class=k>키워드</td><td>한 줄 정의</td></tr><tr><td class=k>LLM (3주)</td><td>많은 글을 학습해 다음 말을 예측하는 대규모 언어 모델.</td></tr><tr><td class=k>Plan 모드 (4주)</td><td>코드를 쓰기 전에 설계안부터 합의하는 방식.</td></tr><tr><td class=k>Permission (4주)</td><td>AI의 위험한 행동을 사람이 허락·거부하는 안전장치.</td></tr><tr><td class=k>commit / push (5주)</td><td>변경을 기록으로 남김 / GitHub에 올림.</td></tr><tr><td class=k>CLAUDE.md (5주)</td><td>AI가 기억하도록 남기는 프로젝트 규칙 파일.</td></tr><tr><td class=k>3단 구조 (6주)</td><td>프레젠테이션(클라이언트) · 애플리케이션(서버) · 데이터(DB) 층.</td></tr><tr><td class=k>HTTP / URL (6주)</td><td>브라우저와 서버의 대화 규칙 / 자원의 주소.</td></tr><tr><td class=k>라우트 · GET · POST (6주)</td><td>주소와 함수의 연결 / 조회 요청 / 보내서 저장하는 요청.</td></tr><tr><td class=k>CRUD (6주)</td><td>생성·조회·수정·삭제. 데이터를 다루는 네 가지 기본 동작.</td></tr><tr><td class=k>테이블 · 행 · 열 (6주)</td><td>DB의 표 / 데이터 한 건 / 항목.</td></tr><tr><td class=k>기본키 PK (6주)</td><td>행을 하나로 구분하는 열. 중복·빈 값 불가.</td></tr><tr><td class=k>외래키 FK (7주)</td><td>다른 테이블의 기본키를 가리키는 열.</td></tr><tr><td class=k>SQL Injection (6주)</td><td>입력값으로 SQL을 조작하는 공격. <code>?</code> 바인딩으로 막는다.</td></tr><tr><td class=k>인증 / 인가 (7주)</td><td>누구인지 확인 / 무엇을 해도 되는지 판단.</td></tr><tr><td class=k>세션 · 쿠키 (7주)</td><td>서버가 로그인 상태를 기억하는 방법 / 브라우저가 보관해 함께 보내는 작은 정보.</td></tr><tr><td class=k>해시 (7주)</td><td>원문을 알 수 없게 바꾼 값. 비밀번호 저장용.</td></tr><tr><td class=k>API · 엔드포인트 (8주)</td><td>프로그램끼리 쓰는 요청·응답 창구 / 그 주소.</td></tr><tr><td class=k>JSON · 파싱 (8주)</td><td>API가 주는 데이터 형식 / 필요한 값만 꺼내 정리.</td></tr><tr><td class=k>.env · 인증키 (8주)</td><td>비밀을 코드 밖에 보관하는 파일 / API 서버에 나를 증명하는 열쇠.</td></tr><tr><td class=k>1:N 관계 (9주)</td><td>하나에 여러 개가 연결. N쪽에 FK를 둔다.</td></tr><tr><td class=k>쿼리스트링 (9주)</td><td>URL 뒤 <code>?key=value</code>로 조건 전달.</td></tr><tr><td class=k>RBAC (9주)</td><td>역할 기반 접근 제어(user / admin).</td></tr><tr><td class=k>WebSocket (9주)</td><td>연결을 유지하는 양방향 실시간 통신.</td></tr><tr><td class=k>Stateless (10주)</td><td>이전 문맥을 기억하지 않는 단발 호출.</td></tr><tr><td class=k>System Instruction (10주)</td><td>모델의 역할·규칙을 고정하는 최상위 지침.</td></tr><tr><td class=k>환각 · Grounding (10주)</td><td>지어내기 / 공공데이터 같은 근거를 먼저 제공해 막기.</td></tr><tr><td class=k>멀티모달 (10주)</td><td>글과 이미지 등 여러 형태의 입력.</td></tr><tr><td class=k>에이전트 (11주)</td><td>모델 + 도구 + 반복 루프.</td></tr><tr><td class=k>하네스 (11주)</td><td>모델 바깥에서 도구 실행·제한·권한·기억을 맡는 프로그램.</td></tr><tr><td class=k>MCP (11주)</td><td>도구를 어느 하네스에나 꽂는 표준 규격.</td></tr></table></div>
+<h1>트러블슈팅</h1>
+<div class="tablewrap"><table class=""><tr><td class=k>증상</td><td>원인 및 해결 방법</td></tr><tr><td class=k><code>localhost:5000</code>이 열리지 않거나 다른 화면이 뜬다</td><td>macOS는 5000번 포트를 AirPlay가 쓰는 경우가 많다. 이 수업은 <code>port=5001</code>을 쓴다.</td></tr><tr><td class=k>폴더 이동이 안 되거나 경로 오류가 난다</td><td>한글·띄어쓰기 폴더명이 원인일 수 있다. 영문·하이픈(<code>week03-intro</code>)을 쓰고 <code>pwd</code>로 위치를 확인한다.</td></tr><tr><td class=k>서버를 껐다 켰더니 글이 사라진다</td><td>DB에 저장하지 않고 메모리에만 두었는지 확인한다. <code>INSERT</code> 후 <code>commit()</code>을 했는지 본다.</td></tr><tr><td class=k>로그인 상태가 유지되지 않는다</td><td><code>app.secret_key</code>가 없거나 <code>session["user_id"]</code>를 저장하지 않았는지 확인한다.</td></tr><tr><td class=k>대시보드가 비어 있거나 오류가 난다</td><td><code>.env</code>의 키 이름과 코드의 이름이 같은지 확인한다. 실패해도 샘플 JSON으로 대체되는지 본다.</td></tr><tr><td class=k>챗봇이 앞의 대화를 모른다</td><td>연속 대화는 이전 기록을 매번 함께 보내야 한다. 기록 리스트에 질문·답을 쌓는지 확인한다.</td></tr><tr><td class=k><code>No module named 'mcp.server.fastmcp'</code></td><td>인터넷 예제의 옛 버전(1.x) 코드다. 수업 starter 코드를 기준으로 쓴다.</td></tr><tr><td class=k><code>/mcp</code>에 school이 connected로 보이지 않는다</td><td><code>claude mcp add</code>의 python 경로가 틀렸을 수 있다. 가상환경 python의 전체 경로로 다시 등록한다.</td></tr></table></div>
+<h1>완성 확인 목록</h1>
+<ul class="check"><li>그림 페이지의 15장을 보고 각 그림을 말로 설명할 수 있다.</li><li>3단 구조에서 요청이 지나가는 길을 순서대로 설명할 수 있다.</li><li>GET과 POST, 상태 코드 <code>200</code>·<code>302</code>·<code>403</code>·<code>404</code>의 뜻을 말할 수 있다.</li><li>기본키와 외래키를 <code>users</code>·<code>posts</code>·<code>comments</code> 예로 설명할 수 있다.</li><li>API 키를 <code>.env</code>로 관리하는 이유를 설명할 수 있다.</li><li>인증과 인가, 세션과 해시의 역할을 설명할 수 있다.</li><li>단일 대화와 연속 대화의 차이, 환각을 줄이는 방법을 설명할 수 있다.</li><li>에이전트, 하네스, MCP를 한 문장씩 정의할 수 있다.</li><li>면접 예상 질문 12개에 내 경험을 넣어 답할 수 있다.</li></ul>
+<p>다음 단계는 12~14주차 캡스톤이다. 11주차 숙제(몸풀기 질문지, 한 문장 피치)로 주제를 정하고, 구현 → 포트폴리오 → 면접형 발표로 이어진다. 이 노트의 개념 중 내 프로젝트에 쓴 것을 골라 「왜 그렇게 설계했는가」를 설명하는 연습을 해 둔다.</p>
+<div class="foot"><div class="pn">1</div><img src="assets/c3/footer-logo.png" alt="C3 CODING 씨큐브코딩"><div class="note">한 쪽으로 이어진 화면판이다. 인쇄하면 쪽이 나뉜다.</div></div>
+</div>
+</div>
+</html>
